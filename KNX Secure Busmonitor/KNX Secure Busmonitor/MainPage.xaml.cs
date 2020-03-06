@@ -16,6 +16,8 @@ using Xamarin.Forms;
 
 namespace KNX_Secure_Busmonitor
 {
+  using Device = Xamarin.Forms.Device;
+
   // Learn more about making custom code visible in the Xamarin.Forms previewer
   // by visiting https://aka.ms/xamarinforms-previewer
   [DesignTimeVisible(false)]
@@ -35,7 +37,8 @@ namespace KNX_Secure_Busmonitor
       {
         Log((discoveryResults.IndexOf(result)) + ": " + result.FriendlyName + " (" + result.IpAddress + ")");
       }
-      Log("log");
+
+      if (!discoveryResults.Any()) return;
 
       ConnectorParameters selectedConnector = SelectConnector(discoveryResults);
       Task.Run(
@@ -53,8 +56,13 @@ namespace KNX_Secure_Busmonitor
               Log("LocalIndividualAddress: " + senderAddress);
               bus.GroupValueReceived += args =>
                 {
-                  Log("IndividualAddress: " + args.IndividualAddress + " Value: " + args.Value + " Address:" + args.Address);
+                  Log(
+                    "IndividualAddress: " + args.IndividualAddress + " Value: " + args.Value + " Address:"
+                    + args.Address);
                 };
+
+              //TODO cancel Task
+              while (true) { }
             }
           });
     }
@@ -93,7 +101,7 @@ namespace KNX_Secure_Busmonitor
 
     private void Log(string message)
     {
-      editor.Text += message;
+      Device.BeginInvokeOnMainThread(() => { editor.Text += message; });
     }
 
     public async void OnAddButtonClicked(object sender, EventArgs e)
