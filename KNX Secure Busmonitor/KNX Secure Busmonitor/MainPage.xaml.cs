@@ -57,7 +57,7 @@ namespace Busmonitor
       ////TODO replace with binding
       if (SelectedInterface == null)
       {
-        listView.IsVisible = true;
+        listGrid.IsVisible = true;
         ButtonGrid.IsVisible = false;
         TelegrammGrid.IsVisible = false;
         passwordLabel.IsVisible = false;
@@ -65,7 +65,7 @@ namespace Busmonitor
       }
       else
       {
-        listView.IsVisible = false;
+        listGrid.IsVisible = false;
         ButtonGrid.IsVisible = true;
         TelegrammGrid.IsVisible = true;
         passwordLabel.IsVisible = true;
