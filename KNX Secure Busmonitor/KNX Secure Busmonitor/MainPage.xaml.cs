@@ -5,7 +5,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Security;
 using System.Threading.Tasks;
+using System.IO;
 
+using Knx.Bus.Common;
+
+using Xamarin.Forms.DataGrid;
 using Knx.Bus.Common.Configuration;
 using Knx.Bus.Common.KnxIp;
 using Knx.Falcon.Sdk;
@@ -19,10 +23,6 @@ using Device = Xamarin.Forms.Device;
 
 namespace Busmonitor
 {
-  using Knx.Bus.Common;
-
-  using Xamarin.Forms.DataGrid;
-
   // Learn more about making custom code visible in the Xamarin.Forms previewer
   // by visiting https://aka.ms/xamarinforms-previewer
   [DesignTimeVisible(false)]
@@ -106,7 +106,7 @@ namespace Busmonitor
                         OnPropertyChanged(nameof(Telegramms));
                       });
                   };
-
+                
                 //TODO pretty hacky to cancel by text
                 while (ConnectButton.Text == "Disconnect")
                 {
@@ -165,10 +165,31 @@ namespace Busmonitor
 
     public DiscoveryResult SelectedInterface { get; set; }
 
-    public async void OnSaveButtonClicked(object sender, EventArgs e)
+    public void OnSaveButtonClicked(object sender, EventArgs e)
     {
-      FileData fileData = new FileData();
-      await CrossFilePicker.Current.SaveFile(fileData);
+      string fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Telegramms.csv");
+      //TODO add content
+      var csvContent = string.Empty;
+      File.WriteAllText(fileName, csvContent);
     }
+    
+    //private static string ConvertToCsv(Telegram telegram, int counter)
+    //{
+    //  return String.Join(",",
+    //    counter,
+    //    $"\"{DateTimeFormatter.ConvertToDateTime(telegram.TimestampLocal, DateAndTime)}\"",
+    //    telegram.Service,
+    //    telegram.Flags,
+    //    telegram.Priority,
+    //    telegram.SourceAddress,
+    //    telegram.SourceName,
+    //    telegram.Destination,
+    //    telegram.DestinationName,
+    //    telegram.RoutingCounter,
+    //    telegram.Type,
+    //    telegram.DataPointType,
+    //    $"\"{telegram.Info}\"",
+    //    telegram.Iack);
+    //}
   }
 }

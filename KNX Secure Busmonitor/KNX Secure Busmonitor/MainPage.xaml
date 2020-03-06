@@ -40,7 +40,8 @@
               Text="Add Keyring"
               Clicked="OnAddButtonClicked"/>
       <Button x:Name="SaveButton"
-              Text="Connect"
+              Grid.Column="2"
+              Text="Save"
               Clicked="OnSaveButtonClicked" />
     </Grid>
   </StackLayout>
