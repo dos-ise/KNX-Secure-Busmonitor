@@ -16,6 +16,8 @@ using Xamarin.Forms;
 
 namespace KNX_Secure_Busmonitor
 {
+  using System.Collections.ObjectModel;
+
   using Device = Xamarin.Forms.Device;
 
   // Learn more about making custom code visible in the Xamarin.Forms previewer
@@ -28,57 +30,104 @@ namespace KNX_Secure_Busmonitor
     public MainPage()
     {
       InitializeComponent();
-    }
 
-    void OnConnectButtonClicked(object sender, EventArgs e)
-    {
-      var discoveryResults = new DiscoveryClient(AdapterTypes.All).Discover().ToList();
-      foreach (var result in discoveryResults)
-      {
-        Log((discoveryResults.IndexOf(result)) + ": " + result.FriendlyName + " (" + result.IpAddress + ")");
-      }
-
-      if (!discoveryResults.Any()) return;
-
-      ConnectorParameters selectedConnector = SelectConnector(discoveryResults);
-      Task.Run(
-        () =>
+      Task.Run(() =>
+        {
+          foreach (var dis in Discover())
           {
-            using (var bus = new Bus(selectedConnector))
-            {
-              bus.Connect();
-              if (bus.IsConnected)
-              {
-                Log("Connected to " + bus.OpenParameters);
-              }
-
-              var senderAddress = bus.LocalIndividualAddress;
-              Log("LocalIndividualAddress: " + senderAddress);
-              bus.GroupValueReceived += args =>
-                {
-                  Log(
-                    "IndividualAddress: " + args.IndividualAddress + " Value: " + args.Value + " Address:"
-                    + args.Address);
-                };
-
-              //TODO cancel Task
-              while (true) { }
-            }
-          });
+            DiscoveredInterfaces.Add(dis);
+          }
+        });
+      DiscoveredInterfaces = new ObservableCollection<DiscoveryResult>();
+      listView.SetBinding(ListView.ItemsSourceProperty, new Binding("."));
+      listView.BindingContext = DiscoveredInterfaces;
+      ToggleUI();
     }
 
-    private ConnectorParameters SelectConnector(List<DiscoveryResult> discoveryResults)
+    private void ToggleUI()
     {
-      ////TODO add UI to select Connector
-      var selected = discoveryResults.FirstOrDefault();
-      if (string.IsNullOrEmpty(_fileName))
+      ////TODO replace with binding
+      if (SelectedInterface == null)
       {
-        return new KnxIpTunnelingConnectorParameters(selected);
+        listView.IsVisible = true;
+        ButtonGrid.IsVisible = false;
+        editor.IsVisible = false;
+        passwordLabel.IsVisible = false;
+        passwordEntry.IsVisible = false;
       }
       else
       {
-        var secure = new KnxIpSecureDeviceManagementConnectorParameters(selected);
-        secure.LoadSecurityData(selected.IndividualAddress, _fileName, MakeStringSecure(password.Text));
+        listView.IsVisible = false;
+        ButtonGrid.IsVisible = true;
+        editor.IsVisible = true;
+        passwordLabel.IsVisible = true;
+        passwordEntry.IsVisible = true;
+      }
+    }
+
+    private IEnumerable<DiscoveryResult> Discover()
+    {
+      return new DiscoveryClient(AdapterTypes.All).Discover();
+    }
+
+    public ObservableCollection<DiscoveryResult> DiscoveredInterfaces { get; set; }
+
+    void OnConnectButtonClicked(object sender, EventArgs e)
+    {
+      ConnectorParameters connectorParameter = CreateParameter();
+      if (ConnectButton.Text != "Disconnect")
+      {
+        Task.Run(
+          () =>
+            {
+              using (var bus = new Bus(connectorParameter))
+              {
+                bus.Connect();
+                if (bus.IsConnected)
+                {
+                  Log("Connected to " + bus.OpenParameters);
+                }
+                else
+                {
+                  return;
+                }
+
+                var senderAddress = bus.LocalIndividualAddress;
+                Log("LocalIndividualAddress: " + senderAddress);
+                bus.GroupValueReceived += args =>
+                  {
+                    Log(
+                      "IndividualAddress: " + args.IndividualAddress + " Value: " + args.Value + " Address:"
+                      + args.Address);
+                  };
+
+                //TODO pretty hacky to cancel by text
+                while (ConnectButton.Text == "Disconnect")
+                {
+                }
+              }
+            });
+        ConnectButton.Text = "Disconnect";
+        AddKeyringButton.IsEnabled = false;
+      }
+      else
+      {
+        editor.Text = string.Empty;
+        ConnectButton.Text = "Connect";
+        AddKeyringButton.IsEnabled = true;
+      }
+    }
+
+    private ConnectorParameters CreateParameter()
+    {
+      if (string.IsNullOrEmpty(_fileName))
+      {
+        return new KnxIpTunnelingConnectorParameters(SelectedInterface);
+      }
+      else
+      {
+        var secure = new KnxIpSecureDeviceManagementConnectorParameters(SelectedInterface);
+        secure.LoadSecurityData(SelectedInterface.IndividualAddress, _fileName, MakeStringSecure(passwordEntry.Text));
         return secure;
       }
     }
@@ -94,11 +143,6 @@ namespace KNX_Secure_Busmonitor
       return sec;
     }
 
-    public void OnClearButtonClicked(object sender, EventArgs e)
-    {
-      editor.Text = string.Empty;
-    }
-
     private void Log(string message)
     {
       Device.BeginInvokeOnMainThread(() => { editor.Text += message + Environment.NewLine; });
@@ -111,5 +155,13 @@ namespace KNX_Secure_Busmonitor
         return; // user canceled file picking
       _fileName = fileData.FileName;
     }
+
+    private void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
+    {
+      SelectedInterface = e.SelectedItem as DiscoveryResult;
+      ToggleUI();
+    }
+
+    public DiscoveryResult SelectedInterface { get; set; }
   }
 }

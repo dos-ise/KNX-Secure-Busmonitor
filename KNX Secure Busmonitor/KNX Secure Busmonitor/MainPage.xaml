@@ -10,24 +10,24 @@
     <Label Text="Code"
            HorizontalOptions="Center"
            FontAttributes="Bold" />
+    <ListView x:Name="listView" ItemSelected="OnItemSelected"/>
     <Editor x:Name="editor"
             FontSize="Small"
             IsReadOnly="True"
             HeightRequest="350" />
-    <Entry x:Name="password" IsPassword="True" />
-    <Grid>
+    <Label x:Name="passwordLabel" Text="Password:"/>
+    <Entry x:Name="passwordEntry" IsPassword="True" />
+    <Grid x:Name="ButtonGrid">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*" />
         <ColumnDefinition Width="*" />
-        <ColumnDefinition Width="*" />
       </Grid.ColumnDefinitions>
-      
-      <Button Text="Connect"
+
+      <Button x:Name="ConnectButton"
+              Text="Connect"
               Clicked="OnConnectButtonClicked" />
-      <Button Grid.Column="1"
-              Text="Clear"
-              Clicked="OnClearButtonClicked"/>     
-      <Button Grid.Column="2"
+      <Button x:Name="AddKeyringButton"
+              Grid.Column="1"
               Text="Add Keyring"
               Clicked="OnAddButtonClicked"/>
     </Grid>
