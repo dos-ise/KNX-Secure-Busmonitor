@@ -3,18 +3,26 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:dataGrid="clr-namespace:Xamarin.Forms.DataGrid;assembly=Xamarin.Forms.DataGrid"
              mc:Ignorable="d"
-             x:Class="KNX_Secure_Busmonitor.MainPage">
+             x:Class="Busmonitor.MainPage">
 
   <StackLayout Margin="10,35,10,10">
-    <Label Text="Code"
-           HorizontalOptions="Center"
-           FontAttributes="Bold" />
     <ListView x:Name="listView" ItemSelected="OnItemSelected"/>
-    <Editor x:Name="editor"
-            FontSize="Small"
-            IsReadOnly="True"
-            HeightRequest="350" />
+
+    <dataGrid:DataGrid x:Name="TelegrammGrid"
+                       SelectionEnabled="True"
+                       RowHeight="70" HeaderHeight="50" BorderColor="#CCCCCC" HeaderBackground="#E0E6F8"
+                       HeightRequest="400"
+                       ActiveRowColor="#8899AA">
+      <dataGrid:DataGrid.Columns>
+        <dataGrid:DataGridColumn Title="Address" PropertyName="Address" Width="2*"/>
+        <dataGrid:DataGridColumn Title="IndividualAddress" PropertyName="IndividualAddress" Width="1*"/>
+        <dataGrid:DataGridColumn Title="Value" PropertyName="Value" Width="4*"/>
+        <dataGrid:DataGridColumn Title="TelegramPriority" PropertyName="TelegramPriority" Width="1*"/>
+        <dataGrid:DataGridColumn Title="IsSecure" PropertyName="IsSecure" Width="1*"/>
+      </dataGrid:DataGrid.Columns>
+    </dataGrid:DataGrid>
     <Label x:Name="passwordLabel" Text="Password:"/>
     <Entry x:Name="passwordEntry" IsPassword="True" />
     <Grid x:Name="ButtonGrid">

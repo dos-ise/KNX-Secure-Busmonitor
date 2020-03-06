@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.IO;
 using System.Security;
+using System.Threading.Tasks;
 
 using Knx.Bus.Common.Configuration;
 using Knx.Bus.Common.KnxIp;
@@ -11,14 +12,16 @@ using Knx.Falcon.Sdk;
 
 using Plugin.FilePicker;
 using Plugin.FilePicker.Abstractions;
-using System.Threading.Tasks;
+
 using Xamarin.Forms;
 
-namespace KNX_Secure_Busmonitor
-{
-  using System.Collections.ObjectModel;
+using Device = Xamarin.Forms.Device;
 
-  using Device = Xamarin.Forms.Device;
+namespace Busmonitor
+{
+  using Knx.Bus.Common;
+
+  using Xamarin.Forms.DataGrid;
 
   // Learn more about making custom code visible in the Xamarin.Forms previewer
   // by visiting https://aka.ms/xamarinforms-previewer
@@ -39,8 +42,13 @@ namespace KNX_Secure_Busmonitor
           }
         });
       DiscoveredInterfaces = new ObservableCollection<DiscoveryResult>();
+      Telegramms = new ObservableCollection<GroupValueEventArgs>();
+
       listView.SetBinding(ListView.ItemsSourceProperty, new Binding("."));
       listView.BindingContext = DiscoveredInterfaces;
+
+      TelegrammGrid.SetBinding(DataGrid.ItemsSourceProperty, new Binding("."));
+      TelegrammGrid.BindingContext = Telegramms;
       ToggleUI();
     }
 
@@ -51,7 +59,7 @@ namespace KNX_Secure_Busmonitor
       {
         listView.IsVisible = true;
         ButtonGrid.IsVisible = false;
-        editor.IsVisible = false;
+        TelegrammGrid.IsVisible = false;
         passwordLabel.IsVisible = false;
         passwordEntry.IsVisible = false;
       }
@@ -59,7 +67,7 @@ namespace KNX_Secure_Busmonitor
       {
         listView.IsVisible = false;
         ButtonGrid.IsVisible = true;
-        editor.IsVisible = true;
+        TelegrammGrid.IsVisible = true;
         passwordLabel.IsVisible = true;
         passwordEntry.IsVisible = true;
       }
@@ -71,6 +79,7 @@ namespace KNX_Secure_Busmonitor
     }
 
     public ObservableCollection<DiscoveryResult> DiscoveredInterfaces { get; set; }
+    public ObservableCollection<GroupValueEventArgs> Telegramms { get; set; }
 
     void OnConnectButtonClicked(object sender, EventArgs e)
     {
@@ -83,22 +92,19 @@ namespace KNX_Secure_Busmonitor
               using (var bus = new Bus(connectorParameter))
               {
                 bus.Connect();
-                if (bus.IsConnected)
-                {
-                  Log("Connected to " + bus.OpenParameters);
-                }
-                else
-                {
+                if (!bus.IsConnected)
+                { 
                   return;
                 }
 
                 var senderAddress = bus.LocalIndividualAddress;
-                Log("LocalIndividualAddress: " + senderAddress);
                 bus.GroupValueReceived += args =>
                   {
-                    Log(
-                      "IndividualAddress: " + args.IndividualAddress + " Value: " + args.Value + " Address:"
-                      + args.Address);
+                    Device.BeginInvokeOnMainThread(() =>
+                      {
+                        Telegramms.Add(args);
+                        OnPropertyChanged(nameof(Telegramms));
+                      });
                   };
 
                 //TODO pretty hacky to cancel by text
@@ -112,7 +118,7 @@ namespace KNX_Secure_Busmonitor
       }
       else
       {
-        editor.Text = string.Empty;
+        Telegramms.Clear();
         ConnectButton.Text = "Connect";
         AddKeyringButton.IsEnabled = true;
       }
@@ -141,11 +147,6 @@ namespace KNX_Secure_Busmonitor
       /* and now : seal the deal */
       sec.MakeReadOnly();
       return sec;
-    }
-
-    private void Log(string message)
-    {
-      Device.BeginInvokeOnMainThread(() => { editor.Text += message + Environment.NewLine; });
     }
 
     public async void OnAddButtonClicked(object sender, EventArgs e)
