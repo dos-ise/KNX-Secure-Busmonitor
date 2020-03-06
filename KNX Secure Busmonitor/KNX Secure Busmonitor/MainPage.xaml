@@ -11,9 +11,9 @@
            HorizontalOptions="Center"
            FontAttributes="Bold" />
     <Editor x:Name="editor"
+            FontSize="Small"
             IsReadOnly="True"
-            Placeholder="Enter your note"
-            HeightRequest="150" />
+            HeightRequest="350" />
     <Entry x:Name="password" IsPassword="True" />
     <Grid>
       <Grid.ColumnDefinitions>

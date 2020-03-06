@@ -101,7 +101,7 @@ namespace KNX_Secure_Busmonitor
 
     private void Log(string message)
     {
-      Device.BeginInvokeOnMainThread(() => { editor.Text += message; });
+      Device.BeginInvokeOnMainThread(() => { editor.Text += message + Environment.NewLine; });
     }
 
     public async void OnAddButtonClicked(object sender, EventArgs e)
