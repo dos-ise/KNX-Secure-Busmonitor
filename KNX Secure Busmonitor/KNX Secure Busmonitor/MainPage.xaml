@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="KNX_Secure_Busmonitor.MainPage">
+
+  <StackLayout Margin="10,35,10,10">
+    <Label Text="Code"
+           HorizontalOptions="Center"
+           FontAttributes="Bold" />
+    <Editor x:Name="editor"
+            IsReadOnly="True"
+            Placeholder="Enter your note"
+            HeightRequest="150" />
+    <Entry x:Name="password" IsPassword="True" />
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="*" />
+      </Grid.ColumnDefinitions>
+      
+      <Button Text="Connect"
+              Clicked="OnConnectButtonClicked" />
+      <Button Grid.Column="1"
+              Text="Clear"
+              Clicked="OnClearButtonClicked"/>     
+      <Button Grid.Column="2"
+              Text="Add Keyring"
+              Clicked="OnAddButtonClicked"/>
+    </Grid>
+  </StackLayout>
+
+</ContentPage>
