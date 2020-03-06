@@ -2,22 +2,20 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
+using System.IO;
+using System.Security;
+
+using Knx.Bus.Common.Configuration;
+using Knx.Bus.Common.KnxIp;
+using Knx.Falcon.Sdk;
+
+using Plugin.FilePicker;
+using Plugin.FilePicker.Abstractions;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace KNX_Secure_Busmonitor
 {
-  using System.IO;
-  using System.Security;
-
-  using Knx.Bus.Common.Configuration;
-  using Knx.Bus.Common.KnxIp;
-  using Knx.Falcon.Sdk;
-
-  using Plugin.FilePicker;
-  using Plugin.FilePicker.Abstractions;
-
   // Learn more about making custom code visible in the Xamarin.Forms previewer
   // by visiting https://aka.ms/xamarinforms-previewer
   [DesignTimeVisible(false)]
@@ -79,7 +77,7 @@ namespace KNX_Secure_Busmonitor
 
     private SecureString MakeStringSecure(string plain)
     {
-      //Not very code handling
+      //Not very good handling
       SecureString sec = new SecureString();
       string pwd = plain; /* Not Secure! */
       pwd.ToCharArray().ToList().ForEach(sec.AppendChar);
