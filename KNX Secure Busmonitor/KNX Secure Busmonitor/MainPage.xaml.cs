@@ -93,7 +93,7 @@ namespace Busmonitor
               {
                 bus.Connect();
                 if (!bus.IsConnected)
-                { 
+                {
                   return;
                 }
 
@@ -164,5 +164,11 @@ namespace Busmonitor
     }
 
     public DiscoveryResult SelectedInterface { get; set; }
+
+    public async void OnSaveButtonClicked(object sender, EventArgs e)
+    {
+      FileData fileData = new FileData();
+      await CrossFilePicker.Current.SaveFile(fileData);
+    }
   }
 }

@@ -12,7 +12,7 @@
 
     <dataGrid:DataGrid x:Name="TelegrammGrid"
                        SelectionEnabled="True"
-                       RowHeight="70" HeaderHeight="50" BorderColor="#CCCCCC" HeaderBackground="#E0E6F8"
+                       RowHeight="70" HeaderHeight="50" BorderColor="#CCCCCC" HeaderBackground="#E0E6F8" 
                        HeightRequest="400"
                        ActiveRowColor="#8899AA">
       <dataGrid:DataGrid.Columns>
@@ -29,6 +29,7 @@
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*" />
         <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="*" />
       </Grid.ColumnDefinitions>
 
       <Button x:Name="ConnectButton"
@@ -38,6 +39,9 @@
               Grid.Column="1"
               Text="Add Keyring"
               Clicked="OnAddButtonClicked"/>
+      <Button x:Name="SaveButton"
+              Text="Connect"
+              Clicked="OnSaveButtonClicked" />
     </Grid>
   </StackLayout>
 
