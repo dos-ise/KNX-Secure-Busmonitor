@@ -14,7 +14,7 @@
         <RowDefinition Height="9*"/>
       </Grid.RowDefinitions>
       <Label Text="Discoverd Interfaces:" Grid.Row="0"/>
-      <ListView x:Name="listView" ItemSelected="OnItemSelected" Grid.Row="1">
+      <ListView x:Name="listView" MinimumHeightRequest="500" HeightRequest="500" ItemSelected="OnItemSelected" Grid.Row="1">
         <ListView.ItemTemplate>
           <DataTemplate>
             <ViewCell>
@@ -31,8 +31,11 @@
     </Grid>
     <dataGrid:DataGrid x:Name="TelegrammGrid"
                        SelectionEnabled="True"
-                       RowHeight="70" HeaderHeight="50" BorderColor="#CCCCCC" HeaderBackground="#E0E6F8" 
-                       HeightRequest="400"
+                       RowHeight="70" 
+                       HeaderHeight="50" 
+                       HeightRequest="600"
+                       BorderColor="#CCCCCC" 
+                       HeaderBackground="#E0E6F8" 
                        ActiveRowColor="#8899AA">
       <dataGrid:DataGrid.Columns>
         <dataGrid:DataGridColumn Title="Address" PropertyName="Address" Width="2*"/>
@@ -42,9 +45,9 @@
         <dataGrid:DataGridColumn Title="IsSecure" PropertyName="IsSecure" Width="1*"/>
       </dataGrid:DataGrid.Columns>
     </dataGrid:DataGrid>
-    <Label x:Name="passwordLabel" Text="Password:"/>
-    <Entry x:Name="passwordEntry" IsPassword="True" />
-    <Grid x:Name="ButtonGrid">
+    <Label x:Name="passwordLabel" Text="Password:" IsVisible="False"/>
+    <Entry x:Name="passwordEntry" IsPassword="True" IsVisible="False"/>
+    <Grid x:Name="ButtonGrid" Grid.Row="1">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*" />
         <ColumnDefinition Width="*" />
@@ -57,12 +60,17 @@
       <Button x:Name="AddKeyringButton"
               Grid.Column="1"
               Text="Add Keyring"
+              IsVisible="False"
               Clicked="OnAddButtonClicked"/>
       <Button x:Name="SaveButton"
               Grid.Column="2"
+              IsVisible="False"
               Text="Save"
               Clicked="OnSaveButtonClicked" />
+      <Button x:Name="DiscoverButton"
+                Text="Discover"
+                Clicked="DiscoverButton_OnClicked"
+        Grid.Column="2"/>
     </Grid>
   </StackLayout>
-
 </ContentPage>

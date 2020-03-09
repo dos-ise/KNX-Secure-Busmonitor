@@ -4,6 +4,14 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <RootNamespace>Busmonitor</RootNamespace>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
+    <Win32Resource />
+    <PackageId>KNX Busmonitor</PackageId>
+    <Version>0.0.1</Version>
+    <Authors>dos</Authors>
+    <Company>dos-Soft</Company>
+    <Product>KNX Busmonitor</Product>
+    <Description>An opensource KNX Busmonitor</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -12,7 +20,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Knx.Falcon.Sdk" Version="5.7.426" />
+    <PackageReference Include="Knx.Falcon.Sdk" Version="5.7.442" />
     <PackageReference Include="Xamarin.Forms" Version="4.5.0.356" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.1" />
     <PackageReference Include="Xamarin.Forms.DataGrid" Version="3.1.0" />

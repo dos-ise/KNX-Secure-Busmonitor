@@ -34,14 +34,9 @@ namespace Busmonitor
     {
       InitializeComponent();
 
-      Task.Run(() =>
-        {
-          foreach (var dis in Discover())
-          {
-            DiscoveredInterfaces.Add(dis);
-          }
-        });
+
       DiscoveredInterfaces = new ObservableCollection<DiscoveryResult>();
+      DiscoverInterfaces();
       Telegramms = new ObservableCollection<GroupValueEventArgs>();
 
       listView.SetBinding(ListView.ItemsSourceProperty, new Binding("."));
@@ -52,6 +47,17 @@ namespace Busmonitor
       ToggleUI();
     }
 
+    private void DiscoverInterfaces()
+    {
+      Task.Run(() =>
+        {
+          foreach (var dis in Discover())
+          {
+            DiscoveredInterfaces.Add(dis);
+          }
+        });
+    }
+
     private void ToggleUI()
     {
       ////TODO replace with binding
@@ -60,16 +66,16 @@ namespace Busmonitor
         listGrid.IsVisible = true;
         ButtonGrid.IsVisible = false;
         TelegrammGrid.IsVisible = false;
-        passwordLabel.IsVisible = false;
-        passwordEntry.IsVisible = false;
+        //passwordLabel.IsVisible = false;
+        //passwordEntry.IsVisible = false;
       }
       else
       {
         listGrid.IsVisible = false;
         ButtonGrid.IsVisible = true;
         TelegrammGrid.IsVisible = true;
-        passwordLabel.IsVisible = true;
-        passwordEntry.IsVisible = true;
+        //passwordLabel.IsVisible = true;
+        //passwordEntry.IsVisible = true;
       }
     }
 
@@ -106,7 +112,7 @@ namespace Busmonitor
                         OnPropertyChanged(nameof(Telegramms));
                       });
                   };
-                
+
                 //TODO pretty hacky to cancel by text
                 while (ConnectButton.Text == "Disconnect")
                 {
@@ -172,7 +178,17 @@ namespace Busmonitor
       var csvContent = string.Empty;
       File.WriteAllText(fileName, csvContent);
     }
-    
+
+    private void DiscoverButton_OnClicked(object sender, EventArgs e)
+    {
+      DiscoveredInterfaces.Clear();
+      Telegramms.Clear();
+      SelectedInterface = null;
+      listView.SelectedItem = null;
+      ToggleUI();
+      DiscoverInterfaces();
+    }
+
     //private static string ConvertToCsv(Telegram telegram, int counter)
     //{
     //  return String.Join(",",
@@ -191,5 +207,6 @@ namespace Busmonitor
     //    $"\"{telegram.Info}\"",
     //    telegram.Iack);
     //}
+
   }
 }
