@@ -5,8 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:dataGrid="clr-namespace:Xamarin.Forms.DataGrid;assembly=Xamarin.Forms.DataGrid"
              mc:Ignorable="d"
-             x:Class="Busmonitor.MainPage">
-
+             x:Class="Busmonitor.Views.HomePage">
   <StackLayout Margin="10,35,10,10">
     <Grid x:Name="listGrid">
       <Grid.RowDefinitions>

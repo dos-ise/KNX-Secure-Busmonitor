@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Security;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Security;
 
 using Knx.Bus.Common;
-
-using Xamarin.Forms.DataGrid;
 using Knx.Bus.Common.Configuration;
 using Knx.Bus.Common.KnxIp;
 using Knx.Falcon.Sdk;
@@ -17,20 +14,20 @@ using Knx.Falcon.Sdk;
 using Plugin.FilePicker;
 using Plugin.FilePicker.Abstractions;
 
-using Xamarin.Forms;
+using Xamarin.Forms.DataGrid;
 
 using Device = Xamarin.Forms.Device;
+using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
-namespace Busmonitor
+namespace Busmonitor.Views
 {
-  // Learn more about making custom code visible in the Xamarin.Forms previewer
-  // by visiting https://aka.ms/xamarinforms-previewer
-  [DesignTimeVisible(false)]
-  public partial class MainPage : ContentPage
+  [XamlCompilation(XamlCompilationOptions.Compile)]
+  public partial class HomePage : ContentPage
   {
     private string _fileName = string.Empty;
 
-    public MainPage()
+    public HomePage()
     {
       InitializeComponent();
 
@@ -50,12 +47,12 @@ namespace Busmonitor
     private void DiscoverInterfaces()
     {
       Task.Run(() =>
+      {
+        foreach (var dis in Discover())
         {
-          foreach (var dis in Discover())
-          {
-            DiscoveredInterfaces.Add(dis);
-          }
-        });
+          DiscoveredInterfaces.Add(dis);
+        }
+      });
     }
 
     private void ToggleUI()
@@ -94,31 +91,31 @@ namespace Busmonitor
       {
         Task.Run(
           () =>
+          {
+            using (var bus = new Bus(connectorParameter))
             {
-              using (var bus = new Bus(connectorParameter))
+              bus.Connect();
+              if (!bus.IsConnected)
               {
-                bus.Connect();
-                if (!bus.IsConnected)
-                {
-                  return;
-                }
-
-                var senderAddress = bus.LocalIndividualAddress;
-                bus.GroupValueReceived += args =>
-                  {
-                    Device.BeginInvokeOnMainThread(() =>
-                      {
-                        Telegramms.Add(args);
-                        OnPropertyChanged(nameof(Telegramms));
-                      });
-                  };
-
-                //TODO pretty hacky to cancel by text
-                while (ConnectButton.Text == "Disconnect")
-                {
-                }
+                return;
               }
-            });
+
+              var senderAddress = bus.LocalIndividualAddress;
+              bus.GroupValueReceived += args =>
+              {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                  Telegramms.Add(args);
+                  OnPropertyChanged(nameof(Telegramms));
+                });
+              };
+
+              //TODO pretty hacky to cancel by text
+              while (ConnectButton.Text == "Disconnect")
+              {
+              }
+            }
+          });
         ConnectButton.Text = "Disconnect";
         AddKeyringButton.IsEnabled = false;
       }
@@ -207,6 +204,5 @@ namespace Busmonitor
     //    $"\"{telegram.Info}\"",
     //    telegram.Iack);
     //}
-
   }
 }
