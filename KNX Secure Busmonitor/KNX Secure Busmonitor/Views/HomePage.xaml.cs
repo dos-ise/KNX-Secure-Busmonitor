@@ -53,12 +53,24 @@ namespace Busmonitor.Views
           {
             using (var bus = new Bus(connectorParameter))
             {
-              bus.Connect();
-              if (!bus.IsConnected)
+              try
               {
+                bus.Connect();
+              }
+              catch (Exception exception)
+              {
+                Device.BeginInvokeOnMainThread(
+                  () =>
+                    {
+                      ConnectButton.Text = "Connect";
+                      CrossToastPopUp.Current.ShowToastMessage(
+                        "Could not connect to " + _settings.InterfaceName + "(" + _settings.IP + ")");
+                    });
+
                 return;
               }
-              else
+
+              if (bus.IsConnected)
               {
                 Device.BeginInvokeOnMainThread(
                   () =>
@@ -66,21 +78,21 @@ namespace Busmonitor.Views
                       CrossToastPopUp.Current.ShowToastMessage(
                         "Connected to " + _settings.InterfaceName + "(" + _settings.IP + ")");
                     });
-              }
 
-              var senderAddress = bus.LocalIndividualAddress;
-              bus.GroupValueReceived += args =>
-              {
-                Device.BeginInvokeOnMainThread(() =>
+                var senderAddress = bus.LocalIndividualAddress;
+                bus.GroupValueReceived += args =>
+                  {
+                    Device.BeginInvokeOnMainThread(() =>
+                      {
+                        Telegramms.Add(args);
+                        OnPropertyChanged(nameof(Telegramms));
+                      });
+                  };
+
+                ////TODO pretty hacky to cancel by text
+                while (ConnectButton.Text == "Disconnect")
                 {
-                  Telegramms.Add(args);
-                  OnPropertyChanged(nameof(Telegramms));
-                });
-              };
-
-              ////TODO pretty hacky to cancel by text
-              while (ConnectButton.Text == "Disconnect")
-              {
+                }
               }
             }
           });
