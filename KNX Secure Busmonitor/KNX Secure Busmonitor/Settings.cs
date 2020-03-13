@@ -47,6 +47,7 @@ namespace Busmonitor
         Application.Current.Properties.Add(key, value);
       }
 
+      Application.Current.SavePropertiesAsync();
       OnPropertyChanged(key);
     }
 

@@ -22,6 +22,8 @@ namespace Busmonitor.Views
 {
   using Knx.Bus.Common.KnxIp;
 
+  using Plugin.Toast;
+
   [XamlCompilation(XamlCompilationOptions.Compile)]
   public partial class HomePage : ContentPage
   {
@@ -35,7 +37,6 @@ namespace Busmonitor.Views
       InitializeComponent();
 
       Telegramms = new ObservableCollection<GroupValueEventArgs>();
-      var aa = new DiscoveryClient(AdapterTypes.All).Discover().ToList();
       TelegrammGrid.SetBinding(DataGrid.ItemsSourceProperty, new Binding("."));
       TelegrammGrid.BindingContext = Telegramms;
     }
@@ -56,6 +57,15 @@ namespace Busmonitor.Views
               if (!bus.IsConnected)
               {
                 return;
+              }
+              else
+              {
+                Device.BeginInvokeOnMainThread(
+                  () =>
+                    {
+                      CrossToastPopUp.Current.ShowToastMessage(
+                        "Connected to " + _settings.InterfaceName + "(" + _settings.IP + ")");
+                    });
               }
 
               var senderAddress = bus.LocalIndividualAddress;
@@ -146,9 +156,5 @@ namespace Busmonitor.Views
     //    $"\"{telegram.Info}\"",
     //    telegram.Iack);
     //}
-    private void DiscoverButton_OnClicked(object sender, EventArgs e)
-    {
-      throw new NotImplementedException();
-    }
   }
 }

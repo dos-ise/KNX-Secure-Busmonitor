@@ -11,18 +11,34 @@ using Xamarin.Forms.Xaml;
 
 namespace Busmonitor.Views
 {
+  using Plugin.Toast;
+
   [XamlCompilation(XamlCompilationOptions.Compile)]
   public partial class Interfaces : ContentPage
   {
-    public Interfaces()
+    private readonly Settings _settings;
+
+    public Interfaces(Settings settings)
     {
+      _settings = settings;
+      DiscoveredInterfaces = new ObservableCollection<DiscoveryResult>();
       InitializeComponent();
+
+      listView.SetBinding(ListView.ItemsSourceProperty, new Binding("."));
+      listView.BindingContext = DiscoveredInterfaces;
     }
-
-
+    
     private void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
       SelectedInterface = e.SelectedItem as DiscoveryResult;
+      if (SelectedInterface != null)
+      {
+        _settings.IP = SelectedInterface.IpAddress.ToString();
+        _settings.InterfaceName = SelectedInterface.FriendlyName;
+
+        CrossToastPopUp.Current.ShowToastMessage(
+          "Saved " + _settings.InterfaceName + "(" + _settings.IP + ")");
+      }
     }
 
     public DiscoveryResult SelectedInterface { get; set; }

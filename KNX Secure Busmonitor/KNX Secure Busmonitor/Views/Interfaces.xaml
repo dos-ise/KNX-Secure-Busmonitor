@@ -5,7 +5,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="Busmonitor.Views.Interfaces">
-    <ContentPage.Content>
+  <ContentPage.Content>
+    <StackLayout>
       <Grid x:Name="listGrid">
         <Grid.RowDefinitions>
           <RowDefinition Height="*"/>
@@ -27,5 +28,9 @@
           </ListView.ItemTemplate>
         </ListView>
       </Grid>
-    </ContentPage.Content>
+      <Button x:Name="DiscoverButton"
+              Text="Discover"
+              Clicked="DiscoverButton_OnClicked"/>
+    </StackLayout>
+  </ContentPage.Content>
 </ContentPage>

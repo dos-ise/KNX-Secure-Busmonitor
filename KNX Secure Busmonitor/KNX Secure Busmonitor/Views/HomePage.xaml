@@ -45,10 +45,6 @@
               IsVisible="False"
               Text="Save"
               Clicked="OnSaveButtonClicked" />
-      <Button x:Name="DiscoverButton"
-                Text="Discover"
-                Clicked="DiscoverButton_OnClicked"
-        Grid.Column="2"/>
     </Grid>
   </StackLayout>
 </ContentPage>
