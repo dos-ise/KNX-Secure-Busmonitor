@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
@@ -8,7 +7,6 @@ using System.Security;
 
 using Knx.Bus.Common;
 using Knx.Bus.Common.Configuration;
-using Knx.Bus.Common.KnxIp;
 using Knx.Falcon.Sdk;
 
 using Plugin.FilePicker;
@@ -22,66 +20,26 @@ using Xamarin.Forms.Xaml;
 
 namespace Busmonitor.Views
 {
+  using Knx.Bus.Common.KnxIp;
+
   [XamlCompilation(XamlCompilationOptions.Compile)]
   public partial class HomePage : ContentPage
   {
+    private readonly Settings _settings;
+
     private string _fileName = string.Empty;
 
-    public HomePage()
+    public HomePage(Settings settings)
     {
+      _settings = settings;
       InitializeComponent();
 
-
-      DiscoveredInterfaces = new ObservableCollection<DiscoveryResult>();
-      DiscoverInterfaces();
       Telegramms = new ObservableCollection<GroupValueEventArgs>();
-
-      listView.SetBinding(ListView.ItemsSourceProperty, new Binding("."));
-      listView.BindingContext = DiscoveredInterfaces;
-
+      var aa = new DiscoveryClient(AdapterTypes.All).Discover().ToList();
       TelegrammGrid.SetBinding(DataGrid.ItemsSourceProperty, new Binding("."));
       TelegrammGrid.BindingContext = Telegramms;
-      ToggleUI();
     }
 
-    private void DiscoverInterfaces()
-    {
-      Task.Run(() =>
-      {
-        foreach (var dis in Discover())
-        {
-          DiscoveredInterfaces.Add(dis);
-        }
-      });
-    }
-
-    private void ToggleUI()
-    {
-      ////TODO replace with binding
-      if (SelectedInterface == null)
-      {
-        listGrid.IsVisible = true;
-        ButtonGrid.IsVisible = false;
-        TelegrammGrid.IsVisible = false;
-        //passwordLabel.IsVisible = false;
-        //passwordEntry.IsVisible = false;
-      }
-      else
-      {
-        listGrid.IsVisible = false;
-        ButtonGrid.IsVisible = true;
-        TelegrammGrid.IsVisible = true;
-        //passwordLabel.IsVisible = true;
-        //passwordEntry.IsVisible = true;
-      }
-    }
-
-    private IEnumerable<DiscoveryResult> Discover()
-    {
-      return new DiscoveryClient(AdapterTypes.All).Discover();
-    }
-
-    public ObservableCollection<DiscoveryResult> DiscoveredInterfaces { get; set; }
     public ObservableCollection<GroupValueEventArgs> Telegramms { get; set; }
 
     void OnConnectButtonClicked(object sender, EventArgs e)
@@ -110,7 +68,7 @@ namespace Busmonitor.Views
                 });
               };
 
-              //TODO pretty hacky to cancel by text
+              ////TODO pretty hacky to cancel by text
               while (ConnectButton.Text == "Disconnect")
               {
               }
@@ -131,14 +89,16 @@ namespace Busmonitor.Views
     {
       if (string.IsNullOrEmpty(_fileName))
       {
-        return new KnxIpTunnelingConnectorParameters(SelectedInterface);
+        return new KnxIpTunnelingConnectorParameters(_settings.IP, _settings.IpPort, false);
       }
       else
       {
-        var secure = new KnxIpSecureDeviceManagementConnectorParameters(SelectedInterface);
-        secure.LoadSecurityData(SelectedInterface.IndividualAddress, _fileName, MakeStringSecure(passwordEntry.Text));
-        return secure;
+        //var secure = new KnxIpSecureDeviceManagementConnectorParameters(SelectedInterface);
+        //secure.LoadSecurityData(SelectedInterface.IndividualAddress, _fileName, MakeStringSecure(passwordEntry.Text));
+        //return secure;
       }
+
+      return null;
     }
 
     private SecureString MakeStringSecure(string plain)
@@ -160,30 +120,12 @@ namespace Busmonitor.Views
       _fileName = fileData.FileName;
     }
 
-    private void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
-    {
-      SelectedInterface = e.SelectedItem as DiscoveryResult;
-      ToggleUI();
-    }
-
-    public DiscoveryResult SelectedInterface { get; set; }
-
     public void OnSaveButtonClicked(object sender, EventArgs e)
     {
       string fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Telegramms.csv");
       //TODO add content
       var csvContent = string.Empty;
       File.WriteAllText(fileName, csvContent);
-    }
-
-    private void DiscoverButton_OnClicked(object sender, EventArgs e)
-    {
-      DiscoveredInterfaces.Clear();
-      Telegramms.Clear();
-      SelectedInterface = null;
-      listView.SelectedItem = null;
-      ToggleUI();
-      DiscoverInterfaces();
     }
 
     //private static string ConvertToCsv(Telegram telegram, int counter)
@@ -204,5 +146,9 @@ namespace Busmonitor.Views
     //    $"\"{telegram.Info}\"",
     //    telegram.Iack);
     //}
+    private void DiscoverButton_OnClicked(object sender, EventArgs e)
+    {
+      throw new NotImplementedException();
+    }
   }
 }
