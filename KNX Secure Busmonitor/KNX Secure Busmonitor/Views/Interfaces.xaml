@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:behavior="clr-namespace:Busmonitor.Behavior;assembly=KNX Secure Busmonitor"
              mc:Ignorable="d"
              x:Class="Busmonitor.Views.Interfaces">
   <ContentPage.Content>
@@ -13,7 +14,10 @@
           <RowDefinition Height="9*"/>
         </Grid.RowDefinitions>
         <Label Text="Discoverd Interfaces:" Grid.Row="0"/>
-        <ListView x:Name="listView" MinimumHeightRequest="500" HeightRequest="500" ItemSelected="OnItemSelected" Grid.Row="1">
+        <ListView MinimumHeightRequest="500" HeightRequest="500" ItemsSource="{Binding DiscoveredInterfaces}"  Grid.Row="1">
+          <ListView.Behaviors>
+            <behavior:EventToCommandBehavior EventName="ItemSelected" Command="{Binding ItemSelectedCommand}"/>
+          </ListView.Behaviors>
           <ListView.ItemTemplate>
             <DataTemplate>
               <ViewCell>
@@ -27,10 +31,8 @@
             </DataTemplate>
           </ListView.ItemTemplate>
         </ListView>
+        <ActivityIndicator Grid.Row="1" IsRunning ="{Binding IsDiscovering}"  HorizontalOptions="Center" VerticalOptions="Center" Color="Orange"  />
       </Grid>
-      <Button x:Name="DiscoverButton"
-              Text="Discover"
-              Clicked="DiscoverButton_OnClicked"/>
     </StackLayout>
   </ContentPage.Content>
 </ContentPage>

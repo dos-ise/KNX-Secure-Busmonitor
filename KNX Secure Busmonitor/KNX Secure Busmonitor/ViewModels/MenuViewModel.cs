@@ -9,10 +9,10 @@ namespace Busmonitor.ViewModels
   {
     public Settings Settings { get; }
 
-    public ICommand GoMonitorCommand { get; set; }
-    public ICommand GoInterfacesCommand { get; set; }
-    public ICommand GoSecurityCommand { get; set; }
-    public ICommand GoExportCommand { get; set; }
+    public ICommand GoMonitorCommand { get; }
+    public ICommand GoInterfacesCommand { get; }
+    public ICommand GoSecurityCommand { get; }
+    public ICommand GoExportCommand { get; }
 
     public MenuViewModel(Settings settings)
     {
@@ -35,7 +35,7 @@ namespace Busmonitor.ViewModels
 
     private void GoInterfacesExecute(object obj)
     {
-      App.NavigationPage.Navigation.PushAsync(new Interfaces(Settings));
+      App.NavigationPage.Navigation.PushAsync(new Interfaces(){ BindingContext = new InterfacesViewModel(Settings) });
       App.MenuIsPresented = false;
     }
 
