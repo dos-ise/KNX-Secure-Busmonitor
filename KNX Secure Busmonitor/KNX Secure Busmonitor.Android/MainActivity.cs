@@ -5,7 +5,7 @@ using Android.OS;
 using Busmonitor;
 namespace KNX_Secure_Busmonitor.Droid
 {
-  [Activity(Label = "KNX_Secure_Busmonitor", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+  [Activity(Label = "OpenMonitor KNX", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
   public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
   {
     protected override void OnCreate(Bundle savedInstanceState)
