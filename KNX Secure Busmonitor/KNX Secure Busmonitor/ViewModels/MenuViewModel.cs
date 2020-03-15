@@ -25,6 +25,7 @@ namespace Busmonitor.ViewModels
 
     private void GoExportExecute(object obj)
     {
+      App.NavigationPage.Navigation.PushAsync(new ExportPage() { BindingContext = new ExportViewModel(Settings) });
       App.MenuIsPresented = false;
     }
 
