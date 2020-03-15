@@ -20,6 +20,8 @@ using Xamarin.Forms.Xaml;
 
 namespace Busmonitor.Views
 {
+  using Busmonitor.Model;
+
   using Knx.Bus.Common.KnxIp;
 
   using Plugin.Toast;
@@ -36,12 +38,12 @@ namespace Busmonitor.Views
       _settings = settings;
       InitializeComponent();
 
-      Telegramms = new ObservableCollection<GroupValueEventArgs>();
+      Telegramms = new ObservableCollection<Telegramm>();
       TelegrammGrid.SetBinding(DataGrid.ItemsSourceProperty, new Binding("."));
       TelegrammGrid.BindingContext = Telegramms;
     }
 
-    public ObservableCollection<GroupValueEventArgs> Telegramms { get; set; }
+    public ObservableCollection<Telegramm> Telegramms { get; set; }
 
     void OnConnectButtonClicked(object sender, EventArgs e)
     {
@@ -84,7 +86,7 @@ namespace Busmonitor.Views
                   {
                     Device.BeginInvokeOnMainThread(() =>
                       {
-                        Telegramms.Add(args);
+                        Telegramms.Add(new Telegramm(args, DateTime.Now));
                         OnPropertyChanged(nameof(Telegramms));
                       });
                   };

@@ -3,10 +3,14 @@
 namespace Busmonitor.ViewModels
 {
   using System.Collections.Generic;
+  using System.IO;
   using System.Xml.Linq;
+
+  using Busmonitor.Model;
 
   using Knx.Bus.Common;
 
+  using Xamarin.Essentials;
   using Xamarin.Forms;
 
   public class ExportViewModel
@@ -21,12 +25,22 @@ namespace Busmonitor.ViewModels
       ExportCommand = new Command(ExecuteExport);
     }
 
-    private void ExecuteExport(object obj)
+    private async void ExecuteExport(object obj)
     {
-      XDocument exportFile = CreateExportFile(new List<GroupValueEventArgs>());
+      XDocument exportFile = CreateExportFile(new List<Telegramm>());
+
+      var fn = "Telegrams.xml";
+      var file = Path.Combine(FileSystem.CacheDirectory, fn);
+      exportFile.Save(file);
+
+      await Share.RequestAsync(new ShareFileRequest
+                                 {
+                                   Title = "Telegrams",
+                                   File = new ShareFile(file)
+                                 });
     }
 
-    private XDocument CreateExportFile(IEnumerable<GroupValueEventArgs> telegrams)
+    private XDocument CreateExportFile(IEnumerable<Telegramm> telegrams)
     {
       XNamespace nameSpace = "http://knx.org/xml/telegrams/01";
       var communiLog = new XElement(nameSpace + "CommunicationLog");
@@ -48,18 +62,12 @@ namespace Busmonitor.ViewModels
       return file;
     }
 
-    private XElement CreateTeleXml(XNamespace nameSpace, GroupValueEventArgs tele)
+    private XElement CreateTeleXml(XNamespace nameSpace, Telegramm tele)
     {
-      var rawData = new XAttribute("RawData", ConvertToRaw(tele));
-      //var timeStamp = new XAttribute("Timestamp", );
+      var rawData = new XAttribute("RawData", tele.RAW);
+      var timeStamp = new XAttribute("Timestamp", tele.TimeStamp);
       var telegram = new XElement(nameSpace + "Telegram", rawData);
       return telegram;
-    }
-
-    private string ConvertToRaw(GroupValueEventArgs tele)
-    {
-      //TODO
-      return "2B0703010604020703BC30045425E1008166";
     }
   }
 }
