@@ -29,13 +29,37 @@ namespace Busmonitor.ViewModels
     private XDocument CreateExportFile(IEnumerable<GroupValueEventArgs> telegrams)
     {
       XNamespace nameSpace = "http://knx.org/xml/telegrams/01";
+      var communiLog = new XElement(nameSpace + "CommunicationLog");
       var timeStamp = new XAttribute("Timestamp", "2020-03-13T14:40:19.0278597Z");
-      var connection = new XElement("Connection", timeStamp, new XAttribute("State", "Established"));
-      var recordStart = new XElement("RecordStart", timeStamp);
-      var recordStop = new XElement("RecordStop", timeStamp);
-      var file = new XDocument(new XElement(nameSpace + "CommunicationLog"));
+      var connection = new XElement(nameSpace + "Connection", timeStamp, new XAttribute("State", "Established"));
+      var recordStart = new XElement(nameSpace + "RecordStart", timeStamp);
+      var recordStop = new XElement(nameSpace + "RecordStop", timeStamp);
+
+      communiLog.Add(connection);
+      communiLog.Add(recordStart);
+      foreach (var tele in telegrams)
+      {
+        communiLog.Add(CreateTeleXml(nameSpace, tele));
+      }
+      communiLog.Add(recordStop);
+
+      var file = new XDocument(communiLog);
 
       return file;
+    }
+
+    private XElement CreateTeleXml(XNamespace nameSpace, GroupValueEventArgs tele)
+    {
+      var rawData = new XAttribute("RawData", ConvertToRaw(tele));
+      //var timeStamp = new XAttribute("Timestamp", );
+      var telegram = new XElement(nameSpace + "Telegram", rawData);
+      return telegram;
+    }
+
+    private string ConvertToRaw(GroupValueEventArgs tele)
+    {
+      //TODO
+      return "2B0703010604020703BC30045425E1008166";
     }
   }
 }

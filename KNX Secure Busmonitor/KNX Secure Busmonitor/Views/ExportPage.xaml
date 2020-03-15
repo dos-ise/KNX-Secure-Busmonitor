@@ -8,6 +8,7 @@
     <ContentPage.Content>
         <StackLayout>
             <Button Text="Export!"
+                    Command="{Binding ExportCommand}"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />
         </StackLayout>
