@@ -37,6 +37,9 @@ namespace Busmonitor.ViewModels
       {
         _settings.IP = result.IpAddress.ToString();
         _settings.InterfaceName = result.FriendlyName;
+        _settings.SerialNumber = result.SerialNumber;
+        _settings.MediumType = result.MediumType.ToString();
+        _settings.MacAddress = result.MacAddress.ToString();
 
         CrossToastPopUp.Current.ShowToastMessage(
           "Saved " + _settings.InterfaceName + "(" + _settings.IP + ")");

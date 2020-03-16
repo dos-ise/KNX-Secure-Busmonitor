@@ -22,7 +22,19 @@ namespace Busmonitor
     {
       set => Set(nameof(InterfaceName), value);
       get => Get<string>(nameof(InterfaceName));
-    }
+    }        
+    
+    public string SerialNumber
+    {
+      set => Set(nameof(SerialNumber), value);
+      get => Get<string>(nameof(SerialNumber));
+    }       
+    
+    public string MediumType
+    {
+      set => Set(nameof(MediumType), value);
+      get => Get<string>(nameof(MediumType));
+    }    
 
     public bool IsSecurityEnabled
     {
@@ -34,6 +46,12 @@ namespace Busmonitor
     {
       set => Set(nameof(Password), value);
       get => Get<string>(nameof(Password));
+    }
+
+    public string MacAddress
+    {
+      set => Set(nameof(MacAddress), value);
+      get => Get<string>(nameof(MacAddress));
     }
 
     private void Set<T>(string key, T value)

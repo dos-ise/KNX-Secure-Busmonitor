@@ -34,10 +34,10 @@ namespace Busmonitor.ViewModels
       exportFile.Save(file);
 
       await Share.RequestAsync(new ShareFileRequest
-                                 {
-                                   Title = "Telegrams",
-                                   File = new ShareFile(file)
-                                 });
+      {
+        Title = "Telegrams",
+        File = new ShareFile(file)
+      });
     }
 
     private XDocument CreateExportFile(IEnumerable<Telegramm> telegrams)
@@ -46,7 +46,7 @@ namespace Busmonitor.ViewModels
       var communiLog = new XElement(nameSpace + "CommunicationLog");
       var timeStamp = new XAttribute("Timestamp", "2020-03-13T14:40:19.0278597Z");
       var connection = new XElement(nameSpace + "Connection", timeStamp, new XAttribute("State", "Established"));
-      var recordStart = new XElement(nameSpace + "RecordStart", timeStamp);
+      var recordStart = CreateRecordStart(nameSpace, timeStamp);
       var recordStop = new XElement(nameSpace + "RecordStop", timeStamp);
 
       communiLog.Add(connection);
@@ -60,6 +60,22 @@ namespace Busmonitor.ViewModels
       var file = new XDocument(communiLog);
 
       return file;
+    }
+
+    private object CreateRecordStart(XNamespace nameSpace, XAttribute timeStamp)
+    {
+      var mode = new XAttribute("Mode", "LinkLayer");
+      var host = new XAttribute("Host", "Android");
+      var connectionName = new XAttribute("ConnectionName", _settings.InterfaceName);
+      var options = string.Format(
+        "Type=KnxIpTunneling;HostAddress={0};Name=&quot;{1}&quot;",
+        _settings.IP,
+        _settings.InterfaceName);
+      var connectionOptions = new XAttribute("ConnectionOptions", options);
+      var connectorType = new XAttribute("ConnectorType", "KnxIpTunneling");
+      var mediumType = new XAttribute("MediumType", _settings.MediumType);
+      var record = new XElement(nameSpace + "RecordStart", timeStamp, mode, host, connectionName, connectionOptions, connectorType, mediumType);
+      return record;
     }
 
     private XElement CreateTeleXml(XNamespace nameSpace, Telegramm tele)
