@@ -4,9 +4,10 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:dataGrid="clr-namespace:Xamarin.Forms.DataGrid;assembly=Xamarin.Forms.DataGrid"
+             xmlns:views="clr-namespace:SuaveControls.Views;assembly=SuaveControls.FloatingActionButton"
              mc:Ignorable="d"
              x:Class="Busmonitor.Views.HomePage">
-  <StackLayout Margin="10,35,10,10">
+  <AbsoluteLayout Margin="10,35,10,10">
     <dataGrid:DataGrid x:Name="TelegrammGrid"
                        SelectionEnabled="True"
                        RowHeight="70" 
@@ -23,28 +24,14 @@
         <dataGrid:DataGridColumn Title="IsSecure" PropertyName="Args.IsSecure" Width="1*"/>
       </dataGrid:DataGrid.Columns>
     </dataGrid:DataGrid>
-    <Label x:Name="passwordLabel" Text="Password:" IsVisible="False"/>
-    <Entry x:Name="passwordEntry" IsPassword="True" IsVisible="False"/>
-    <Grid x:Name="ButtonGrid" Grid.Row="1">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="*" />
-        <ColumnDefinition Width="*" />
-        <ColumnDefinition Width="*" />
-      </Grid.ColumnDefinitions>
-
-      <Button x:Name="ConnectButton"
-              Text="Connect"
-              Clicked="OnConnectButtonClicked" />
-      <Button x:Name="AddKeyringButton"
-              Grid.Column="1"
-              Text="Add Keyring"
-              IsVisible="False"
-              Clicked="OnAddButtonClicked"/>
-      <Button x:Name="SaveButton"
-              Grid.Column="2"
-              IsVisible="False"
-              Text="Save"
-              Clicked="OnSaveButtonClicked" />
-    </Grid>
-  </StackLayout>
+    <views:FloatingActionButton 
+      AbsoluteLayout.LayoutFlags="PositionProportional"  
+      AbsoluteLayout.LayoutBounds=".95,.95,80,80" 
+      x:Name="ConnectButton" 
+      Text="Connect" HorizontalOptions="CenterAndExpand" 
+      WidthRequest="75" HeightRequest="90"  
+      VerticalOptions="CenterAndExpand" 
+      ButtonColor="LawnGreen" 
+      Clicked="OnConnectButtonClicked"/>
+  </AbsoluteLayout>
 </ContentPage>

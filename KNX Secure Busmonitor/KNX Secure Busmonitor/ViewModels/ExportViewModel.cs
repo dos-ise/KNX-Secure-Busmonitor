@@ -2,11 +2,14 @@
 
 namespace Busmonitor.ViewModels
 {
+  using System;
   using System.Collections.Generic;
   using System.IO;
+  using System.Linq;
   using System.Xml.Linq;
 
   using Busmonitor.Model;
+  using Busmonitor.Views;
 
   using Knx.Bus.Common;
 
@@ -27,7 +30,7 @@ namespace Busmonitor.ViewModels
 
     private async void ExecuteExport(object obj)
     {
-      XDocument exportFile = CreateExportFile(new List<Telegramm>());
+      XDocument exportFile = CreateExportFile(HomePage.Telegramms);
 
       var fn = "Telegrams.xml";
       var file = Path.Combine(FileSystem.CacheDirectory, fn);
@@ -44,10 +47,23 @@ namespace Busmonitor.ViewModels
     {
       XNamespace nameSpace = "http://knx.org/xml/telegrams/01";
       var communiLog = new XElement(nameSpace + "CommunicationLog");
-      var timeStamp = new XAttribute("Timestamp", "2020-03-13T14:40:19.0278597Z");
-      var connection = new XElement(nameSpace + "Connection", timeStamp, new XAttribute("State", "Established"));
-      var recordStart = CreateRecordStart(nameSpace, timeStamp);
-      var recordStop = new XElement(nameSpace + "RecordStop", timeStamp);
+
+      XAttribute startTimeStamp;
+      XAttribute stopTimeStamp;
+      if (telegrams.Any())
+      {
+        startTimeStamp = new XAttribute("Timestamp", telegrams.First().TimeStamp);
+        stopTimeStamp = new XAttribute("Timestamp", telegrams.Last().TimeStamp);
+      }
+      else
+      {
+        startTimeStamp = new XAttribute("Timestamp", DateTime.Now);
+        stopTimeStamp = new XAttribute("Timestamp", DateTime.Now);
+      }
+      
+      var connection = new XElement(nameSpace + "Connection", startTimeStamp, new XAttribute("State", "Established"));
+      var recordStart = CreateRecordStart(nameSpace, startTimeStamp);
+      var recordStop = new XElement(nameSpace + "RecordStop", stopTimeStamp);
 
       communiLog.Add(connection);
       communiLog.Add(recordStart);
@@ -80,9 +96,11 @@ namespace Busmonitor.ViewModels
 
     private XElement CreateTeleXml(XNamespace nameSpace, Telegramm tele)
     {
-      var rawData = new XAttribute("RawData", tele.RAW);
       var timeStamp = new XAttribute("Timestamp", tele.TimeStamp);
-      var telegram = new XElement(nameSpace + "Telegram", rawData);
+      var service = new XAttribute("Service", "L_Data.ind");
+      var frameFormat = new XAttribute("FrameFormat", "CommonEmi");
+      var rawData = new XAttribute("RawData", tele.RAW);
+      var telegram = new XElement(nameSpace + "Telegram", timeStamp, service, frameFormat, rawData);
       return telegram;
     }
   }

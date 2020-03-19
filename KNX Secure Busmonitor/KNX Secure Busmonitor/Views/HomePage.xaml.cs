@@ -43,7 +43,7 @@ namespace Busmonitor.Views
       TelegrammGrid.BindingContext = Telegramms;
     }
 
-    public ObservableCollection<Telegramm> Telegramms { get; set; }
+    public static ObservableCollection<Telegramm> Telegramms { get; set; }
 
     void OnConnectButtonClicked(object sender, EventArgs e)
     {
@@ -99,13 +99,11 @@ namespace Busmonitor.Views
             }
           });
         ConnectButton.Text = "Disconnect";
-        AddKeyringButton.IsEnabled = false;
       }
       else
       {
         Telegramms.Clear();
         ConnectButton.Text = "Connect";
-        AddKeyringButton.IsEnabled = true;
       }
     }
 
