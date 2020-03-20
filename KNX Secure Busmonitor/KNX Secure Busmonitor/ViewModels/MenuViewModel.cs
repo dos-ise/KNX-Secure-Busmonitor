@@ -31,6 +31,7 @@ namespace Busmonitor.ViewModels
 
     private void GoSecurityExecute(object obj)
     {
+      App.NavigationPage.Navigation.PushAsync(new SecurityPage() { BindingContext = new SecurtiyViewModel() });
       App.MenuIsPresented = false;
     }
 

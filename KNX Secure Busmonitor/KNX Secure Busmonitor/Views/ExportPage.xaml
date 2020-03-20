@@ -7,10 +7,11 @@
              x:Class="Busmonitor.Views.ExportPage">
     <ContentPage.Content>
         <StackLayout>
-            <Button Text="Export!"
-                    Command="{Binding ExportCommand}"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+          <Label Text="Export to ETS5 xml Format"/>
+          <Button Text="Export!"
+                  Command="{Binding ExportCommand}"
+                  VerticalOptions="CenterAndExpand" 
+                  HorizontalOptions="CenterAndExpand" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

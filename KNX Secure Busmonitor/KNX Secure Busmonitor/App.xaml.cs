@@ -4,6 +4,8 @@ using Xamarin.Forms;
 
 namespace Busmonitor
 {
+  using Busmonitor.ViewModels;
+
   public partial class App : Application
   {
     public static NavigationPage NavigationPage { get; private set; }
@@ -22,7 +24,7 @@ namespace Busmonitor
       DefaultSettings(_settings);
       Xamarin.Forms.DataGrid.DataGridComponent.Init();
       var menuPage = new MenuPage { BindingContext = new ViewModels.MenuViewModel(_settings), Title = "Menu" };
-      NavigationPage = new NavigationPage(new HomePage(_settings));
+      NavigationPage = new NavigationPage(new HomePage() { BindingContext = new HomeViewModel(_settings) });
       RootPage = new RootPage();
       RootPage.Master = menuPage;
       RootPage.Detail = NavigationPage;

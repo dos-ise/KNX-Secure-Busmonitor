@@ -28,10 +28,11 @@
       AbsoluteLayout.LayoutFlags="PositionProportional"  
       AbsoluteLayout.LayoutBounds=".95,.95,80,80" 
       x:Name="ConnectButton" 
-      Text="Connect" HorizontalOptions="CenterAndExpand" 
+      Text="{Binding ConnectButtonText}" 
+      HorizontalOptions="CenterAndExpand" 
       WidthRequest="75" HeightRequest="90"  
       VerticalOptions="CenterAndExpand" 
       ButtonColor="LawnGreen" 
-      Clicked="OnConnectButtonClicked"/>
+      Command="{Binding ConnectCommand}"/>
   </AbsoluteLayout>
 </ContentPage>
