@@ -32,7 +32,7 @@
       HorizontalOptions="CenterAndExpand" 
       WidthRequest="75" HeightRequest="90"  
       VerticalOptions="CenterAndExpand" 
-      ButtonColor="LawnGreen" 
+      ButtonColor="{Binding ConnectButtonColor}" 
       Command="{Binding ConnectCommand}"/>
   </AbsoluteLayout>
 </ContentPage>

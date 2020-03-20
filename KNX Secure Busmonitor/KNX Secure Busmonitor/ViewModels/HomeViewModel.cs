@@ -26,11 +26,13 @@ namespace Busmonitor.ViewModels
     private readonly Settings _settings;
 
     private string _connectButtonText;
+    private Color _connectButtonColor;
 
     public HomeViewModel(Settings settings)
     {
       _settings = settings;
       _connectButtonText = "Connect";
+      _connectButtonColor = Color.GreenYellow;
       Telegramms = new ObservableCollection<Telegramm>();
       ConnectCommand = new Command(OnConnect);
     }
@@ -49,6 +51,19 @@ namespace Busmonitor.ViewModels
       {
         _connectButtonText = value;
         OnPropertyChanged(nameof(ConnectButtonText));
+      }
+    }    
+    
+    public Color ConnectButtonColor
+    {
+      get
+      {
+        return _connectButtonColor;
+      }
+      set
+      {
+        _connectButtonColor = value;
+        OnPropertyChanged(nameof(ConnectButtonColor));
       }
     }
 
@@ -72,6 +87,7 @@ namespace Busmonitor.ViewModels
                     () =>
                       {
                         ConnectButtonText = "Connect";
+                        ConnectButtonColor = Color.GreenYellow;
                         CrossToastPopUp.Current.ShowToastMessage(
                           "Could not connect to " + _settings.InterfaceName + "(" + _settings.IP + ")");
                       });
@@ -106,11 +122,13 @@ namespace Busmonitor.ViewModels
               }
             });
         ConnectButtonText = "Disconnect";
+        ConnectButtonColor = Color.Red;
       }
       else
       {
         Telegramms.Clear();
         ConnectButtonText = "Connect";
+        ConnectButtonColor = Color.GreenYellow;
       }
     }
 
