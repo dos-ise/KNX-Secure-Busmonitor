@@ -31,9 +31,31 @@
       x:Name="ConnectButton" 
       Text="{Binding ConnectButtonText}" 
       HorizontalOptions="CenterAndExpand" 
-      WidthRequest="75" HeightRequest="90"  
       VerticalOptions="CenterAndExpand" 
+      WidthRequest="75" 
+      HeightRequest="75"  
       ButtonColor="{Binding ConnectButtonColor}" 
       Command="{Binding ConnectCommand}"/>
+    <views:FloatingActionButton 
+      AbsoluteLayout.LayoutFlags="PositionProportional"  
+      AbsoluteLayout.LayoutBounds=".95,.40,80,80" 
+      x:Name="WriteButton" 
+      Text="{Binding ConnectButtonText}" 
+      HorizontalOptions="CenterAndExpand" 
+      VerticalOptions="CenterAndExpand" 
+      WidthRequest="75" 
+      HeightRequest="75"  
+      ButtonColor="Yellow"
+      Command="{Binding OpenWriteCommand}"/>
+    <Grid AbsoluteLayout.LayoutBounds=".5,1,1,.15" AbsoluteLayout.LayoutFlags="All">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="*" />
+      </Grid.ColumnDefinitions>
+      <Entry Text="{Binding TargetWriteAddress}" Grid.Column="0"/>
+      <Entry Text="1" Grid.Column="1"/>
+      <Button Text="Send" Grid.Column="2"/>
+    </Grid>
   </AbsoluteLayout>
 </ContentPage>
