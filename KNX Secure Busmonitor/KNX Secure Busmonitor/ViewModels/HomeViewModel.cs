@@ -52,6 +52,8 @@ namespace Busmonitor.ViewModels
 
     public Color ConnectButtonColor => _bus.IsConnected ? Color.GreenYellow : Color.Red;
 
+    public bool IsConnected => this._bus.IsConnected;
+
     public string TargetWriteAddress
     {
       get => targetWriteAddress;
@@ -94,6 +96,7 @@ namespace Busmonitor.ViewModels
         Telegramms.Clear();
         OnPropertyChanged(nameof(ConnectButtonColor));
         OnPropertyChanged(nameof(ConnectButtonText));
+        OnPropertyChanged(nameof(IsConnected));
       }
     }
 
@@ -106,6 +109,7 @@ namespace Busmonitor.ViewModels
         _bus.Connect();
         OnPropertyChanged(nameof(ConnectButtonColor));
         OnPropertyChanged(nameof(ConnectButtonText));
+        OnPropertyChanged(nameof(IsConnected));
       }
       catch (Exception exception)
       {

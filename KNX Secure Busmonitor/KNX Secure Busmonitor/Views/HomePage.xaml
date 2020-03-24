@@ -36,14 +36,14 @@
       HeightRequest="75"  
       ButtonColor="{Binding ConnectButtonColor}" 
       Command="{Binding ConnectCommand}"/>
-    <Grid AbsoluteLayout.LayoutBounds=".5,1,1,.15" AbsoluteLayout.LayoutFlags="All">
+    <Grid AbsoluteLayout.LayoutBounds=".5,1,1,.15" AbsoluteLayout.LayoutFlags="All" IsVisible="{Binding IsConnected}">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="Auto" />
         <ColumnDefinition Width="*" />
         <ColumnDefinition Width="*" />
       </Grid.ColumnDefinitions>
       <Entry Text="{Binding TargetWriteAddress}" Grid.Column="0"/>
-      <Entry Text="1" Grid.Column="1"/>
+      <Entry Text="{Binding WriteValue}" Grid.Column="1"/>
       <Button Text="Send" Grid.Column="2"/>
     </Grid>
   </AbsoluteLayout>
