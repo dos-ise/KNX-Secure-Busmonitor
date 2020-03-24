@@ -37,14 +37,13 @@ namespace Busmonitor.ViewModels
       _bus = new Bus(CreateParameter());
       Telegramms = new ObservableCollection<Telegramm>();
       ConnectCommand = new Command(OnConnect);
-      OpenWriteCommand = new Command(OnOpenWrite);
       WriteCommand = new Command(OnWrite);
       TargetWriteAddress = "1/1/1";
       WriteValue = "true";
     }
 
     public ICommand ConnectCommand { get; }
-    public ICommand OpenWriteCommand { get; }
+
     public ICommand WriteCommand { get; }
 
     public ObservableCollection<Telegramm> Telegramms { get; set; }
