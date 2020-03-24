@@ -39,7 +39,7 @@ namespace Busmonitor.ViewModels
 
     public ICommand ConnectCommand { get; }
 
-    public static ObservableCollection<Telegramm> Telegramms { get; set; }
+    public ObservableCollection<Telegramm> Telegramms { get; set; }
 
     public string ConnectButtonText
     {

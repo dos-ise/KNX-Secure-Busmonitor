@@ -9,6 +9,7 @@ namespace Busmonitor
   public partial class App : Application
   {
     public static NavigationPage NavigationPage { get; private set; }
+    public static HomeViewModel Home { get; private set; }
     private static RootPage RootPage;
 
     public static bool MenuIsPresented
@@ -24,7 +25,8 @@ namespace Busmonitor
       DefaultSettings(_settings);
       Xamarin.Forms.DataGrid.DataGridComponent.Init();
       var menuPage = new MenuPage { BindingContext = new ViewModels.MenuViewModel(_settings), Title = "Menu" };
-      NavigationPage = new NavigationPage(new HomePage() { BindingContext = new HomeViewModel(_settings) });
+      Home = new HomeViewModel(_settings);
+      NavigationPage = new NavigationPage(new HomePage() { BindingContext = Home });
       RootPage = new RootPage();
       RootPage.Master = menuPage;
       RootPage.Detail = NavigationPage;

@@ -10,6 +10,7 @@
   <AbsoluteLayout Margin="10,35,10,10">
     <dataGrid:DataGrid x:Name="TelegrammGrid"
                        SelectionEnabled="True"
+                       ItemsSource="{Binding Telegramms}"
                        RowHeight="70" 
                        HeaderHeight="50" 
                        HeightRequest="600"

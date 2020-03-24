@@ -30,7 +30,7 @@ namespace Busmonitor.ViewModels
 
     private async void ExecuteExport(object obj)
     {
-      XDocument exportFile = CreateExportFile(HomeViewModel.Telegramms);
+      XDocument exportFile = CreateExportFile(App.Home.Telegramms);
 
       var fn = "Telegrams.xml";
       var file = Path.Combine(FileSystem.CacheDirectory, fn);
