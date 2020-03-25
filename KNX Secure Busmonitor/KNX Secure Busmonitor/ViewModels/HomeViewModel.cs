@@ -31,6 +31,8 @@ namespace Busmonitor.ViewModels
     private string targetWriteAddress;
     private string writeValue;
 
+    private bool _isConnecting;
+
     public HomeViewModel(Settings settings)
     {
       _settings = settings;
@@ -62,8 +64,8 @@ namespace Busmonitor.ViewModels
         targetWriteAddress = value;
         OnPropertyChanged(nameof(TargetWriteAddress));
       }
-    }    
-    
+    }
+
     public string WriteValue
     {
       get => writeValue;
@@ -83,12 +85,15 @@ namespace Busmonitor.ViewModels
       _bus.WriteValue(new GroupAddress(TargetWriteAddress), GroupValue.Parse(WriteValue));
     }
 
-    private void OnConnect()
+    private async void OnConnect()
     {
       ConnectorParameters connectorParameter = CreateParameter();
-      if (_bus.IsConnected)
+      if (!_bus.IsConnected)
       {
-        Task.Run(() => Action(connectorParameter));
+        if (!_isConnecting)
+        {
+          await Task.Run(() => Action(connectorParameter));
+        }
       }
       else
       {
@@ -106,7 +111,9 @@ namespace Busmonitor.ViewModels
 
       try
       {
+        _isConnecting = true;
         _bus.Connect();
+
         OnPropertyChanged(nameof(ConnectButtonColor));
         OnPropertyChanged(nameof(ConnectButtonText));
         OnPropertyChanged(nameof(IsConnected));
@@ -121,6 +128,10 @@ namespace Busmonitor.ViewModels
             });
 
         return;
+      }
+      finally
+      {
+        _isConnecting = false;
       }
 
       if (_bus.IsConnected)
