@@ -44,7 +44,7 @@
       </Grid.ColumnDefinitions>
       <Entry Text="{Binding TargetWriteAddress}" Grid.Column="0"/>
       <Entry Text="{Binding WriteValue}" Grid.Column="1"/>
-      <Button Text="Send" Grid.Column="2"/>
+      <Button Text="Send" Command="{Binding WriteCommand}"  Grid.Column="2"/>
     </Grid>
   </AbsoluteLayout>
 </ContentPage>
