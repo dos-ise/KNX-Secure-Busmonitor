@@ -7,7 +7,7 @@
              xmlns:views="clr-namespace:SuaveControls.Views;assembly=SuaveControls.FloatingActionButton"
              mc:Ignorable="d"
              x:Class="Busmonitor.Views.HomePage">
-  <AbsoluteLayout Margin="10,35,10,10">
+  <AbsoluteLayout Margin="0,35,0,10">
     <dataGrid:DataGrid x:Name="TelegrammGrid"
                        SelectionEnabled="True"
                        ItemsSource="{Binding Telegramms}"
@@ -27,13 +27,14 @@
     </dataGrid:DataGrid>
     <views:FloatingActionButton 
       AbsoluteLayout.LayoutFlags="PositionProportional"  
-      AbsoluteLayout.LayoutBounds=".95,.95,80,80" 
+      AbsoluteLayout.LayoutBounds=".95,.70, 80, 80" 
       x:Name="ConnectButton" 
       Text="{Binding ConnectButtonText}" 
       HorizontalOptions="CenterAndExpand" 
       VerticalOptions="CenterAndExpand" 
       WidthRequest="75" 
       HeightRequest="75"  
+      ImageSource="plug.png"
       ButtonColor="{Binding ConnectButtonColor}" 
       Command="{Binding ConnectCommand}"/>
     <Grid AbsoluteLayout.LayoutBounds=".5,1,1,.15" AbsoluteLayout.LayoutFlags="All" IsVisible="{Binding IsConnected}">
