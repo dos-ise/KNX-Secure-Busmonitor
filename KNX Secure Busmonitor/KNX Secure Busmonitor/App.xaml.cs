@@ -40,6 +40,7 @@ namespace Busmonitor
         settings.IP = "192.168.10.100";
         settings.IpPort = 0x0e57;
         settings.InterfaceName = "Multicast";
+        settings.MediumType = "TP";
       }
     }
 
