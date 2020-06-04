@@ -51,6 +51,8 @@ namespace Busmonitor.ViewModels
     public SecurtiyViewModel Security => new SecurtiyViewModel();
 
     public ExportViewModel Export => new ExportViewModel(_settings);
+
+    public Settings Settings => _settings;
     
     public ICommand ConnectCommand { get; }
 
