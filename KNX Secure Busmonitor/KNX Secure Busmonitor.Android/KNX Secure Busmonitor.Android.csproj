@@ -52,10 +52,11 @@
     <EnableLLVM>false</EnableLLVM>
     <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
     <BundleAssemblies>false</BundleAssemblies>
-    <AndroidLinkTool>proguard</AndroidLinkTool>
     <AndroidPackageFormat>apk</AndroidPackageFormat>
     <MandroidI18n />
     <AndroidLinkMode>None</AndroidLinkMode>
+    <AndroidDexTool>dx</AndroidDexTool>
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />

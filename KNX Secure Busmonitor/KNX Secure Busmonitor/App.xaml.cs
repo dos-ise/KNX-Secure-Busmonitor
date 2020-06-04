@@ -8,15 +8,7 @@ namespace Busmonitor
 
   public partial class App : Application
   {
-    public static NavigationPage NavigationPage { get; private set; }
     public static HomeViewModel Home { get; private set; }
-    private static RootPage RootPage;
-
-    public static bool MenuIsPresented
-    {
-      get => RootPage.IsPresented;
-      set => RootPage.IsPresented = value;
-    }
 
     public App()
     {

@@ -5,10 +5,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="Busmonitor.Views.SecurityPage">
-    <ContentPage.Content>
-        <StackLayout>
-          <Label x:Name="passwordLabel" Text="Password:" IsVisible="False"/>
-          <Entry x:Name="passwordEntry" IsPassword="True" IsVisible="False"/>
+  <ContentPage.Content>
+    <StackLayout>
+      <Label x:Name="passwordLabel" Text="Password:" IsVisible="False"/>
+      <Entry x:Name="passwordEntry" IsPassword="True" IsVisible="False"/>
     </StackLayout>
-    </ContentPage.Content>
+  </ContentPage.Content>
 </ContentPage>
