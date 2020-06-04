@@ -24,13 +24,8 @@ namespace Busmonitor
       var _settings = new Settings();
       DefaultSettings(_settings);
       Xamarin.Forms.DataGrid.DataGridComponent.Init();
-      var menuPage = new MenuPage { BindingContext = new ViewModels.MenuViewModel(_settings), Title = "Menu" };
       Home = new HomeViewModel(_settings);
-      NavigationPage = new NavigationPage(new HomePage() { BindingContext = Home });
-      RootPage = new RootPage();
-      RootPage.Master = menuPage;
-      RootPage.Detail = NavigationPage;
-      MainPage = RootPage;
+      MainPage = new AppShell() { BindingContext = Home };
     }
 
     private void DefaultSettings(Settings settings)

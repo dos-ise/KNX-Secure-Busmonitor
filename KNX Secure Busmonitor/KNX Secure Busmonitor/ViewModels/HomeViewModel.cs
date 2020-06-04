@@ -44,6 +44,14 @@ namespace Busmonitor.ViewModels
       WriteValue = "true";
     }
 
+    public HomeViewModel Home => this;
+
+    public InterfacesViewModel Interface => new InterfacesViewModel(_settings);
+
+    public SecurtiyViewModel Security => new SecurtiyViewModel();
+
+    public ExportViewModel Export => new ExportViewModel(_settings);
+    
     public ICommand ConnectCommand { get; }
 
     public ICommand WriteCommand { get; }

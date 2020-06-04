@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Linq;
+using System.Security;
+
+using Plugin.FilePicker;
+using Plugin.FilePicker.Abstractions;
 
 namespace Busmonitor.ViewModels
 {
-  using System.Linq;
-  using System.Security;
-
-  using Plugin.FilePicker;
-  using Plugin.FilePicker.Abstractions;
-
-  class SecurtiyViewModel
+  public class SecurtiyViewModel
   {
     private string _fileName;
 
