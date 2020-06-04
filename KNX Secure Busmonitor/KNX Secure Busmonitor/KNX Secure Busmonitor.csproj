@@ -23,10 +23,10 @@
     <PackageReference Include="Knx.Falcon.Sdk" Version="5.7.442" />
     <PackageReference Include="Plugin.Toast" Version="2.1.2" />
     <PackageReference Include="SuaveControls.FloatingActionButton" Version="2018.1.5" />
-    <PackageReference Include="Xamarin.Forms" Version="4.5.0.356" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.5.1" />
+    <PackageReference Include="Xamarin.Forms" Version="4.6.0.800" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
     <PackageReference Include="Xamarin.Forms.DataGrid" Version="3.1.0" />
-    <PackageReference Include="Xamarin.Plugin.FilePicker" Version="2.1.34" />
+    <PackageReference Include="Xamarin.Plugin.FilePicker" Version="2.1.41" />
   </ItemGroup>
 
   <ItemGroup>
