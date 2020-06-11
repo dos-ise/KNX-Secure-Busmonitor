@@ -40,6 +40,7 @@ namespace KNX_Secure_Busmonitor.UWP
     protected override void OnLaunched(LaunchActivatedEventArgs e)
     {
       // Initialize Xamarin.Forms here
+      Xamarin.Forms.Forms.SetFlags("Shell_UWP_Experimental");
       Xamarin.Forms.Forms.Init(e);
 
       var rootFrame = Window.Current.Content as Frame;
