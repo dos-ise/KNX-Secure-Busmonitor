@@ -4,7 +4,6 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:dataGrid="clr-namespace:Xamarin.Forms.DataGrid;assembly=Xamarin.Forms.DataGrid"
-             xmlns:views="clr-namespace:SuaveControls.Views;assembly=SuaveControls.FloatingActionButton"
              mc:Ignorable="d"
              x:Class="Busmonitor.Views.HomePage">
   <AbsoluteLayout Margin="0,35,0,10">
@@ -26,27 +25,23 @@
         <!--<dataGrid:DataGridColumn Title="IsSecure" PropertyName="Args.IsSecure" Width="1*"/>-->
       </dataGrid:DataGrid.Columns>
     </dataGrid:DataGrid>
-    <views:FloatingActionButton 
-      AbsoluteLayout.LayoutFlags="PositionProportional"  
-      AbsoluteLayout.LayoutBounds=".95,.70, 80, 80" 
-      x:Name="ConnectButton" 
-      Text="{Binding ConnectButtonText}" 
-      HorizontalOptions="CenterAndExpand" 
-      VerticalOptions="CenterAndExpand" 
-      WidthRequest="75" 
-      HeightRequest="75"  
-      ImageSource="plug.png"
-      ButtonColor="{Binding ConnectButtonColor}" 
-      Command="{Binding ConnectCommand}"/>
-    <Grid AbsoluteLayout.LayoutBounds=".5,1,1,.15" AbsoluteLayout.LayoutFlags="All" IsVisible="{Binding IsConnected}">
+
+    <Grid AbsoluteLayout.LayoutBounds=".5,1,1,.15" AbsoluteLayout.LayoutFlags="All" >
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="Auto" />
         <ColumnDefinition Width="*" />
         <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="*" />
       </Grid.ColumnDefinitions>
-      <Entry Text="{Binding TargetWriteAddress}" Grid.Column="0"/>
-      <Entry Text="{Binding WriteValue}" Grid.Column="1"/>
-      <Button Text="Send" Command="{Binding WriteCommand}"  Grid.Column="2"/>
+      <Entry Text="{Binding TargetWriteAddress}" Grid.Column="0" IsVisible="{Binding IsConnected}"/>
+      <Entry Text="{Binding WriteValue}" Grid.Column="1" IsVisible="{Binding IsConnected}"/>
+      <Button Text="Send" Command="{Binding WriteCommand}"  Grid.Column="2" IsVisible="{Binding IsConnected}"/>
+      <Button x:Name="ConnectButton" Grid.Column="3" 
+              Text="{Binding ConnectButtonText}" 
+              HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" 
+              WidthRequest="75" HeightRequest="75"  
+              ImageSource="plug.png"
+              Command="{Binding ConnectCommand}"/>
     </Grid>
   </AbsoluteLayout>
 </ContentPage>

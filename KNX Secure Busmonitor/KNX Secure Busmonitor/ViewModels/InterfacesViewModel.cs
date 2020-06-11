@@ -8,11 +8,9 @@ using Knx.Falcon.Sdk;
 
 namespace Busmonitor.ViewModels
 {
-  using System.Collections.Generic;
-  using System.Linq;
   using System.Windows.Input;
 
-  using Plugin.Toast;
+  using Plugin.LocalNotifications;
 
   using Xamarin.Forms;
 
@@ -44,8 +42,7 @@ namespace Busmonitor.ViewModels
         _settings.MediumType = result.MediumType.ToString();
         _settings.MacAddress = result.MacAddress.ToString();
 
-        CrossToastPopUp.Current.ShowToastMessage(
-          "Saved " + _settings.InterfaceName + "(" + _settings.IP + ")");
+        CrossLocalNotifications.Current.Show("Info:", "Saved " + _settings.InterfaceName + "(" + _settings.IP + ")");
       }
     }
 

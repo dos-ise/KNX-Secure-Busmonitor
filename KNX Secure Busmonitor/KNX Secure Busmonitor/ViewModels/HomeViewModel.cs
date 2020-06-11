@@ -17,7 +17,7 @@ namespace Busmonitor.ViewModels
   using Knx.Bus.Common.GroupValues;
   using Knx.Falcon.Sdk;
 
-  using Plugin.Toast;
+  using Plugin.LocalNotifications;
 
   using Xamarin.Forms;
 
@@ -53,14 +53,14 @@ namespace Busmonitor.ViewModels
     public ExportViewModel Export => new ExportViewModel(_settings);
 
     public Settings Settings => _settings;
-    
+
     public ICommand ConnectCommand { get; }
 
     public ICommand WriteCommand { get; }
 
     public ObservableCollection<Telegramm> Telegramms { get; set; }
 
-    public string ConnectButtonText => _bus.IsConnected ? "Connect" : "Disconnect";
+    public string ConnectButtonText => _bus.IsConnected ? "Disconnect" : "Connect";
 
     public Color ConnectButtonColor => _bus.IsConnected ? Color.GreenYellow : Color.Red;
 
@@ -133,8 +133,7 @@ namespace Busmonitor.ViewModels
         Device.BeginInvokeOnMainThread(
           () =>
             {
-              CrossToastPopUp.Current.ShowToastMessage(
-                "Could not connect to " + _settings.InterfaceName + "(" + _settings.IP + ")");
+              CrossLocalNotifications.Current.Show("Error:", "Could not connect to " + _settings.InterfaceName + "(" + _settings.IP + ")");
             });
 
         return;
@@ -149,8 +148,7 @@ namespace Busmonitor.ViewModels
         Device.BeginInvokeOnMainThread(
           () =>
             {
-              CrossToastPopUp.Current.ShowToastMessage(
-                "Connected to " + _settings.InterfaceName + "(" + _settings.IP + ")");
+              CrossLocalNotifications.Current.Show("Info", "Connected to " + _settings.InterfaceName + "(" + _settings.IP + ")");
             });
 
         var senderAddress = _bus.LocalIndividualAddress;

@@ -21,8 +21,7 @@
 
   <ItemGroup>
     <PackageReference Include="Knx.Falcon.Sdk" Version="5.7.442" />
-    <PackageReference Include="Plugin.Toast" Version="2.1.2" />
-    <PackageReference Include="SuaveControls.FloatingActionButton" Version="2018.1.5" />
+    <PackageReference Include="Xam.Plugins.Notifier" Version="3.0.1" />
     <PackageReference Include="Xamarin.Forms" Version="4.6.0.800" />
     <PackageReference Include="Xamarin.Forms.Visual.Material" Version="4.6.0.800" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
