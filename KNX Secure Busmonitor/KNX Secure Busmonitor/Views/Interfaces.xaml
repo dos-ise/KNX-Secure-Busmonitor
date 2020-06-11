@@ -11,10 +11,14 @@
       <Grid x:Name="listGrid">
         <Grid.RowDefinitions>
           <RowDefinition Height="*"/>
-          <RowDefinition Height="9*"/>
+          <RowDefinition Height="4*"/>
+          <RowDefinition Height="*"/>
+          <RowDefinition Height="4*"/>
         </Grid.RowDefinitions>
-        <Label Text="Discoverd Interfaces:" Grid.Row="0"/>
-        <ListView MinimumHeightRequest="500" HeightRequest="500" ItemsSource="{Binding DiscoveredInterfaces}"  Grid.Row="1">
+        <Label Text="Networks:" Grid.Row="0"/>
+        <ListView MinimumHeightRequest="500" HeightRequest="500" ItemsSource="{Binding Networks}"  Grid.Row="1"/>
+        <Label Text="Discoverd Interfaces:" Grid.Row="2"/>
+        <ListView MinimumHeightRequest="500" HeightRequest="500" ItemsSource="{Binding DiscoveredInterfaces}"  Grid.Row="3">
           <ListView.Behaviors>
             <behavior:EventToCommandBehavior EventName="ItemSelected" Command="{Binding ItemSelectedCommand}"/>
           </ListView.Behaviors>

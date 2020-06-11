@@ -8,6 +8,8 @@ using Knx.Falcon.Sdk;
 
 namespace Busmonitor.ViewModels
 {
+  using System.Collections.Generic;
+  using System.Linq;
   using System.Windows.Input;
 
   using Plugin.Toast;
@@ -26,10 +28,11 @@ namespace Busmonitor.ViewModels
     {
       _settings = settings;
       DiscoveredInterfaces = new ObservableCollection<DiscoveryResult>();
+      Networks = new ObservableCollection<NetworkAdapterInfo>(new NetworkAdapterEnumerator(AdapterTypes.All));
       DiscoverInterfaces();
       ItemSelectedCommand = new Command(ItemSelectedExecute);
     }
-
+    
     private void ItemSelectedExecute(object obj)
     {
       var args = obj as SelectedItemChangedEventArgs;
@@ -73,6 +76,8 @@ namespace Busmonitor.ViewModels
     }
 
     public ObservableCollection<DiscoveryResult> DiscoveredInterfaces { get; set; }
+
+    public ObservableCollection<NetworkAdapterInfo> Networks { get; }
 
     public event PropertyChangedEventHandler PropertyChanged;
 
