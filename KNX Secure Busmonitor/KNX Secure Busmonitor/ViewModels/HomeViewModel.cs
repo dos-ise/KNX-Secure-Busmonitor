@@ -1,28 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using System.Windows.Input;
+
+using Busmonitor.Model;
+
+using Knx.Bus.Common;
+using Knx.Bus.Common.Configuration;
+using Knx.Bus.Common.GroupValues;
+using Knx.Falcon.Sdk;
+
+using Plugin.LocalNotifications;
+
+using Xamarin.Forms;
+
+using Device = Xamarin.Forms.Device;
 
 namespace Busmonitor.ViewModels
 {
-  using System.Collections.ObjectModel;
-  using System.ComponentModel;
-  using System.Runtime.CompilerServices;
-  using System.Threading.Tasks;
-  using System.Windows.Input;
-
-  using Busmonitor.Model;
-
-  using Knx.Bus.Common;
-  using Knx.Bus.Common.Configuration;
-  using Knx.Bus.Common.GroupValues;
-  using Knx.Falcon.Sdk;
-
-  using Plugin.LocalNotifications;
-
-  using Xamarin.Forms;
-
-  using Device = Xamarin.Forms.Device;
-
   public class HomeViewModel : INotifyPropertyChanged
   {
     private readonly Settings _settings;
