@@ -6,7 +6,7 @@ using Plugin.FilePicker.Abstractions;
 
 namespace Busmonitor.ViewModels
 {
-  public class SecurtiyViewModel
+  public class SecurtiyViewModel : ViewModelBase
   {
     private string _fileName;
 

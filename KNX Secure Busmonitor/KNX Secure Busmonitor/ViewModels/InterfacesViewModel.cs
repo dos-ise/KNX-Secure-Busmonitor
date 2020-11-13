@@ -1,7 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Threading.Tasks;
-using System.Runtime.CompilerServices;
 
 using Knx.Bus.Common.KnxIp;
 using Knx.Falcon.Sdk;
@@ -13,7 +11,7 @@ using Xamarin.Forms;
 
 namespace Busmonitor.ViewModels
 {
-  public class InterfacesViewModel : INotifyPropertyChanged
+  public class InterfacesViewModel : ViewModelBase
   {
     private readonly Settings _settings;
 
@@ -74,12 +72,5 @@ namespace Busmonitor.ViewModels
     public ObservableCollection<DiscoveryResult> DiscoveredInterfaces { get; set; }
 
     public ObservableCollection<NetworkAdapterInfo> Networks { get; }
-
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-    {
-      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
   }
 }

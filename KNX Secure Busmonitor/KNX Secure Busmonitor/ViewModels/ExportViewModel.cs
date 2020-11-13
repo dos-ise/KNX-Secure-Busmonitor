@@ -1,22 +1,18 @@
 ﻿using System.Windows.Input;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Xml.Linq;
+
+using Busmonitor.Model;
+
+using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace Busmonitor.ViewModels
 {
-  using System;
-  using System.Collections.Generic;
-  using System.IO;
-  using System.Linq;
-  using System.Xml.Linq;
-
-  using Busmonitor.Model;
-  using Busmonitor.Views;
-
-  using Knx.Bus.Common;
-
-  using Xamarin.Essentials;
-  using Xamarin.Forms;
-
-  public class ExportViewModel
+  public class ExportViewModel : ViewModelBase
   {
     private readonly Settings _settings;
 

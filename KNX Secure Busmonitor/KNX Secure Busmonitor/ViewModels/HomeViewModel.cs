@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -20,9 +21,7 @@ using Device = Xamarin.Forms.Device;
 
 namespace Busmonitor.ViewModels
 {
-  using System.Linq;
-
-  public class HomeViewModel : INotifyPropertyChanged
+  public class HomeViewModel : ViewModelBase
   {
     private readonly Settings _settings;
     private Bus _bus;
@@ -191,13 +190,6 @@ namespace Busmonitor.ViewModels
       {
         return new KnxIpTunnelingConnectorParameters(_settings.IP, _settings.IpPort, false);
       }
-    }
-
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-    {
-      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
   }
 }

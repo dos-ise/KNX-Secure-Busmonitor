@@ -1,15 +1,13 @@
 ﻿using System.Windows.Input;
+using System.Collections.Generic;
+using System.Linq;
 
+using Busmonitor.Model;
 using Xamarin.Forms;
 
 namespace Busmonitor.ViewModels
 {
-  using System.Collections.Generic;
-  using System.Linq;
-
-  using Busmonitor.Model;
-
-  public class GroupAddressImportViewModel
+  public class GroupAddressImportViewModel : ViewModelBase
   {
     private readonly Settings _settings;
 
