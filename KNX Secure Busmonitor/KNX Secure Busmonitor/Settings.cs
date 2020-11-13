@@ -4,6 +4,10 @@ using System.Runtime.CompilerServices;
 
 namespace Busmonitor
 {
+  using System.Collections.Generic;
+
+  using Busmonitor.Model;
+
   public class Settings : INotifyPropertyChanged
   {
     public string IP
@@ -53,6 +57,11 @@ namespace Busmonitor
       set => Set(nameof(MacAddress), value);
       get => Get<string>(nameof(MacAddress));
     }
+
+    /// <summary>
+    /// TODO persist
+    /// </summary>
+    public List<ImportGroupAddress> ImportGroupAddress { get; set; }
 
     private void Set<T>(string key, T value)
     {

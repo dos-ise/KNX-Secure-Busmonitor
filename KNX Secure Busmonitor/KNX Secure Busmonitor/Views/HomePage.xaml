@@ -17,11 +17,12 @@
                        HeaderBackground="#E0E6F8" 
                        ActiveRowColor="#8899AA">
       <dataGrid:DataGrid.Columns>
+        <dataGrid:DataGridColumn Title="Name" PropertyName="GroupName" Width="2*"/>
         <dataGrid:DataGridColumn Title="Address" PropertyName="Args.Address" Width="2*"/>
         <dataGrid:DataGridColumn Title="IndividualAddress" PropertyName="Args.IndividualAddress" Width="1*"/>
-        <dataGrid:DataGridColumn Title="SizeInBit" PropertyName="Args.Value.SizeInBit" Width="1*"/>
-        <dataGrid:DataGridColumn Title="Value" PropertyName="Args.Value.TypedValue" Width="4*"/>
-        <dataGrid:DataGridColumn Title="TelegramPriority" PropertyName="Args.TelegramPriority" Width="1*"/>
+        <!--<dataGrid:DataGridColumn Title="SizeInBit" PropertyName="Args.Value.SizeInBit" Width="1*"/>-->
+        <dataGrid:DataGridColumn Title="Value" PropertyName="DisplayNameValue" Width="4*"/>
+        <!--<dataGrid:DataGridColumn Title="TelegramPriority" PropertyName="Args.TelegramPriority" Width="1*"/>-->
         <!--<dataGrid:DataGridColumn Title="IsSecure" PropertyName="Args.IsSecure" Width="1*"/>-->
       </dataGrid:DataGrid.Columns>
     </dataGrid:DataGrid>

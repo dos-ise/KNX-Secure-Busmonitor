@@ -5,15 +5,14 @@ using System.Runtime.CompilerServices;
 
 using Knx.Bus.Common.KnxIp;
 using Knx.Falcon.Sdk;
+using System.Windows.Input;
+
+using Plugin.LocalNotifications;
+
+using Xamarin.Forms;
 
 namespace Busmonitor.ViewModels
 {
-  using System.Windows.Input;
-
-  using Plugin.LocalNotifications;
-
-  using Xamarin.Forms;
-
   public class InterfacesViewModel : INotifyPropertyChanged
   {
     private readonly Settings _settings;

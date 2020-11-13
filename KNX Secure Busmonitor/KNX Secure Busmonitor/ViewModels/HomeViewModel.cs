@@ -20,6 +20,8 @@ using Device = Xamarin.Forms.Device;
 
 namespace Busmonitor.ViewModels
 {
+  using System.Linq;
+
   public class HomeViewModel : INotifyPropertyChanged
   {
     private readonly Settings _settings;
@@ -48,6 +50,8 @@ namespace Busmonitor.ViewModels
     public SecurtiyViewModel Security => new SecurtiyViewModel();
 
     public ExportViewModel Export => new ExportViewModel(_settings);
+
+    public GroupAddressImportViewModel GaImport => new GroupAddressImportViewModel(_settings);
 
     public Settings Settings => _settings;
 
@@ -153,7 +157,10 @@ namespace Busmonitor.ViewModels
           {
             Device.BeginInvokeOnMainThread(() =>
               {
-                Telegramms.Add(new Telegramm(args, DateTime.Now));
+                var gaName = FindGroupName(args);
+                var t = new Telegramm(args, DateTime.Now);
+                t.GroupName = gaName;
+                Telegramms.Add(t);
                 OnPropertyChanged(nameof(Telegramms));
               });
           };
@@ -162,6 +169,12 @@ namespace Busmonitor.ViewModels
         {
         }
       }
+    }
+
+    private string FindGroupName(GroupValueEventArgs arg)
+    {
+      var ga = _settings.ImportGroupAddress.FirstOrDefault(me => me.Address == arg.Address.Address);
+      return ga == null ? string.Empty : ga.GroupName;
     }
 
     private ConnectorParameters CreateParameter()

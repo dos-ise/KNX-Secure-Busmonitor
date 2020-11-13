@@ -32,4 +32,9 @@
       <views:ExportPage BindingContext="{Binding Export}"/>
     </ShellContent>
   </FlyoutItem>
+  <FlyoutItem Title="Import GA">
+    <ShellContent>
+      <views:GroupAddressImportView BindingContext="{Binding GaImport}"/>
+    </ShellContent>
+  </FlyoutItem>
 </Shell>

@@ -10,6 +10,10 @@ namespace Busmonitor.Model
   {
     public GroupValueEventArgs Args { get; }
 
+    public string GroupName { get; set; }
+
+    public string DisplayNameValue { get; }
+
     public DateTime TimeStamp { get; }
 
     public string  RAW => GetRaw();
@@ -157,6 +161,18 @@ namespace Busmonitor.Model
     {
       Args = args;
       TimeStamp = timeStamp;
+      DisplayNameValue = ConvertToDisplayName(args);
+    }
+
+    private string ConvertToDisplayName(GroupValueEventArgs args)
+    {
+      if (args.Value.SizeInBit < 8)
+      {
+        return args.Value.Value[0].ToString();
+      }
+      var hex = args.Value.Value.AsHexString();
+      int intValue = int.Parse(hex, System.Globalization.NumberStyles.HexNumber);
+      return intValue.ToString();
     }
   }
 }
