@@ -95,7 +95,18 @@ namespace Busmonitor.ViewModels
     }
     private void OnWrite()
     {
-      _bus.WriteValue(new GroupAddress(TargetWriteAddress), GroupValue.Parse(WriteValue));
+      try
+      {
+        _bus.WriteValue(new GroupAddress(TargetWriteAddress), GroupValue.Parse(WriteValue));
+      }
+      catch (Exception e)
+      {
+        Device.BeginInvokeOnMainThread(
+          () =>
+          {
+            CrossLocalNotifications.Current.Show("Error:", "Could not write to " + TargetWriteAddress + "(" + e.Message + ")");
+          });
+      }
     }
 
     private async void OnConnect()

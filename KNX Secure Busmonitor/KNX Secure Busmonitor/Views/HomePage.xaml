@@ -40,9 +40,8 @@
       <Button Text="Send" Command="{Binding WriteCommand}"  Grid.Column="2" IsVisible="{Binding IsConnected}"/>
       <Button x:Name="ConnectButton" Grid.Column="3" 
               Text="{Binding ConnectButtonText}" 
-              HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" 
-              WidthRequest="75" HeightRequest="75"  
-              ImageSource="plug.png"
+              WidthRequest="75" 
+              HeightRequest="75"  
               Command="{Binding ConnectCommand}"/>
     </Grid>
   </AbsoluteLayout>
