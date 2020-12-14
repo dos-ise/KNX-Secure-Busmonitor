@@ -18,6 +18,7 @@ using Plugin.LocalNotifications;
 using Xamarin.Forms;
 
 using Device = Xamarin.Forms.Device;
+using Busmonitor.Views;
 
 namespace Busmonitor.ViewModels
 {
@@ -59,6 +60,8 @@ namespace Busmonitor.ViewModels
     public ICommand WriteCommand { get; }
 
     public ObservableCollection<Telegramm> Telegramms { get; set; }
+
+    public Telegramm SelectedTelegramm { get; set; }
 
     public string ConnectButtonText => _bus.IsConnected ? "Disconnect" : "Connect";
 
@@ -161,6 +164,7 @@ namespace Busmonitor.ViewModels
                 t.GroupName = gaName;
                 Telegramms.Add(t);
                 OnPropertyChanged(nameof(Telegramms));
+                HomePage.ScrollToBottom();
               });
           };
 
@@ -172,7 +176,7 @@ namespace Busmonitor.ViewModels
 
     private string FindGroupName(GroupValueEventArgs arg)
     {
-      var ga = _settings.ImportGroupAddress.FirstOrDefault(me => me.Address == arg.Address.Address);
+      var ga = _settings.ImportGroupAddress?.FirstOrDefault(me => me.Address == arg.Address.Address);
       return ga == null ? string.Empty : ga.GroupName;
     }
 

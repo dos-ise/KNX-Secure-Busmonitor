@@ -5,6 +5,7 @@ using System.Text;
 namespace Busmonitor.Model
 {
   using Knx.Bus.Common;
+  using System.Globalization;
 
   public class Telegramm
   {
@@ -16,7 +17,7 @@ namespace Busmonitor.Model
 
     public DateTime TimeStamp { get; }
 
-    public string  RAW => GetRaw();
+    public string RAW => GetRaw();
 
     private string GetRaw()
     {
@@ -120,7 +121,7 @@ namespace Busmonitor.Model
 
       //TODO Action MessageCode
       datagram[i++] = (byte)0x11;
-      
+
       datagram[i++] = 0x00;
       datagram[i++] = 0xAC;
 
@@ -171,8 +172,15 @@ namespace Busmonitor.Model
         return args.Value.Value[0].ToString();
       }
       var hex = args.Value.Value.AsHexString();
-      int intValue = int.Parse(hex, System.Globalization.NumberStyles.HexNumber);
-      return intValue.ToString();
+      var provider = CultureInfo.InvariantCulture;
+      if (int.TryParse(hex, NumberStyles.HexNumber, provider, out int intValue))
+      {
+        return intValue.ToString();
+      }
+      else
+      {
+        return hex;
+      }
     }
   }
 }
