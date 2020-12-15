@@ -4,9 +4,10 @@ using System.Linq;
 
 using Busmonitor.Model;
 using Xamarin.Forms;
-using Plugin.FilePicker;
-using Plugin.FilePicker.Abstractions;
+using Xamarin.Essentials;
 using System;
+using System.IO;
+using System.Text;
 using Plugin.LocalNotifications;
 
 namespace Busmonitor.ViewModels
@@ -27,12 +28,14 @@ namespace Busmonitor.ViewModels
 
     private async void OnImport()
     {
-      FileData fileData = await CrossFilePicker.Current.PickFile();
+      var fileData = await FilePicker.PickAsync();
       if (fileData == null)
         return; // user canceled file picking
       try
       {
-        string contents = System.Text.Encoding.UTF8.GetString(fileData.DataArray);
+        var stream = await fileData.OpenReadAsync();
+        StreamReader reader = new StreamReader(stream);
+        string contents = reader.ReadToEnd();
         _settings.ImportGroupAddress = GetGa(contents).ToList(); 
         GaCount = _settings.ImportGroupAddress.Count;
         OnPropertyChanged(nameof(GaCount));

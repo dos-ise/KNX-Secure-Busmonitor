@@ -1,8 +1,6 @@
 ﻿using System.Linq;
 using System.Security;
-
-using Plugin.FilePicker;
-using Plugin.FilePicker.Abstractions;
+using Xamarin.Essentials;
 
 namespace Busmonitor.ViewModels
 {
@@ -23,7 +21,7 @@ namespace Busmonitor.ViewModels
 
     public async void OnAddKeyring()
     {
-      FileData fileData = await CrossFilePicker.Current.PickFile();
+      var fileData = await FilePicker.PickAsync();
       if (fileData == null)
         return; // user canceled file picking
       _fileName = fileData.FileName;
