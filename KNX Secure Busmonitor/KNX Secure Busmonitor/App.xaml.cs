@@ -6,7 +6,7 @@ namespace Busmonitor
 {
   public partial class App : Application
   {
-    public static HomeViewModel Home { get; private set; }
+    public static AppShellViewModel Home { get; private set; }
 
     public App()
     {
@@ -14,7 +14,7 @@ namespace Busmonitor
       var _settings = new Settings();
       DefaultSettings(_settings);
       Xamarin.Forms.DataGrid.DataGridComponent.Init();
-      Home = new HomeViewModel(_settings);
+      Home = new AppShellViewModel(_settings);
       MainPage = new AppShell() { BindingContext = Home };
     }
 

@@ -22,7 +22,7 @@ using Busmonitor.Views;
 
 namespace Busmonitor.ViewModels
 {
-  public class HomeViewModel : ViewModelBase
+  public class AppShellViewModel : ViewModelBase
   {
     private readonly Settings _settings;
     private Bus _bus;
@@ -32,7 +32,7 @@ namespace Busmonitor.ViewModels
 
     private bool _isConnecting;
 
-    public HomeViewModel(Settings settings)
+    public AppShellViewModel(Settings settings)
     {
       _settings = settings;
       _bus = new Bus(CreateParameter());
@@ -43,7 +43,7 @@ namespace Busmonitor.ViewModels
       WriteValue = "true";
     }
 
-    public HomeViewModel Home => this;
+    public AppShellViewModel Home => this;
 
     public InterfacesViewModel Interface => new InterfacesViewModel(_settings);
 

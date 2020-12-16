@@ -19,7 +19,7 @@ namespace Busmonitor.Bootstrap
       // view models
       builder.RegisterType<ExportViewModel>().SingleInstance();
       builder.RegisterType<GroupAddressImportViewModel>().SingleInstance();
-      builder.RegisterType<HomeViewModel>().SingleInstance();
+      builder.RegisterType<AppShellViewModel>().SingleInstance();
       builder.RegisterType<InterfacesViewModel>().SingleInstance();
       builder.RegisterType<SecurtiyViewModel>().SingleInstance();
 

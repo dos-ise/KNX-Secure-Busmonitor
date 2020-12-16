@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Views\AppShell.xaml">
+    <EmbeddedResource Update="Views\AppShelViewl.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\ExportPage.xaml">
@@ -48,5 +48,11 @@
 
   <ItemGroup>
     <Folder Include="Extension\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\AppShelViewl.xaml.cs">
+      <DependentUpon>AppShelViewl.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>
