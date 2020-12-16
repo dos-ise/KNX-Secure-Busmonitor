@@ -1,11 +1,9 @@
 ﻿using Busmonitor.Views;
-
+using Busmonitor.ViewModels;
 using Xamarin.Forms;
 
 namespace Busmonitor
 {
-  using Busmonitor.ViewModels;
-
   public partial class App : Application
   {
     public static HomeViewModel Home { get; private set; }

@@ -4,6 +4,8 @@
         xmlns:d="http://xamarin.com/schemas/2014/forms/design"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="clr-namespace:Busmonitor.Views;assembly=KNX Secure Busmonitor"
+        xmlns:bootstrap="clr-namespace:Busmonitor.Bootstrap;assembly=KNX Secure Busmonitor"
+        bootstrap:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
         x:Class="Busmonitor.AppShell">
   <Shell.FlyoutHeader>

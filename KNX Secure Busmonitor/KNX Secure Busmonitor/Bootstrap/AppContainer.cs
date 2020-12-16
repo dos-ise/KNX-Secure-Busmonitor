@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using Autofac;
+using Busmonitor.ViewModels;
 
 namespace Busmonitor.Bootstrap
 {
@@ -16,6 +17,11 @@ namespace Busmonitor.Bootstrap
       // services
 
       // view models
+      builder.RegisterType<ExportViewModel>().SingleInstance();
+      builder.RegisterType<GroupAddressImportViewModel>().SingleInstance();
+      builder.RegisterType<HomeViewModel>().SingleInstance();
+      builder.RegisterType<InterfacesViewModel>().SingleInstance();
+      builder.RegisterType<SecurtiyViewModel>().SingleInstance();
 
       container = builder.Build();
     }

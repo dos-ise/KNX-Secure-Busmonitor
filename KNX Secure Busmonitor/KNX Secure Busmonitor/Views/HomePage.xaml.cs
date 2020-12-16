@@ -1,6 +1,4 @@
-﻿using Busmonitor.Extension;
-using Busmonitor.Model;
-using Busmonitor.ViewModels;
+﻿using Busmonitor.Model;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;

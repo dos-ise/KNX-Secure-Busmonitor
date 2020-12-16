@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Reflection;
-
+using Busmonitor.ViewModels;
 using Xamarin.Forms;
 
 namespace Busmonitor.Bootstrap
 {
-  using Busmonitor.ViewModels;
-
   public static class ViewModelLocator
   {
     private static readonly AppContainer Container;
