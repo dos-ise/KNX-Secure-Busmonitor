@@ -1,10 +1,10 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
-using Knx.Bus.Common.KnxIp;
-using Knx.Falcon.Sdk;
 using System.Windows.Input;
-
+using Knx.Falcon.Discovery;
 using Plugin.LocalNotifications;
 
 using Xamarin.Forms;
@@ -22,8 +22,8 @@ namespace Busmonitor.ViewModels
     public InterfacesViewModel(Settings settings)
     {
       _settings = settings;
-      DiscoveredInterfaces = new ObservableCollection<DiscoveryResult>();
-      Networks = new ObservableCollection<NetworkAdapterInfo>(new NetworkAdapterEnumerator(AdapterTypes.All));
+      DiscoveredInterfaces = new ObservableCollection<IpDeviceDiscoveryResult>();
+      //Networks = new ObservableCollection<NetworkAdapterInfo>(new NetworkAdapterEnumerator(AdapterTypes.All));
       DiscoverInterfaces();
       ItemSelectedCommand = new Command(ItemSelectedExecute);
     }
@@ -31,9 +31,9 @@ namespace Busmonitor.ViewModels
     private void ItemSelectedExecute(object obj)
     {
       var args = obj as SelectedItemChangedEventArgs;
-      if (args?.SelectedItem is DiscoveryResult result)
+      if (args?.SelectedItem is IpDeviceDiscoveryResult result)
       {
-        _settings.IP = result.IpAddress.ToString();
+        _settings.IP = result.LocalIPAddress.ToString();
         _settings.InterfaceName = result.FriendlyName;
         _settings.SerialNumber = result.SerialNumber;
         _settings.MediumType = result.MediumType.ToString();
@@ -48,7 +48,8 @@ namespace Busmonitor.ViewModels
       Task.Run(() =>
         {
           IsDiscovering = true;
-          foreach (var dis in new DiscoveryClient(AdapterTypes.All).Discover())
+          var devices = new IpDeviceDiscovery().DiscoverAsync(new CancellationToken()).ToListAsync().Result;
+          foreach (var dis in devices)
           {
             DiscoveredInterfaces.Add(dis);
           }
@@ -69,8 +70,6 @@ namespace Busmonitor.ViewModels
       }
     }
 
-    public ObservableCollection<DiscoveryResult> DiscoveredInterfaces { get; set; }
-
-    public ObservableCollection<NetworkAdapterInfo> Networks { get; }
+    public ObservableCollection<IpDeviceDiscoveryResult> DiscoveredInterfaces { get; set; }
   }
 }

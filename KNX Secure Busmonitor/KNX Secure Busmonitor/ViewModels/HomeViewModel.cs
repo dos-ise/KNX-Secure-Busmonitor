@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Busmonitor.Model;
 using Busmonitor.Views;
-using Knx.Bus.Common;
-using Knx.Bus.Common.Configuration;
-using Knx.Bus.Common.GroupValues;
+using Knx.Falcon;
+using Knx.Falcon.Configuration;
 using Knx.Falcon.Sdk;
 using Plugin.LocalNotifications;
 using Xamarin.Forms;
@@ -20,24 +19,24 @@ namespace Busmonitor.ViewModels
   public class HomeViewModel : ViewModelBase
   {
     private readonly Settings _settings;
-    private Bus _bus;
+    private KnxBus _bus;
 
     private string targetWriteAddress;
     private string writeValue;
 
     private bool _isConnecting;
-    
+
     public HomeViewModel(Settings settings, TelegrammList telegrammList)
     {
       _settings = settings;
-      _bus = new Bus(CreateParameter());
+      _bus = new KnxBus(CreateParameter());
       Telegramms = telegrammList;
       ConnectCommand = new Command(OnConnect);
       WriteCommand = new Command(OnWrite);
       TargetWriteAddress = "1/1/1";
       WriteValue = "true";
     }
-    
+
     public ICommand ConnectCommand { get; }
 
     public ICommand WriteCommand { get; }
@@ -46,11 +45,11 @@ namespace Busmonitor.ViewModels
 
     public Telegramm SelectedTelegramm { get; set; }
 
-    public string ConnectButtonText => _bus.IsConnected ? "Disconnect" : "Connect";
+    public string ConnectButtonText => _bus.ConnectionState == BusConnectionState.Connected ? "Disconnect" : "Connect";
 
-    public Color ConnectButtonColor => _bus.IsConnected ? Color.GreenYellow : Color.Red;
+    public Color ConnectButtonColor => _bus.ConnectionState == BusConnectionState.Connected ? Color.GreenYellow : Color.Red;
 
-    public bool IsConnected => _bus.IsConnected;
+    public bool IsConnected => _bus.ConnectionState == BusConnectionState.Connected;
 
     public string TargetWriteAddress
     {
@@ -76,11 +75,11 @@ namespace Busmonitor.ViewModels
     {
 
     }
-    private void OnWrite()
+    private async void OnWrite()
     {
       try
       {
-        _bus.WriteValue(new GroupAddress(TargetWriteAddress), GroupValue.Parse(WriteValue));
+        await _bus.WriteGroupValueAsync(new GroupAddress(TargetWriteAddress), GroupValue.Parse(WriteValue));
       }
       catch (Exception e)
       {
@@ -95,7 +94,7 @@ namespace Busmonitor.ViewModels
     private async void OnConnect()
     {
       ConnectorParameters connectorParameter = CreateParameter();
-      if (!_bus.IsConnected)
+      if (_bus.ConnectionState != BusConnectionState.Connected)
       {
         if (!_isConnecting)
         {
@@ -104,7 +103,7 @@ namespace Busmonitor.ViewModels
       }
       else
       {
-        _bus.Disconnect();
+        //_bus.Disconnect();
         Telegramms.Clear();
         OnPropertyChanged(nameof(ConnectButtonColor));
         OnPropertyChanged(nameof(ConnectButtonText));
@@ -114,12 +113,12 @@ namespace Busmonitor.ViewModels
 
     private void Action(ConnectorParameters connectorParameter)
     {
-      _bus = new Bus(connectorParameter);
+      _bus = new KnxBus(connectorParameter);
 
       try
       {
         _isConnecting = true;
-        _bus.Connect();
+        _bus.ConnectAsync();
 
         OnPropertyChanged(nameof(ConnectButtonColor));
         OnPropertyChanged(nameof(ConnectButtonText));
@@ -140,7 +139,7 @@ namespace Busmonitor.ViewModels
         _isConnecting = false;
       }
 
-      if (_bus.IsConnected)
+      if (_bus.ConnectionState == BusConnectionState.Connected)
       {
         Device.BeginInvokeOnMainThread(
           () =>
@@ -148,28 +147,27 @@ namespace Busmonitor.ViewModels
             CrossLocalNotifications.Current.Show("Info", "Connected to " + _settings.InterfaceName + "(" + _settings.IP + ")");
           });
 
-        var senderAddress = _bus.LocalIndividualAddress;
-        _bus.GroupValueReceived += args =>
+        var senderAddress = _bus.InterfaceConfiguration.DomainAddress;
+        _bus.GroupMessageReceived += (sender, args) =>
         {
           Device.BeginInvokeOnMainThread(() =>
           {
             var gaName = FindGroupName(args);
-            var t = new Telegramm(args, DateTime.Now) { GroupName = gaName };
+            var t = new Telegramm(args, DateTime.Now) {GroupName = gaName};
             Telegramms.Add(t);
             OnPropertyChanged(nameof(Telegramms));
             HomeView.ScrollToBottom();
           });
         };
-
-        while (_bus.IsConnected)
+        while (_bus.ConnectionState == BusConnectionState.Connected)
         {
         }
       }
     }
 
-    private string FindGroupName(GroupValueEventArgs arg)
+    private string FindGroupName(GroupEventArgs arg)
     {
-      var ga = _settings.ImportGroupAddress?.FirstOrDefault(me => me.Address == arg.Address.Address);
+      var ga = _settings.ImportGroupAddress?.FirstOrDefault(me => me.Address == arg.DestinationAddress.Address);
       return ga == null ? string.Empty : ga.GroupName;
     }
 
@@ -181,11 +179,11 @@ namespace Busmonitor.ViewModels
         //var secure = new KnxIpSecureDeviceManagementConnectorParameters(SelectedInterface);
         //secure.LoadSecurityData(SelectedInterface.IndividualAddress, _fileName, MakeStringSecure(passwordEntry.Text));
         //return secure;
-        return new KnxIpTunnelingConnectorParameters(_settings.IP, _settings.IpPort, false);
+        return new IpTunnelingConnectorParameters(_settings.IP, _settings.IpPort);
       }
       else
       {
-        return new KnxIpTunnelingConnectorParameters(_settings.IP, _settings.IpPort, false);
+        return new IpTunnelingConnectorParameters(_settings.IP, _settings.IpPort);
       }
     }
   }
