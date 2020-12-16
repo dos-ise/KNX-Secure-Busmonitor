@@ -5,10 +5,16 @@ namespace Busmonitor.Model
   public class ImportGroupAddress
   {
     private GroupAddress _internalGA;
-
-    public ImportGroupAddress(string addressString)
+    private string _addressString;
+    
+    public string AddressString
     {
-      _internalGA = new GroupAddress(addressString);
+      get => _addressString;
+      set
+      {
+        _internalGA = new GroupAddress(value);
+        _addressString = value;
+      }
     }
 
     public string GroupName { get; set; }

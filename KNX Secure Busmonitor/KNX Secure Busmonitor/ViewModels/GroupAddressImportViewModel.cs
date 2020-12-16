@@ -20,7 +20,7 @@ namespace Busmonitor.ViewModels
     {
       _settings = settings;
       ImportCommand = new Command(OnImport);
-      //GaCount = _settings.ImportGroupAddress.Count;
+      GaCount = _settings.ImportGroupAddress.Count;
       //OnPropertyChanged(nameof(GaCount));
     }
 
@@ -59,9 +59,10 @@ namespace Busmonitor.ViewModels
       {
         var c = line.GetColumns().ToArray();
         var ga = c.Slice(1, 4).Select(a => a.Replace("\"", string.Empty)).Select(Selector);
-        var i = new ImportGroupAddress(string.Join(" ", ga))
+        var i = new ImportGroupAddress()
         {
-          GroupName = c[0]
+          GroupName = c[0],
+          AddressString = string.Join(" ", ga)
         };
         yield return i;
       }

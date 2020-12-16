@@ -1,9 +1,11 @@
-﻿using Xamarin.Forms;
+﻿using System;
+using Xamarin.Forms;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
 
 using Busmonitor.Model;
+using Newtonsoft.Json;
 
 namespace Busmonitor
 {
@@ -13,8 +15,8 @@ namespace Busmonitor
     {
       set => Set(nameof(IP), value);
       get => Get<string>(nameof(IP));
-    }    
-    
+    }
+
     public ushort IpPort
     {
       set => Set(nameof(IpPort), value);
@@ -25,19 +27,19 @@ namespace Busmonitor
     {
       set => Set(nameof(InterfaceName), value);
       get => Get<string>(nameof(InterfaceName));
-    }        
-    
+    }
+
     public string SerialNumber
     {
       set => Set(nameof(SerialNumber), value);
       get => Get<string>(nameof(SerialNumber));
-    }       
-    
+    }
+
     public string MediumType
     {
       set => Set(nameof(MediumType), value);
       get => Get<string>(nameof(MediumType));
-    }    
+    }
 
     public bool IsSecurityEnabled
     {
@@ -60,17 +62,36 @@ namespace Busmonitor
     /// <summary>
     /// TODO persist
     /// </summary>
-    public List<ImportGroupAddress> ImportGroupAddress { get; set; }
+    public List<ImportGroupAddress> ImportGroupAddress
+    {
+      set => Set(nameof(ImportGroupAddress), value);
+      get => Get<List<ImportGroupAddress>>(nameof(ImportGroupAddress));
+    }
 
     private void Set<T>(string key, T value)
     {
-      if (Application.Current.Properties.ContainsKey(key))
+      if (value.GetType().IsPrimitive || typeof(string).IsAssignableFrom(typeof(T)))
       {
-        Application.Current.Properties[key] = value;
+        if (Application.Current.Properties.ContainsKey(key))
+        {
+          Application.Current.Properties[key] = value;
+        }
+        else
+        {
+          Application.Current.Properties.Add(key, value);
+        }
       }
       else
       {
-        Application.Current.Properties.Add(key, value);
+        var valueString = JsonConvert.SerializeObject(value);
+        if (Application.Current.Properties.ContainsKey(key))
+        {
+          Application.Current.Properties[key] = valueString;
+        }
+        else
+        {
+          Application.Current.Properties.Add(key, valueString);
+        }
       }
 
       Application.Current.SavePropertiesAsync();
@@ -79,13 +100,34 @@ namespace Busmonitor
 
     private T Get<T>(string key)
     {
-      if (Application.Current.Properties.ContainsKey(key))
+      if (typeof(T).IsPrimitive || typeof(string).IsAssignableFrom(typeof(T)))
       {
-        return (T)Application.Current.Properties[key];
+        if (Application.Current.Properties.ContainsKey(key))
+        {
+          return (T)Application.Current.Properties[key];
+        }
+        else
+        {
+          return default;
+        }
       }
       else
       {
-        return default;
+        if (Application.Current.Properties.ContainsKey(key))
+        {
+          try
+          {
+            return JsonConvert.DeserializeObject<T>(Application.Current.Properties[key].ToString());
+          }
+          catch (Exception e)
+          {
+            return default;
+          }
+        }
+        else
+        {
+          return default;
+        }
       }
     }
 
