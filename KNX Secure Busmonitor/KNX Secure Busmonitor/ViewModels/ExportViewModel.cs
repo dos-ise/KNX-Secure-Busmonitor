@@ -15,18 +15,20 @@ namespace Busmonitor.ViewModels
   public class ExportViewModel : ViewModelBase
   {
     private readonly Settings _settings;
+    private readonly TelegrammList _telegrammList;
 
     public ICommand ExportCommand { get; }
 
-    public ExportViewModel(Settings settings)
+    public ExportViewModel(Settings settings, TelegrammList telegrammList)
     {
       _settings = settings;
+      _telegrammList = telegrammList;
       ExportCommand = new Command(ExecuteExport);
     }
 
     private async void ExecuteExport(object obj)
     {
-      XDocument exportFile = CreateExportFile(App.Home.Telegramms);
+      XDocument exportFile = CreateExportFile(_telegrammList);
 
       var fn = "Telegrams.xml";
       var file = Path.Combine(FileSystem.CacheDirectory, fn);

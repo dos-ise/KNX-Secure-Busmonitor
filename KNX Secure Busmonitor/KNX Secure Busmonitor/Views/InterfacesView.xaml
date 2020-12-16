@@ -4,7 +4,9 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:behavior="clr-namespace:Busmonitor.Behavior;assembly=KNX Secure Busmonitor"
-             mc:Ignorable="d"
+             xmlns:bootstrap="clr-namespace:Busmonitor.Bootstrap;assembly=KNX Secure Busmonitor"
+             mc:Ignorable="d"        
+             bootstrap:ViewModelLocator.AutoWireViewModel="True"
              x:Class="Busmonitor.Views.InterfacesView">
   <ContentPage.Content>
     <StackLayout>

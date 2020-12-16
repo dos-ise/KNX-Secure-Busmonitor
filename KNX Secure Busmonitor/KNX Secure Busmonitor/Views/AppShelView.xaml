@@ -7,7 +7,7 @@
         xmlns:bootstrap="clr-namespace:Busmonitor.Bootstrap;assembly=KNX Secure Busmonitor"
         bootstrap:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
-        x:Class="Busmonitor.AppShellView">
+        x:Class="Busmonitor.Views.AppShellView">
     <Shell.FlyoutHeader>
         <StackLayout Orientation="Vertical">
             <Label Text="{Binding Settings.IP}"/>
@@ -16,27 +16,27 @@
     </Shell.FlyoutHeader>
     <FlyoutItem Title="Monitor">
         <ShellContent>
-            <views:HomeView BindingContext="{Binding Home}"/>
+            <views:HomeView/>
         </ShellContent>
     </FlyoutItem>
     <FlyoutItem Title="Interfaces">
         <ShellContent>
-            <views:InterfacesView BindingContext="{Binding Interface}"/>
+            <views:InterfacesView/>
         </ShellContent>
     </FlyoutItem>
     <FlyoutItem Title="Security">
         <ShellContent>
-            <views:SecurityView BindingContext="{Binding Security}"/>
+            <views:SecurityView/>
         </ShellContent>
     </FlyoutItem>
     <FlyoutItem Title="Export">
         <ShellContent>
-            <views:ExportView BindingContext="{Binding Export}"/>
+            <views:ExportView/>
         </ShellContent>
     </FlyoutItem>
     <FlyoutItem Title="Import GA">
         <ShellContent>
-            <views:GroupAddressImportView BindingContext="{Binding GaImport}"/>
+            <views:GroupAddressImportView/>
         </ShellContent>
     </FlyoutItem>
 </Shell>

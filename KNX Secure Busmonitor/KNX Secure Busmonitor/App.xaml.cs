@@ -12,7 +12,7 @@ namespace Busmonitor
     {
       InitializeComponent();
       Xamarin.Forms.DataGrid.DataGridComponent.Init();
-      MainPage = new AppShellView();
+      MainPage = new Views.AppShellView();
       Home = MainPage.BindingContext as AppShellViewModel;
     }
 
