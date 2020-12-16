@@ -19,7 +19,7 @@
             <views:HomeView/>
         </ShellContent>
     </FlyoutItem>
-    <FlyoutItem Title="Interfaces">
+    <FlyoutItem Title="Gateway" Icon="knx_interface.png">
         <ShellContent>
             <views:InterfacesView/>
         </ShellContent>
@@ -34,7 +34,7 @@
             <views:ExportView/>
         </ShellContent>
     </FlyoutItem>
-    <FlyoutItem Title="Import GA">
+    <FlyoutItem Title="Import GA" Icon="ga.png">
         <ShellContent>
             <views:GroupAddressImportView/>
         </ShellContent>

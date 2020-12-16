@@ -4,6 +4,9 @@
   {
     public AppShellViewModel(Settings settings)
     {
+      Settings = settings;
     }
+    
+    public Settings Settings { get; }
   }
 }

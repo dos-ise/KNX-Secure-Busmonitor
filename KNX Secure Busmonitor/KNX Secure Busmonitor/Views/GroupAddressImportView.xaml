@@ -7,13 +7,13 @@
     <ContentPage.Content>
         <StackLayout>
             <Label Text="Import ETS5 GA csv Format" VerticalOptions="Center"/>
+            <Image Source="ga_export_settings.png" VerticalOptions="Center"/>
             <Label Text="Import Count:" VerticalOptions="Center"/>
             <Label Text="{Binding GaCount}" VerticalOptions="Center"/>
-            <Label Text="Import Count:" VerticalOptions="Center"/>
             <Button Text="Import!"
-                Command="{Binding ImportCommand}"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+                    Command="{Binding ImportCommand}"
+                    VerticalOptions="CenterAndExpand" 
+                    HorizontalOptions="CenterAndExpand" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
