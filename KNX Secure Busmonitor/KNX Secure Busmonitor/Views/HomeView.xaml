@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:dataGrid="clr-namespace:Xamarin.Forms.DataGrid;assembly=Xamarin.Forms.DataGrid"
              xmlns:bootstrap="clr-namespace:Busmonitor.Bootstrap;assembly=KNX Secure Busmonitor"
+             xmlns:behavior="clr-namespace:Busmonitor.Behavior;assembly=KNX Secure Busmonitor"
              mc:Ignorable="d"
              bootstrap:ViewModelLocator.AutoWireViewModel="True"
              x:Class="Busmonitor.Views.HomeView">
@@ -15,24 +16,25 @@
         </Grid.RowDefinitions>
         <dataGrid:DataGrid x:Name="TelegrammGrid"
                            Grid.Row="0"
-                         SelectionEnabled="True"
-                         ItemsSource="{Binding Telegramms}"
+                           ItemsSource="{Binding Telegramms}"
                          SelectedItem="{Binding SelectedTelegramm}"
-                         RowHeight="70" 
+                         RowHeight="40" 
                          HeaderHeight="50" 
                          HeightRequest="600"
                          BorderColor="#CCCCCC" 
-                         HeaderBackground="#E0E6F8"
-                         ActiveRowColor="#8899AA"                        >
+                         HeaderBackground="#E0E6F8" >
             <dataGrid:DataGrid.Columns>
-                <dataGrid:DataGridColumn Title="Name" PropertyName="GroupName" Width="2*"/>
-                <dataGrid:DataGridColumn Title="Address" PropertyName="Args.Address" Width="2*"/>
-                <dataGrid:DataGridColumn Title="IndividualAddress" PropertyName="Args.IndividualAddress" Width="1*"/>
-                <!--<dataGrid:DataGridColumn Title="SizeInBit" PropertyName="Args.Value.SizeInBit" Width="1*"/>-->
-                <dataGrid:DataGridColumn Title="Value" PropertyName="DisplayNameValue" Width="4*"/>
-                <!--<dataGrid:DataGridColumn Title="TelegramPriority" PropertyName="Args.TelegramPriority" Width="1*"/>-->
-                <!--<dataGrid:DataGridColumn Title="IsSecure" PropertyName="Args.IsSecure" Width="1*"/>-->
+                <dataGrid:DataGridColumn Title="Name" PropertyName="GroupName" Width="2*" SortingEnabled="False"/>
+                <dataGrid:DataGridColumn Title="Address" PropertyName="Args.Address" Width="2*" SortingEnabled="False"/>
+                <dataGrid:DataGridColumn Title="IndividualAddress" PropertyName="Args.IndividualAddress" Width="1*" SortingEnabled="False"/>
+                <dataGrid:DataGridColumn Title="Value" PropertyName="DisplayNameValue" Width="4*" SortingEnabled="False"/>
             </dataGrid:DataGrid.Columns>
+            <dataGrid:DataGrid.RowsBackgroundColorPalette>
+                <dataGrid:PaletteCollection>
+                    <Color>#F2F2F2</Color>
+                    <Color>#FFFFFF</Color>
+                </dataGrid:PaletteCollection>
+            </dataGrid:DataGrid.RowsBackgroundColorPalette>
         </dataGrid:DataGrid>
 
         <Grid  Grid.Row="1">
