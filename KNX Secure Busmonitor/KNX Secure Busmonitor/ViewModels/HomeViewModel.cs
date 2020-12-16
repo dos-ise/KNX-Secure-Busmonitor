@@ -125,12 +125,12 @@ namespace Busmonitor.ViewModels
         OnPropertyChanged(nameof(ConnectButtonText));
         OnPropertyChanged(nameof(IsConnected));
       }
-      catch (Exception exception)
+      catch (Exception ex)
       {
         Device.BeginInvokeOnMainThread(
           () =>
           {
-            CrossLocalNotifications.Current.Show("Error:", "Could not connect to " + _settings.InterfaceName + "(" + _settings.IP + ")");
+            CrossLocalNotifications.Current.Show("Error:", "Could not connect to " + _settings.InterfaceName + "(" + _settings.IP + ")" + ex.Message);
           });
 
         return;

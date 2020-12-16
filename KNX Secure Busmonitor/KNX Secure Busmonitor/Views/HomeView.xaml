@@ -8,43 +8,48 @@
              mc:Ignorable="d"
              bootstrap:ViewModelLocator.AutoWireViewModel="True"
              x:Class="Busmonitor.Views.HomeView">
-  <AbsoluteLayout Margin="0,35,0,10">
-    <dataGrid:DataGrid x:Name="TelegrammGrid"
-                       SelectionEnabled="True"
-                       ItemsSource="{Binding Telegramms}"
-                       SelectedItem="{Binding SelectedTelegramm}"
-                       RowHeight="70" 
-                       HeaderHeight="50" 
-                       HeightRequest="600"
-                       BorderColor="#CCCCCC" 
-                       HeaderBackground="#E0E6F8"
-                       ActiveRowColor="#8899AA"                        >
-      <dataGrid:DataGrid.Columns>
-        <dataGrid:DataGridColumn Title="Name" PropertyName="GroupName" Width="2*"/>
-        <dataGrid:DataGridColumn Title="Address" PropertyName="Args.Address" Width="2*"/>
-        <dataGrid:DataGridColumn Title="IndividualAddress" PropertyName="Args.IndividualAddress" Width="1*"/>
-        <!--<dataGrid:DataGridColumn Title="SizeInBit" PropertyName="Args.Value.SizeInBit" Width="1*"/>-->
-        <dataGrid:DataGridColumn Title="Value" PropertyName="DisplayNameValue" Width="4*"/>
-        <!--<dataGrid:DataGridColumn Title="TelegramPriority" PropertyName="Args.TelegramPriority" Width="1*"/>-->
-        <!--<dataGrid:DataGridColumn Title="IsSecure" PropertyName="Args.IsSecure" Width="1*"/>-->
-      </dataGrid:DataGrid.Columns>
-    </dataGrid:DataGrid>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="90"/>
+        </Grid.RowDefinitions>
+        <dataGrid:DataGrid x:Name="TelegrammGrid"
+                           Grid.Row="0"
+                         SelectionEnabled="True"
+                         ItemsSource="{Binding Telegramms}"
+                         SelectedItem="{Binding SelectedTelegramm}"
+                         RowHeight="70" 
+                         HeaderHeight="50" 
+                         HeightRequest="600"
+                         BorderColor="#CCCCCC" 
+                         HeaderBackground="#E0E6F8"
+                         ActiveRowColor="#8899AA"                        >
+            <dataGrid:DataGrid.Columns>
+                <dataGrid:DataGridColumn Title="Name" PropertyName="GroupName" Width="2*"/>
+                <dataGrid:DataGridColumn Title="Address" PropertyName="Args.Address" Width="2*"/>
+                <dataGrid:DataGridColumn Title="IndividualAddress" PropertyName="Args.IndividualAddress" Width="1*"/>
+                <!--<dataGrid:DataGridColumn Title="SizeInBit" PropertyName="Args.Value.SizeInBit" Width="1*"/>-->
+                <dataGrid:DataGridColumn Title="Value" PropertyName="DisplayNameValue" Width="4*"/>
+                <!--<dataGrid:DataGridColumn Title="TelegramPriority" PropertyName="Args.TelegramPriority" Width="1*"/>-->
+                <!--<dataGrid:DataGridColumn Title="IsSecure" PropertyName="Args.IsSecure" Width="1*"/>-->
+            </dataGrid:DataGrid.Columns>
+        </dataGrid:DataGrid>
 
-    <Grid AbsoluteLayout.LayoutBounds=".5,1,1,.15" AbsoluteLayout.LayoutFlags="All" >
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="Auto" />
-        <ColumnDefinition Width="*" />
-        <ColumnDefinition Width="*" />
-        <ColumnDefinition Width="*" />
-      </Grid.ColumnDefinitions>
-      <Entry Text="{Binding TargetWriteAddress}" Grid.Column="0" IsVisible="{Binding IsConnected}"/>
-      <Entry Text="{Binding WriteValue}" Grid.Column="1" IsVisible="{Binding IsConnected}"/>
-      <Button Text="Send" Command="{Binding WriteCommand}"  Grid.Column="2" IsVisible="{Binding IsConnected}"/>
-      <Button x:Name="ConnectButton" Grid.Column="3" 
+        <Grid  Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Entry Text="{Binding TargetWriteAddress}" Grid.Column="0" IsVisible="{Binding IsConnected}"/>
+            <Entry Text="{Binding WriteValue}" Grid.Column="1" IsVisible="{Binding IsConnected}"/>
+            <Button Text="Send" Command="{Binding WriteCommand}"  Grid.Column="2" IsVisible="{Binding IsConnected}"/>
+            <Button x:Name="ConnectButton" Grid.Column="3" 
               Text="{Binding ConnectButtonText}" 
               WidthRequest="75" 
               HeightRequest="75"  
               Command="{Binding ConnectCommand}"/>
+        </Grid>
     </Grid>
-  </AbsoluteLayout>
 </ContentPage>
