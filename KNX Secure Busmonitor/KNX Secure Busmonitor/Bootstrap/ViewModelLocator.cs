@@ -5,6 +5,9 @@ using Xamarin.Forms;
 
 namespace Busmonitor.Bootstrap
 {
+  /// <summary>
+  /// https://dev.to/petermilovcik/setup-autofac-in-xamarin-forms-363h
+  /// </summary>
   public static class ViewModelLocator
   {
     private static readonly AppContainer Container;

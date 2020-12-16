@@ -1,13 +1,12 @@
 ﻿using Xamarin.Forms;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Collections.Generic;
+
+using Busmonitor.Model;
 
 namespace Busmonitor
 {
-  using System.Collections.Generic;
-
-  using Busmonitor.Model;
-
   public class Settings : INotifyPropertyChanged
   {
     public string IP

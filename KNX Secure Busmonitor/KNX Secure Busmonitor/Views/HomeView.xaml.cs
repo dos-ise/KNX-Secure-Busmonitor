@@ -8,11 +8,11 @@ using Xamarin.Forms.Xaml;
 namespace Busmonitor.Views
 {
   [XamlCompilation(XamlCompilationOptions.Compile)]
-  public partial class HomePage : ContentPage
+  public partial class HomeView : ContentPage
   {
     public static Action ScrollToBottom;
 
-    public HomePage()
+    public HomeView()
     {
       InitializeComponent();
       ScrollToBottom = () => 

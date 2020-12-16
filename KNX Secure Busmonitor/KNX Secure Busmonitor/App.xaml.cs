@@ -11,22 +11,9 @@ namespace Busmonitor
     public App()
     {
       InitializeComponent();
-      var _settings = new Settings();
-      DefaultSettings(_settings);
       Xamarin.Forms.DataGrid.DataGridComponent.Init();
-      Home = new AppShellViewModel(_settings);
-      MainPage = new AppShell() { BindingContext = Home };
-    }
-
-    private void DefaultSettings(Settings settings)
-    {
-      if (string.IsNullOrEmpty(settings.IP))
-      {
-        settings.IP = "192.168.10.100";
-        settings.IpPort = 0x0e57;
-        settings.InterfaceName = "Multicast";
-        settings.MediumType = "TP";
-      }
+      MainPage = new AppShellView();
+      Home = MainPage.BindingContext as AppShellViewModel;
     }
 
     protected override void OnStart()

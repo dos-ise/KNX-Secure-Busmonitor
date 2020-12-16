@@ -22,6 +22,7 @@ namespace Busmonitor.Bootstrap
       builder.RegisterType<AppShellViewModel>().SingleInstance();
       builder.RegisterType<InterfacesViewModel>().SingleInstance();
       builder.RegisterType<SecurtiyViewModel>().SingleInstance();
+      builder.RegisterType<Settings>().SingleInstance();
 
       container = builder.Build();
     }

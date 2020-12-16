@@ -53,8 +53,6 @@ namespace Busmonitor.ViewModels
 
     public GroupAddressImportViewModel GaImport => new GroupAddressImportViewModel(_settings);
 
-    public Settings Settings => _settings;
-
     public ICommand ConnectCommand { get; }
 
     public ICommand WriteCommand { get; }
@@ -175,7 +173,7 @@ namespace Busmonitor.ViewModels
                 t.GroupName = gaName;
                 Telegramms.Add(t);
                 OnPropertyChanged(nameof(Telegramms));
-                HomePage.ScrollToBottom();
+                HomeView.ScrollToBottom();
               });
           };
 

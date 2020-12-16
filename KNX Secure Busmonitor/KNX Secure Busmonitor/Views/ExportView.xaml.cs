@@ -4,9 +4,9 @@ using Xamarin.Forms.Xaml;
 namespace Busmonitor.Views
 {
   [XamlCompilation(XamlCompilationOptions.Compile)]
-  public partial class Interfaces : ContentPage
+  public partial class ExportView : ContentPage
   {
-    public Interfaces()
+    public ExportView()
     {
       InitializeComponent();
     }

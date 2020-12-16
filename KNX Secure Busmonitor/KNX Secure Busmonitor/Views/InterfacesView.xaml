@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:behavior="clr-namespace:Busmonitor.Behavior;assembly=KNX Secure Busmonitor"
              mc:Ignorable="d"
-             x:Class="Busmonitor.Views.Interfaces">
+             x:Class="Busmonitor.Views.InterfacesView">
   <ContentPage.Content>
     <StackLayout>
       <Grid x:Name="listGrid">

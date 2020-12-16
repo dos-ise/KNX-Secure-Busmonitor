@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:dataGrid="clr-namespace:Xamarin.Forms.DataGrid;assembly=Xamarin.Forms.DataGrid"
              mc:Ignorable="d"
-             x:Class="Busmonitor.Views.HomePage">
+             x:Class="Busmonitor.Views.HomeView">
   <AbsoluteLayout Margin="0,35,0,10">
     <dataGrid:DataGrid x:Name="TelegrammGrid"
                        SelectionEnabled="True"

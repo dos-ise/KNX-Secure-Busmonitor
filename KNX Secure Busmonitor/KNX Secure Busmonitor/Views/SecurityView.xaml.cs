@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace Busmonitor
+namespace Busmonitor.Views
 {
   [XamlCompilation(XamlCompilationOptions.Compile)]
-  public partial class AppShell : Shell
+  public partial class SecurityView : ContentPage
   {
-    public AppShell()
+    public SecurityView()
     {
       InitializeComponent();
     }

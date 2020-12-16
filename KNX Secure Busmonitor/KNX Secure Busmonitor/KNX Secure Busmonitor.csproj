@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -29,19 +29,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Views\AppShelViewl.xaml">
+    <EmbeddedResource Update="Views\AppShelView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ExportPage.xaml">
+    <EmbeddedResource Update="Views\ExportView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\GroupAddressImportView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\HomePage.xaml">
+    <EmbeddedResource Update="Views\HomeView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\SecurityPage.xaml">
+    <EmbeddedResource Update="Views\SecurityView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
@@ -51,8 +51,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Views\AppShelViewl.xaml.cs">
-      <DependentUpon>AppShelViewl.xaml</DependentUpon>
+    <Compile Update="Views\AppShelView.xaml.cs">
+      <DependentUpon>AppShelView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\ExportView.xaml.cs">
+      <DependentUpon>ExportView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\HomeView.xaml.cs">
+      <DependentUpon>HomeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\InterfacesView.xaml.cs">
+      <DependentUpon>InterfacesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\SecurityView.xaml.cs">
+      <DependentUpon>SecurityView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>
