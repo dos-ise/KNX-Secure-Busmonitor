@@ -14,7 +14,7 @@
             <Label Text="{Binding Settings.InterfaceName}"/>
         </StackLayout>
     </Shell.FlyoutHeader>
-    <FlyoutItem Title="Monitor">
+    <FlyoutItem Title="Monitor" Icon="research.png">
         <ShellContent>
             <views:HomeView/>
         </ShellContent>
@@ -24,12 +24,12 @@
             <views:InterfacesView/>
         </ShellContent>
     </FlyoutItem>
-    <FlyoutItem Title="Security">
+    <FlyoutItem Title="Security" Icon="padlock.png">
         <ShellContent>
             <views:SecurityView/>
         </ShellContent>
     </FlyoutItem>
-    <FlyoutItem Title="Export">
+    <FlyoutItem Title="Export" Icon="export.png">
         <ShellContent>
             <views:ExportView/>
         </ShellContent>

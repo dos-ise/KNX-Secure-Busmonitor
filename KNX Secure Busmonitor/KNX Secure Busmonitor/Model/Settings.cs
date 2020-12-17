@@ -115,18 +115,12 @@ namespace Busmonitor
       {
         if (Application.Current.Properties.ContainsKey(key))
         {
-          try
-          {
-            return JsonConvert.DeserializeObject<T>(Application.Current.Properties[key].ToString());
-          }
-          catch (Exception e)
-          {
-            return default;
-          }
+
+          return JsonConvert.DeserializeObject<T>(Application.Current.Properties[key].ToString());
         }
         else
         {
-          return default;
+          return Activator.CreateInstance<T>();
         }
       }
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,6 +31,7 @@ namespace Busmonitor.ViewModels
     public HomeViewModel(Settings settings, TelegrammList telegrammList)
     {
       _settings = settings;
+      _settings.PropertyChanged += SettingsOnPropertyChanged;
       _bus = new Bus(CreateParameter());
       Telegramms = telegrammList;
       ConnectCommand = new Command(OnConnect);
@@ -37,7 +39,16 @@ namespace Busmonitor.ViewModels
       TargetWriteAddress = "1/1/1";
       WriteValue = "true";
     }
-    
+
+    private void SettingsOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+      if (e.PropertyName.Equals(nameof(Settings.IP)))
+      {
+        OnPropertyChanged(nameof(NoGateway));
+        OnPropertyChanged(nameof(GatewaySelected));
+      }
+    }
+
     public ICommand ConnectCommand { get; }
 
     public ICommand WriteCommand { get; }
@@ -51,6 +62,10 @@ namespace Busmonitor.ViewModels
     public Color ConnectButtonColor => _bus.IsConnected ? Color.GreenYellow : Color.Red;
 
     public bool IsConnected => _bus.IsConnected;
+
+    public bool NoGateway => _settings.IP == null;
+
+    public bool GatewaySelected => !NoGateway;
 
     public string TargetWriteAddress
     {

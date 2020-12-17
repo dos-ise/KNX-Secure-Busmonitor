@@ -17,7 +17,7 @@
           <RowDefinition Height="*"/>
           <RowDefinition Height="4*"/>
         </Grid.RowDefinitions>
-        <Label Text="Networks:" Grid.Row="0"/>
+        <Label Text="Networks:" Grid.Row="0" IsVisible="False" />
         <ListView MinimumHeightRequest="500" HeightRequest="500" ItemsSource="{Binding Networks}"  Grid.Row="1"/>
         <Label Text="Discoverd Interfaces:" Grid.Row="2"/>
         <ListView MinimumHeightRequest="500" HeightRequest="500" ItemsSource="{Binding DiscoveredInterfaces}"  Grid.Row="3">
@@ -27,7 +27,7 @@
           <ListView.ItemTemplate>
             <DataTemplate>
               <ViewCell>
-                <StackLayout Orientation="Horizontal">
+                <StackLayout Orientation="Horizontal" Margin="20, 0, 20, 0">
                   <Label Text="{Binding IndividualAddress}" FontAttributes="Bold" />
                   <Label Text="{Binding FriendlyName}" />
                   <Label Text="{Binding IpAddress}" />
