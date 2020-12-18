@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Busmonitor.Bootstrap
 {
+  /// <summary>
+  /// https://docs.microsoft.com/en-us/xamarin/xamarin-forms/app-fundamentals/local-notifications
+  /// </summary>
   public interface INotificationManager
   {
     event EventHandler NotificationReceived;
