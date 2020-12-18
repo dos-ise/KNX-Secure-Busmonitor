@@ -6,13 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Busmonitor.Bootstrap;
 using Busmonitor.Model;
 using Busmonitor.Views;
 using Knx.Bus.Common;
 using Knx.Bus.Common.Configuration;
 using Knx.Bus.Common.GroupValues;
 using Knx.Falcon.Sdk;
-using Plugin.LocalNotifications;
+
 using Xamarin.Forms;
 using Device = Xamarin.Forms.Device;
 
@@ -21,6 +22,7 @@ namespace Busmonitor.ViewModels
   public class HomeViewModel : ViewModelBase
   {
     private readonly Settings _settings;
+    private readonly INotificationManager _manager;
     private Bus _bus;
 
     private string targetWriteAddress;
@@ -28,9 +30,10 @@ namespace Busmonitor.ViewModels
 
     private bool _isConnecting;
     
-    public HomeViewModel(Settings settings, TelegrammList telegrammList)
+    public HomeViewModel(Settings settings, TelegrammList telegrammList, INotificationManager manager)
     {
       _settings = settings;
+      _manager = manager;
       _settings.PropertyChanged += SettingsOnPropertyChanged;
       _bus = new Bus(CreateParameter());
       Telegramms = telegrammList;
@@ -102,7 +105,7 @@ namespace Busmonitor.ViewModels
         Device.BeginInvokeOnMainThread(
           () =>
           {
-            CrossLocalNotifications.Current.Show("Error:", "Could not write to " + TargetWriteAddress + "(" + e.Message + ")");
+            _manager.SendNotification("Error:", "Could not write to " + TargetWriteAddress + "(" + e.Message + ")");
           });
       }
     }
@@ -145,7 +148,7 @@ namespace Busmonitor.ViewModels
         Device.BeginInvokeOnMainThread(
           () =>
           {
-            CrossLocalNotifications.Current.Show("Error:", "Could not connect to " + _settings.InterfaceName + "(" + _settings.IP + ")" + ex.Message);
+            _manager.SendNotification("Error:", "Could not connect to " + _settings.InterfaceName + "(" + _settings.IP + ")" + ex.Message);
           });
 
         return;
@@ -160,7 +163,7 @@ namespace Busmonitor.ViewModels
         Device.BeginInvokeOnMainThread(
           () =>
           {
-            CrossLocalNotifications.Current.Show("Info", "Connected to " + _settings.InterfaceName + "(" + _settings.IP + ")");
+            _manager.SendNotification("Info", "Connected to " + _settings.InterfaceName + "(" + _settings.IP + ")");
           });
 
         var senderAddress = _bus.LocalIndividualAddress;

@@ -4,9 +4,7 @@ using System.Threading.Tasks;
 using Knx.Bus.Common.KnxIp;
 using Knx.Falcon.Sdk;
 using System.Windows.Input;
-
-using Plugin.LocalNotifications;
-
+using Busmonitor.Bootstrap;
 using Xamarin.Forms;
 
 namespace Busmonitor.ViewModels
@@ -14,14 +12,16 @@ namespace Busmonitor.ViewModels
   public class InterfacesViewModel : ViewModelBase
   {
     private readonly Settings _settings;
+    private readonly INotificationManager _manager;
 
     private bool _isDiscovering;
 
     public ICommand ItemSelectedCommand { get; }
 
-    public InterfacesViewModel(Settings settings)
+    public InterfacesViewModel(Settings settings, INotificationManager manager)
     {
       _settings = settings;
+      _manager = manager;
       DiscoveredInterfaces = new ObservableCollection<DiscoveryResult>();
       Networks = new ObservableCollection<NetworkAdapterInfo>(new NetworkAdapterEnumerator(AdapterTypes.All));
       DiscoverInterfaces();
@@ -39,7 +39,7 @@ namespace Busmonitor.ViewModels
         _settings.MediumType = result.MediumType.ToString();
         _settings.MacAddress = result.MacAddress.ToString();
 
-        CrossLocalNotifications.Current.Show("Info:", "Saved " + _settings.InterfaceName + "(" + _settings.IP + ")");
+        _manager.SendNotification("Info:", "Saved " + _settings.InterfaceName + "(" + _settings.IP + ")");
       }
     }
 

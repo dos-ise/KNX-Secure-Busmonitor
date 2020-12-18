@@ -7,21 +7,21 @@ using Xamarin.Forms;
 using Xamarin.Essentials;
 using System;
 using System.IO;
-using System.Text;
-using Plugin.LocalNotifications;
+using Busmonitor.Bootstrap;
 
 namespace Busmonitor.ViewModels
 {
   public class GroupAddressImportViewModel : ViewModelBase
   {
     private readonly Settings _settings;
+    private readonly INotificationManager _manager;
 
-    public GroupAddressImportViewModel(Settings settings)
+    public GroupAddressImportViewModel(Settings settings, INotificationManager manager)
     {
       _settings = settings;
+      _manager = manager;
       ImportCommand = new Command(OnImport);
       GaCount = _settings.ImportGroupAddress.Count;
-      //OnPropertyChanged(nameof(GaCount));
     }
 
     public int GaCount { get; set; }
@@ -45,7 +45,7 @@ namespace Busmonitor.ViewModels
         Device.BeginInvokeOnMainThread(
             () =>
             {
-              CrossLocalNotifications.Current.Show("Error:", "Could not import GA (" + ex.Message + ")");
+              _manager.SendNotification("Error:", "Could not import GA (" + ex.Message + ")");
             });
       }
     }

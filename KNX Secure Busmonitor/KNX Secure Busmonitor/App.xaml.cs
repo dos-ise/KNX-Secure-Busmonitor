@@ -1,4 +1,5 @@
-﻿using Busmonitor.Views;
+﻿using Busmonitor.Bootstrap;
+using Busmonitor.Views;
 using Busmonitor.ViewModels;
 using Xamarin.Forms;
 
@@ -11,6 +12,9 @@ namespace Busmonitor
     public App()
     {
       InitializeComponent();
+
+      DependencyService.Get<INotificationManager>().Initialize();
+
       Xamarin.Forms.DataGrid.DataGridComponent.Init();
       MainPage = new Views.AppShellView();
       Home = MainPage.BindingContext as AppShellViewModel;

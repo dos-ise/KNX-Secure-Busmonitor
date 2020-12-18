@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
 using Autofac;
 using Busmonitor.Model;
 using Busmonitor.ViewModels;
+using Xamarin.Forms;
 
 namespace Busmonitor.Bootstrap
 {
@@ -26,8 +24,14 @@ namespace Busmonitor.Bootstrap
       builder.RegisterType<AppShellViewModel>().SingleInstance();
       builder.RegisterType<InterfacesViewModel>().SingleInstance();
       builder.RegisterType<SecurtiyViewModel>().SingleInstance();
+      builder.RegisterInstance(GetPlattformImplementation<INotificationManager>()).SingleInstance();
       
       container = builder.Build();
+    }
+
+    private T GetPlattformImplementation<T>() where T : class
+    {
+      return DependencyService.Get<T>();
     }
 
     public T Resolve<T>() => container.Resolve<T>();
