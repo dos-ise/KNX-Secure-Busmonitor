@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:dataGrid="clr-namespace:Xamarin.Forms.DataGrid;assembly=Xamarin.Forms.DataGrid"
              xmlns:bootstrap="clr-namespace:Busmonitor.Bootstrap;assembly=KNX Secure Busmonitor"
+             xmlns:behavior="clr-namespace:Busmonitor.Behavior;assembly=KNX Secure Busmonitor"
              mc:Ignorable="d"
              bootstrap:ViewModelLocator.AutoWireViewModel="True"
              x:Class="Busmonitor.Views.HomeView">
@@ -44,7 +45,11 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Label IsVisible="{Binding NoGateway}" Grid.Column="0" Grid.ColumnSpan="4" Text="No KNX Gateway selected! Please go to Gateway and select an KNX interface"/>
-            <Entry Text="{Binding TargetWriteAddress}" Grid.Column="0" IsVisible="{Binding IsConnected}"/>
+            <Entry Text="{Binding TargetWriteAddress}" Keyboard="Numeric" Grid.Column="0" IsVisible="{Binding IsConnected}">
+                <Entry.Behaviors>
+                    <behavior:MaskedBehavior Mask="X/X/X" />
+                </Entry.Behaviors>
+            </Entry>
             <Entry Text="{Binding WriteValue}" Grid.Column="1" IsVisible="{Binding IsConnected}"/>
             <Button Text="Send" Command="{Binding WriteCommand}"  Grid.Column="2" IsVisible="{Binding IsConnected}"/>
             <Button x:Name="ConnectButton" Grid.Column="3" 
