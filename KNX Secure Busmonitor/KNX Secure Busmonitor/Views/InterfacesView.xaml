@@ -8,37 +8,50 @@
              mc:Ignorable="d"        
              bootstrap:ViewModelLocator.AutoWireViewModel="True"
              x:Class="Busmonitor.Views.InterfacesView">
-  <ContentPage.Content>
-    <StackLayout>
-      <Grid x:Name="listGrid">
-        <Grid.RowDefinitions>
-          <RowDefinition Height="*"/>
-          <RowDefinition Height="4*"/>
-          <RowDefinition Height="*"/>
-          <RowDefinition Height="4*"/>
-        </Grid.RowDefinitions>
-        <Label Text="Networks:" Grid.Row="0" IsVisible="False" />
-        <ListView MinimumHeightRequest="500" HeightRequest="500" ItemsSource="{Binding Networks}"  Grid.Row="1"/>
-        <Label Text="Discoverd Interfaces:" Grid.Row="2"/>
-        <ListView MinimumHeightRequest="500" HeightRequest="500" ItemsSource="{Binding DiscoveredInterfaces}"  Grid.Row="3">
-          <ListView.Behaviors>
-            <behavior:EventToCommandBehavior EventName="ItemSelected" Command="{Binding ItemSelectedCommand}"/>
-          </ListView.Behaviors>
-          <ListView.ItemTemplate>
-            <DataTemplate>
-              <ViewCell>
-                <StackLayout Orientation="Horizontal" Margin="20, 0, 20, 0">
-                  <Label Text="{Binding IndividualAddress}" FontAttributes="Bold" />
-                  <Label Text="{Binding FriendlyName}" />
-                  <Label Text="{Binding IpAddress}" />
-                  <Label Text="{Binding MacAddress}" HorizontalTextAlignment="End" />
-                </StackLayout>
-              </ViewCell>
-            </DataTemplate>
-          </ListView.ItemTemplate>
-        </ListView>
-        <ActivityIndicator Grid.Row="1" IsRunning ="{Binding IsDiscovering}"  HorizontalOptions="Center" VerticalOptions="Center" Color="Orange"  />
-      </Grid>
-    </StackLayout>
-  </ContentPage.Content>
+    <ContentPage.Content>
+        <StackLayout>
+            <Grid x:Name="listGrid">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="4*"/>
+                </Grid.RowDefinitions>
+                <Label Text="Add Interface:" Grid.Row="0" IsVisible="False" />
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Entry Text="Name" Grid.Column="0"/>
+                    <Entry Keyboard="Numeric" Grid.Column="1" Text="192.168.178.60">
+                        <Entry.Behaviors>
+                            <behavior:MaskedBehavior Mask="XXX.XXX.XXX.XX" />
+                        </Entry.Behaviors>
+                    </Entry>
+                </Grid>
+
+                <Label Text="Discoverd Interfaces:" Grid.Row="2"/>
+                <ListView MinimumHeightRequest="500" HeightRequest="500" ItemsSource="{Binding DiscoveredInterfaces}"  Grid.Row="3">
+                    <ListView.Behaviors>
+                        <behavior:EventToCommandBehavior EventName="ItemSelected" Command="{Binding ItemSelectedCommand}"/>
+                    </ListView.Behaviors>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout Orientation="Horizontal" Margin="30, 0, 30, 0">
+                                    <Image Source="knx_interface.png" VerticalOptions="Center"/>
+                                    <Label Text="{Binding IndividualAddress}" FontAttributes="Bold" />
+                                    <Label Text="{Binding FriendlyName}" />
+                                    <Label Text="{Binding IpAddress}" />
+                                    <Label Text="{Binding MacAddress}" HorizontalTextAlignment="End" />
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <ActivityIndicator Grid.Row="1" IsRunning ="{Binding IsDiscovering}"  HorizontalOptions="Center" VerticalOptions="Center" Color="Orange"  />
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
 </ContentPage>
