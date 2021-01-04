@@ -22,13 +22,15 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Entry Text="Name" Grid.Column="0"/>
-                    <Entry Keyboard="Numeric" Grid.Column="1" Text="192.168.178.60">
+                    <Entry Text="{Binding GatewayName}" Grid.Column="0" />
+                    <Entry Keyboard="Numeric" Grid.Column="1" Text="{Binding IpAddress}">
                         <Entry.Behaviors>
                             <behavior:MaskedBehavior Mask="XXX.XXX.XXX.XX" />
                         </Entry.Behaviors>
                     </Entry>
+                    <Button Grid.Column="2" Text="Save" Command="{Binding SaveGatewayCommand}"/>
                 </Grid>
 
                 <Label Text="Discoverd Interfaces:" Grid.Row="2"/>

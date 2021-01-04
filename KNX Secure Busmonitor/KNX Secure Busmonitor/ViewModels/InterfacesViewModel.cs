@@ -15,6 +15,8 @@ namespace Busmonitor.ViewModels
     private readonly INotificationManager _manager;
 
     private bool _isDiscovering;
+    private string _ipAddress;
+    private string _gatewayName;
 
     public ICommand ItemSelectedCommand { get; }
 
@@ -26,8 +28,15 @@ namespace Busmonitor.ViewModels
       Networks = new ObservableCollection<NetworkAdapterInfo>(new NetworkAdapterEnumerator(AdapterTypes.All));
       DiscoverInterfaces();
       ItemSelectedCommand = new Command(ItemSelectedExecute);
+      SaveGatewayCommand = new Command(SaveGatewayExecute);
     }
-    
+
+    private void SaveGatewayExecute()
+    {
+      _settings.IP = _ipAddress;
+      _settings.InterfaceName = _gatewayName;
+    }
+
     private void ItemSelectedExecute(object obj)
     {
       var args = obj as SelectedItemChangedEventArgs;
@@ -56,6 +65,8 @@ namespace Busmonitor.ViewModels
         });
     }
 
+    public ICommand SaveGatewayCommand { get; }
+
     public bool IsDiscovering
     {
       get
@@ -66,6 +77,32 @@ namespace Busmonitor.ViewModels
       {
         _isDiscovering = value;
         OnPropertyChanged(nameof(IsDiscovering));
+      }
+    }
+
+    public string IpAddress
+    {
+      get
+      {
+        return _ipAddress;
+      }
+      set
+      {
+        _ipAddress = value;
+        OnPropertyChanged(nameof(IpAddress));
+      }
+    }    
+    
+    public string GatewayName
+    {
+      get
+      {
+        return _gatewayName;
+      }
+      set
+      {
+        _gatewayName = value;
+        OnPropertyChanged(nameof(GatewayName));
       }
     }
 
