@@ -13,9 +13,9 @@
             <Grid x:Name="listGrid">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="4*"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="8*"/>
                 </Grid.RowDefinitions>
                 <Label Text="Add Interface:" Grid.Row="0" IsVisible="False" />
                 <Grid Grid.Row="1">
@@ -24,13 +24,19 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Entry Text="{Binding GatewayName}" Grid.Column="0" />
-                    <Entry Keyboard="Numeric" Grid.Column="1" Text="{Binding IpAddress}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0" Grid.Column="0" Text="Interface Name:"/>
+                    <Label Grid.Row="0" Grid.Column="0" Text="IP Address:"/>
+                    <Entry Grid.Row="1" Text="{Binding GatewayName}" Grid.Column="0" />
+                    <Entry Grid.Row="1" Keyboard="Numeric" Grid.Column="1" Text="{Binding IpAddress}">
                         <Entry.Behaviors>
-                            <behavior:MaskedBehavior Mask="XXX.XXX.XXX.XX" />
+                            <!--<behavior:MaskedBehavior Mask="XXX.XXX.XXX.XX" />-->
                         </Entry.Behaviors>
                     </Entry>
-                    <Button Grid.Column="2" Text="Save" Command="{Binding SaveGatewayCommand}"/>
+                    <Button Grid.Row="1" Grid.Column="2" Text="Save" Command="{Binding SaveGatewayCommand}"/>
                 </Grid>
 
                 <Label Text="Discoverd Interfaces:" Grid.Row="2"/>

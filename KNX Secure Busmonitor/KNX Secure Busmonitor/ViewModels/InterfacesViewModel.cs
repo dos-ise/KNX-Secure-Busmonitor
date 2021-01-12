@@ -29,12 +29,16 @@ namespace Busmonitor.ViewModels
       DiscoverInterfaces();
       ItemSelectedCommand = new Command(ItemSelectedExecute);
       SaveGatewayCommand = new Command(SaveGatewayExecute);
+      _ipAddress = "192.168.178.7";
+      _gatewayName = "Interface Name";
     }
 
     private void SaveGatewayExecute()
     {
       _settings.IP = _ipAddress;
       _settings.InterfaceName = _gatewayName;
+
+      _manager.SendNotification("Info:", "Saved " + _settings.InterfaceName + "(" + _settings.IP + ")");
     }
 
     private void ItemSelectedExecute(object obj)

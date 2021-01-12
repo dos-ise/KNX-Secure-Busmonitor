@@ -47,7 +47,7 @@
             <Label IsVisible="{Binding NoGateway}" Grid.Column="0" Grid.ColumnSpan="4" Text="No KNX Gateway selected! Please go to Gateway and select an KNX interface"/>
             <Entry Text="{Binding TargetWriteAddress}" Keyboard="Numeric" Grid.Column="0" IsVisible="{Binding IsConnected}">
                 <Entry.Behaviors>
-                    <behavior:MaskedBehavior Mask="X/X/X" />
+                    <!--<behavior:MaskedBehavior Mask="X/X/X" />-->
                 </Entry.Behaviors>
             </Entry>
             <Entry Text="{Binding WriteValue}" Grid.Column="1" IsVisible="{Binding IsConnected}"/>
