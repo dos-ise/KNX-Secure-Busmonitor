@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Net;
 using System.Threading.Tasks;
 
 using Knx.Bus.Common.KnxIp;
@@ -35,10 +36,18 @@ namespace Busmonitor.ViewModels
 
     private void SaveGatewayExecute()
     {
-      _settings.IP = _ipAddress;
-      _settings.InterfaceName = _gatewayName;
+      if (IPAddress.TryParse(_ipAddress, out var ip))
+      {
+        _settings.IP = _ipAddress;
+        _settings.InterfaceName = _gatewayName;
 
-      _manager.SendNotification("Info:", "Saved " + _settings.InterfaceName + "(" + _settings.IP + ")");
+        _manager.SendNotification("Info:", "Saved " + _settings.InterfaceName + "(" + _settings.IP + ")");
+      }
+      else
+      {
+        _manager.SendNotification("Info:",_ipAddress + " is not a valid IP Address");
+        IpAddress = string.Empty;
+      }
     }
 
     private void ItemSelectedExecute(object obj)
