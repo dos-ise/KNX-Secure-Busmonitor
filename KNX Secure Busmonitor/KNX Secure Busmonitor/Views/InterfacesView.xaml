@@ -13,7 +13,7 @@
             <Grid x:Name="listGrid">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="2*"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="8*"/>
                 </Grid.RowDefinitions>
@@ -25,11 +25,11 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="2*" />
                     </Grid.RowDefinitions>
                     <Label Grid.Row="0" Grid.Column="0" Text="Interface Name:"/>
-                    <Label Grid.Row="0" Grid.Column="0" Text="IP Address:"/>
+                    <Label Grid.Row="0" Grid.Column="1" Text="IP Address:"/>
                     <Entry Grid.Row="1" Text="{Binding GatewayName}" Grid.Column="0" />
                     <Entry Grid.Row="1" Keyboard="Numeric" Grid.Column="1" Text="{Binding IpAddress}">
                         <Entry.Behaviors>
