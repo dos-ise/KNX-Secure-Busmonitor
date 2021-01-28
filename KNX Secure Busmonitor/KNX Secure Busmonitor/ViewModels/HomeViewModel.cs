@@ -112,21 +112,28 @@ namespace Busmonitor.ViewModels
 
     private async void OnConnect()
     {
-      ConnectorParameters connectorParameter = CreateParameter();
-      if (!_bus.IsConnected)
+      try
       {
-        if (!_isConnecting)
+        ConnectorParameters connectorParameter = CreateParameter();
+        if (!_bus.IsConnected)
         {
-          await Task.Run(() => Action(connectorParameter));
+          if (!_isConnecting)
+          {
+            await Task.Run(() => Action(connectorParameter));
+          }
+        }
+        else
+        {
+          _bus.Disconnect();
+          Telegramms.Clear();
+          OnPropertyChanged(nameof(ConnectButtonColor));
+          OnPropertyChanged(nameof(ConnectButtonText));
+          OnPropertyChanged(nameof(IsConnected));
         }
       }
-      else
+      catch (Exception e)
       {
-        _bus.Disconnect();
-        Telegramms.Clear();
-        OnPropertyChanged(nameof(ConnectButtonColor));
-        OnPropertyChanged(nameof(ConnectButtonText));
-        OnPropertyChanged(nameof(IsConnected));
+        Console.WriteLine(e);
       }
     }
 

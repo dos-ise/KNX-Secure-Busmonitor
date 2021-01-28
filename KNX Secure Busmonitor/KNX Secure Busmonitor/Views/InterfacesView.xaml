@@ -30,8 +30,8 @@
                     </Grid.RowDefinitions>
                     <Label Grid.Row="0" Grid.Column="0" Text="Interface Name:"/>
                     <Label Grid.Row="0" Grid.Column="1" Text="IP Address:"/>
-                    <Entry Grid.Row="1" Text="{Binding GatewayName}" Grid.Column="0" />
-                    <Entry Grid.Row="1" Keyboard="Numeric" Grid.Column="1" Text="{Binding IpAddress}">
+                    <Entry Grid.Row="1" FontSize="14" Text="{Binding GatewayName}" Grid.Column="0" />
+                    <Entry Grid.Row="1" FontSize="14" Keyboard="Numeric" Grid.Column="1" Text="{Binding IpAddress}">
                         <Entry.Behaviors>
                             <!--<behavior:MaskedBehavior Mask="XXX.XXX.XXX.XX" />-->
                         </Entry.Behaviors>
