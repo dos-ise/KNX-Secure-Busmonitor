@@ -1,30 +1,53 @@
-﻿using System.Linq;
+﻿using System;
+using System.IO;
+using System.Linq;
 using System.Security;
+using System.Windows.Input;
+using Busmonitor.Bootstrap;
 using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace Busmonitor.ViewModels
 {
   public class SecurtiyViewModel : ViewModelBase
   {
-    private string _fileName;
+    private readonly Settings _settings;
+    private readonly INotificationManager _manager;
 
-    private SecureString MakeStringSecure(string plain)
+    public SecurtiyViewModel(Settings settings, INotificationManager manager)
     {
-      //Not very good handling
-      SecureString sec = new SecureString();
-      string pwd = plain; /* Not Secure! */
-      pwd.ToCharArray().ToList().ForEach(sec.AppendChar);
-      /* and now : seal the deal */
-      sec.MakeReadOnly();
-      return sec;
+      _settings = settings;
+      _manager = manager;
+      ImportKnxKeys = new Command(OnImportKeys);
     }
 
-    public async void OnAddKeyring()
+    private async void OnImportKeys()
     {
       var fileData = await FilePicker.PickAsync();
       if (fileData == null)
         return; // user canceled file picking
-      _fileName = fileData.FileName;
+      try
+      {
+        var stream = await fileData.OpenReadAsync();
+        StreamReader reader = new StreamReader(stream);
+        _settings.KnxKeys = reader.ReadToEnd();
+      }
+      catch (Exception ex)
+      {
+        Device.BeginInvokeOnMainThread(
+          () =>
+          {
+            _manager.SendNotification("Error:", "Could not import GA (" + ex.Message + ")");
+          });
+      }
+    }
+    
+    public ICommand ImportKnxKeys { get; }
+    
+    public string Password
+    {
+      get => _settings.Password;
+      set => _settings.Password = value;
     }
   }
 }

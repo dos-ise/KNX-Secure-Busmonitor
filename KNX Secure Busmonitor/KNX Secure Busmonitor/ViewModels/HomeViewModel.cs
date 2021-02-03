@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Busmonitor.Bootstrap;
+using Busmonitor.Extension;
 using Busmonitor.Model;
 using Busmonitor.Views;
 using Knx.Bus.Common;
@@ -202,11 +205,18 @@ namespace Busmonitor.ViewModels
     {
       if (_settings.IsSecurityEnabled)
       {
-        //TODO
-        //var secure = new KnxIpSecureDeviceManagementConnectorParameters(SelectedInterface);
-        //secure.LoadSecurityData(SelectedInterface.IndividualAddress, _fileName, MakeStringSecure(passwordEntry.Text));
-        //return secure;
-        return new KnxIpTunnelingConnectorParameters(_settings.IP, _settings.IpPort, false);
+        try
+        {
+          SecureString password = _settings.Password.ToSecureString();
+          var secure = new KnxIpSecureTunnelingConnectorParameters(_settings.IP, _settings.IpPort, false);
+          secure.IndividualAddress = _settings.IndividualAddress;
+          secure.LoadSecurityData(_settings.KnxKeys.ToStream(), password);
+          return secure;
+        }
+        catch (Exception e)
+        {
+          return new KnxIpTunnelingConnectorParameters(_settings.IP, _settings.IpPort, false);
+        }
       }
       else
       {

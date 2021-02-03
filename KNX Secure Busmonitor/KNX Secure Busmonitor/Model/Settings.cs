@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Collections.Generic;
 
 using Busmonitor.Model;
+using Knx.Bus.Common;
 using Newtonsoft.Json;
 
 namespace Busmonitor
@@ -52,7 +53,13 @@ namespace Busmonitor
       set => Set(nameof(Password), value);
       get => Get<string>(nameof(Password));
     }
-
+    
+    public string KnxKeys
+    {
+      set => Set(nameof(KnxKeys), value);
+      get => Get<string>(nameof(KnxKeys));
+    }
+    
     public string MacAddress
     {
       set => Set(nameof(MacAddress), value);
@@ -66,6 +73,12 @@ namespace Busmonitor
     {
       set => Set(nameof(ImportGroupAddress), value);
       get => Get<List<ImportGroupAddress>>(nameof(ImportGroupAddress));
+    }
+
+    public string IndividualAddress
+    {
+      set => Set(nameof(IndividualAddress), value);
+      get => Get<string>(nameof(IndividualAddress));
     }
 
     private void Set<T>(string key, T value)

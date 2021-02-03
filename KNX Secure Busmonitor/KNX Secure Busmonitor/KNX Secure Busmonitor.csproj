@@ -47,10 +47,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Extension\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Views\AppShelView.xaml.cs">
       <DependentUpon>AppShelView.xaml</DependentUpon>
     </Compile>

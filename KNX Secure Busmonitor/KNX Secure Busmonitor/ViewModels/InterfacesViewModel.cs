@@ -60,7 +60,7 @@ namespace Busmonitor.ViewModels
         _settings.SerialNumber = result.SerialNumber;
         _settings.MediumType = result.MediumType.ToString();
         _settings.MacAddress = result.MacAddress.ToString();
-
+        _settings.IndividualAddress = result.IndividualAddress;
         _manager.SendNotification("Info:", "Saved " + _settings.InterfaceName + "(" + _settings.IP + ")");
       }
     }
