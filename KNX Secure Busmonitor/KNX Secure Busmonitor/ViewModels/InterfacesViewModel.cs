@@ -36,18 +36,10 @@ namespace Busmonitor.ViewModels
 
     private void SaveGatewayExecute()
     {
-      if (IPAddress.TryParse(_ipAddress, out var ip))
-      {
-        _settings.IP = _ipAddress;
-        _settings.InterfaceName = _gatewayName;
+      _settings.IP = _ipAddress;
+      _settings.InterfaceName = _gatewayName;
 
-        _manager.SendNotification("Info:", "Saved " + _settings.InterfaceName + "(" + _settings.IP + ")");
-      }
-      else
-      {
-        _manager.SendNotification("Info:",_ipAddress + " is not a valid IP Address");
-        IpAddress = string.Empty;
-      }
+      _manager.SendNotification("Info:", "Saved " + _settings.InterfaceName + "(" + _settings.IP + ")");
     }
 
     private void ItemSelectedExecute(object obj)
@@ -104,8 +96,8 @@ namespace Busmonitor.ViewModels
         _ipAddress = value;
         OnPropertyChanged(nameof(IpAddress));
       }
-    }    
-    
+    }
+
     public string GatewayName
     {
       get
