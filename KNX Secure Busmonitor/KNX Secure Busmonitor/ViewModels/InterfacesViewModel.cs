@@ -20,6 +20,7 @@ namespace Busmonitor.ViewModels
     private string _gatewayName;
 
     public ICommand ItemSelectedCommand { get; }
+    public ICommand RefreshCommand { get; }
 
     public InterfacesViewModel(Settings settings, INotificationManager manager)
     {
@@ -29,9 +30,14 @@ namespace Busmonitor.ViewModels
       Networks = new ObservableCollection<NetworkAdapterInfo>(new NetworkAdapterEnumerator(AdapterTypes.All));
       DiscoverInterfaces();
       ItemSelectedCommand = new Command(ItemSelectedExecute);
+      RefreshCommand = new Command(RefreshCommandExecute);
       SaveGatewayCommand = new Command(SaveGatewayExecute);
       _ipAddress = "192.168.178.7";
       _gatewayName = "Interface Name";
+    }
+
+    private void RefreshCommandExecute()
+    {
     }
 
     private void SaveGatewayExecute()

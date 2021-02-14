@@ -57,14 +57,26 @@ namespace Busmonitor.ViewModels
       lines.RemoveAt(lines.Count - 1);
       foreach (var line in lines)
       {
-        var c = line.GetColumns().ToArray();
-        var ga = c.Slice(1, 4).Select(a => a.Replace("\"", string.Empty)).Select(Selector);
-        var i = new ImportGroupAddress()
+        ImportGroupAddress i = null;
+        try
         {
-          GroupName = c[0],
-          AddressString = string.Join(" ", ga)
-        };
-        yield return i;
+          var c = line.GetColumns().ToArray();
+          var ga = c.Slice(1, 4).Select(a => a.Replace("\"", string.Empty)).Select(Selector);
+          i = new ImportGroupAddress()
+          {
+            GroupName = c[0],
+            AddressString = string.Join(" ", ga)
+          };
+        
+        }
+        catch (Exception e)
+        {
+        }
+
+        if (i != null)
+        {
+          yield return i;
+        }
       }
     }
 
