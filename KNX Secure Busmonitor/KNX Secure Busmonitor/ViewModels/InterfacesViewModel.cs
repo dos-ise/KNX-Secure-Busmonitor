@@ -43,10 +43,13 @@ namespace Busmonitor.ViewModels
 
     private void SaveGatewayExecute()
     {
-      _settings.IP = _ipAddress;
-      _settings.InterfaceName = _gatewayName;
+      if (IPAddress.TryParse(_ipAddress, out var ip))
+      {
+        _settings.IP = _ipAddress;
+        _settings.InterfaceName = _gatewayName;
 
-      _manager.SendNotification("Info:", "Saved " + _settings.InterfaceName + "(" + _settings.IP + ")");
+        _manager.SendNotification("Info:", "Saved " + _settings.InterfaceName + "(" + _settings.IP + ")");
+      }
     }
 
     private void ItemSelectedExecute(object obj)
