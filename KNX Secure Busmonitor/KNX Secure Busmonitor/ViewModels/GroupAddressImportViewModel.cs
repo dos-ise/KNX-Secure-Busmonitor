@@ -7,37 +7,50 @@ using Xamarin.Forms;
 using Xamarin.Essentials;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Busmonitor.Bootstrap;
+using Knx.Bus.Common;
 
 namespace Busmonitor.ViewModels
 {
   public class GroupAddressImportViewModel : ViewModelBase
   {
-    private readonly Settings _settings;
+    private readonly ISettings _settings;
     private readonly INotificationManager _manager;
+    public Task<Stream> _pickAsync;
 
-    public GroupAddressImportViewModel(Settings settings, INotificationManager manager)
+    public GroupAddressImportViewModel(ISettings settings, INotificationManager manager)
     {
       _settings = settings;
       _manager = manager;
+      _pickAsync = PickFile();
       ImportCommand = new Command(OnImport);
       GaCount = _settings.ImportGroupAddress.Count;
+    }
+
+    private async Task<Stream> PickFile()
+    {
+      var fileData = await FilePicker.PickAsync();
+      if (fileData == null)
+      {
+        return null;
+      }
+
+      return await fileData.OpenReadAsync();
     }
 
     public int GaCount { get; set; }
 
     private async void OnImport()
     {
-      var fileData = await FilePicker.PickAsync();
-      if (fileData == null)
-        return; // user canceled file picking
       try
       {
-        var stream = await fileData.OpenReadAsync();
+        var stream = await _pickAsync;
         StreamReader reader = new StreamReader(stream);
         string contents = reader.ReadToEnd();
-        _settings.ImportGroupAddress = GetGa(contents).ToList(); 
-        GaCount = _settings.ImportGroupAddress.Count;
+        var gas= GetGa(contents).ToList();
+        _settings.ImportGroupAddress = gas;
+        GaCount = gas.Count;
         OnPropertyChanged(nameof(GaCount));
       }
       catch (Exception ex)
@@ -64,12 +77,14 @@ namespace Busmonitor.ViewModels
           var slices = c.Slice(1, 2);
           var ga = slices.Select(a => a.Replace("\"", string.Empty)).Select(Selector);
           var addressString = string.Join(" ", ga);
-          i = new ImportGroupAddress()
+          if (GroupAddress.TryParse(addressString, out var gaa))
           {
-            GroupName = c[0],
-            AddressString = addressString
-          };
-        
+            i = new ImportGroupAddress()
+            {
+              GroupName = c[0],
+              AddressString = addressString
+            };
+          }
         }
         catch (Exception e)
         {

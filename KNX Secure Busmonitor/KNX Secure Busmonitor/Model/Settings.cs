@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace Busmonitor
 {
-  public class Settings : INotifyPropertyChanged
+  public class Settings : ISettings, INotifyPropertyChanged
   {
     public string IP
     {
@@ -66,9 +66,6 @@ namespace Busmonitor
       get => Get<string>(nameof(MacAddress));
     }
 
-    /// <summary>
-    /// TODO persist
-    /// </summary>
     public List<ImportGroupAddress> ImportGroupAddress
     {
       set => Set(nameof(ImportGroupAddress), value);
@@ -144,5 +141,22 @@ namespace Busmonitor
     {
       PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+  }
+
+  public interface ISettings
+  {
+    string IP { set; get; }
+    ushort IpPort { set; get; }
+    string InterfaceName { set; get; }
+    string SerialNumber { set; get; }
+    string MediumType { set; get; }
+    bool IsSecurityEnabled { set; get; }
+    string Password { set; get; }
+    string KnxKeys { set; get; }
+    string MacAddress { set; get; }
+
+    List<ImportGroupAddress> ImportGroupAddress { set; get; }
+
+    string IndividualAddress { set; get; }
   }
 }
