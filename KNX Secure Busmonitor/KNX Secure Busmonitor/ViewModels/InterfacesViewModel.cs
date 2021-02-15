@@ -30,7 +30,7 @@ namespace Busmonitor.ViewModels
       Networks = new ObservableCollection<NetworkAdapterInfo>(new NetworkAdapterEnumerator(AdapterTypes.All));
       DiscoverInterfaces();
       ItemSelectedCommand = new Command(ItemSelectedExecute);
-      RefreshCommand = new Command(RefreshCommandExecute);
+      RefreshCommand = new Command(RefreshCommandExecute, () => !_isDiscovering);
       SaveGatewayCommand = new Command(SaveGatewayExecute);
       _ipAddress = "192.168.178.7";
       _gatewayName = "Interface Name";
@@ -38,6 +38,7 @@ namespace Busmonitor.ViewModels
 
     private void RefreshCommandExecute()
     {
+      DiscoverInterfaces();
     }
 
     private void SaveGatewayExecute()
@@ -65,6 +66,7 @@ namespace Busmonitor.ViewModels
 
     private void DiscoverInterfaces()
     {
+      DiscoveredInterfaces.Clear();
       Task.Run(() =>
         {
           IsDiscovering = true;

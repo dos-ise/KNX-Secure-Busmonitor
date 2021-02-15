@@ -61,11 +61,13 @@ namespace Busmonitor.ViewModels
         try
         {
           var c = line.GetColumns().ToArray();
-          var ga = c.Slice(1, 4).Select(a => a.Replace("\"", string.Empty)).Select(Selector);
+          var slices = c.Slice(1, 2);
+          var ga = slices.Select(a => a.Replace("\"", string.Empty)).Select(Selector);
+          var addressString = string.Join(" ", ga);
           i = new ImportGroupAddress()
           {
             GroupName = c[0],
-            AddressString = string.Join(" ", ga)
+            AddressString = addressString
           };
         
         }
