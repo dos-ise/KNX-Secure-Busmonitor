@@ -23,7 +23,7 @@ namespace KNX_Secure_Busmonitor_Test
       var settingsMock = CreateSettingsMock();
       var sut = new GroupAddressImportViewModel(settingsMock.Object, Mock.Of<INotificationManager>())
       {
-        _pickAsync = Task.FromResult(File.OpenRead(file) as Stream)
+        _pickAsync  = () =>  Task.FromResult(File.OpenRead(file) as Stream)
       };
 
       sut.ImportCommand.Execute(null);

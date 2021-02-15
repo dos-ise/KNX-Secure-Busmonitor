@@ -30,7 +30,7 @@ namespace Busmonitor.ViewModels
       Networks = new ObservableCollection<NetworkAdapterInfo>(new NetworkAdapterEnumerator(AdapterTypes.All));
       DiscoverInterfaces();
       ItemSelectedCommand = new Command(ItemSelectedExecute);
-      RefreshCommand = new Command(RefreshCommandExecute, () => !_isDiscovering);
+      RefreshCommand = new Command(RefreshCommandExecute);
       SaveGatewayCommand = new Command(SaveGatewayExecute);
       _ipAddress = "192.168.178.7";
       _gatewayName = "Interface Name";
@@ -38,7 +38,10 @@ namespace Busmonitor.ViewModels
 
     private void RefreshCommandExecute()
     {
-      DiscoverInterfaces();
+      if (!_isDiscovering)
+      {
+        DiscoverInterfaces();
+      }
     }
 
     private void SaveGatewayExecute()

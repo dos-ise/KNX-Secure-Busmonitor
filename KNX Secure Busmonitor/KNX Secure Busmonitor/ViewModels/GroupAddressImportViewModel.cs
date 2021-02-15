@@ -17,13 +17,13 @@ namespace Busmonitor.ViewModels
   {
     private readonly ISettings _settings;
     private readonly INotificationManager _manager;
-    public Task<Stream> _pickAsync;
+    public Func<Task<Stream>> _pickAsync = null;
 
     public GroupAddressImportViewModel(ISettings settings, INotificationManager manager)
     {
       _settings = settings;
       _manager = manager;
-      _pickAsync = PickFile();
+      _pickAsync = PickFile;
       ImportCommand = new Command(OnImport);
       GaCount = _settings.ImportGroupAddress.Count;
     }
@@ -45,7 +45,7 @@ namespace Busmonitor.ViewModels
     {
       try
       {
-        var stream = await _pickAsync;
+        var stream = await _pickAsync();
         StreamReader reader = new StreamReader(stream);
         string contents = reader.ReadToEnd();
         var gas= GetGa(contents).ToList();

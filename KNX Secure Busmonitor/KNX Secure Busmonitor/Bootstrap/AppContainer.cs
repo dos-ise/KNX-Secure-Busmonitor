@@ -14,7 +14,7 @@ namespace Busmonitor.Bootstrap
     {
       var builder = new ContainerBuilder();
       // services
-      builder.RegisterType<Settings>().SingleInstance();
+      builder.RegisterType<Settings>().AsSelf().As<ISettings>().SingleInstance();
       builder.RegisterType<TelegrammList>().SingleInstance();
       
       // view models
