@@ -65,7 +65,7 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-                <ActivityIndicator Grid.Row="1" IsRunning ="{Binding IsDiscovering}"  HorizontalOptions="Center" VerticalOptions="Center" Color="Orange"  />
+                <ActivityIndicator Grid.Row="3" IsRunning ="{Binding IsDiscovering}"  HorizontalOptions="Center" VerticalOptions="Center" Color="Orange"  />
                 <Button Grid.Row="4" Text="Refresh" Command="{Binding RefreshCommand}"/>
             </Grid>
         </StackLayout>
