@@ -7,11 +7,16 @@
              mc:Ignorable="d"
              bootstrap:ViewModelLocator.AutoWireViewModel="True"
              x:Class="Busmonitor.Views.SecurityView">
-  <ContentPage.Content>
-    <StackLayout>
-      <Label x:Name="passwordLabel" Text="Password:" IsVisible="False"/>
-      <Entry x:Name="passwordEntry" IsPassword="True" Text="{Binding Password}" IsVisible="False"/>
-      <Button Command="{Binding ImportKnxKeys}" Text="ImportKnxKeys"/>
-    </StackLayout>
-  </ContentPage.Content>
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Label x:Name="passwordLabel" Text="Password:" IsVisible="False" Grid.Row="0"/>
+            <Entry x:Name="passwordEntry" IsPassword="True" Text="{Binding Password}" IsVisible="False" Grid.Row="1"/>
+            <Button Command="{Binding ImportKnxKeys}" Text="ImportKnxKeys" Grid.Row="2"/>
+        </Grid>
+    </ContentPage.Content>
 </ContentPage>

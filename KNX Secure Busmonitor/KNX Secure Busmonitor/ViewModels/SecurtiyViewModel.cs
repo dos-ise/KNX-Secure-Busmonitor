@@ -37,7 +37,7 @@ namespace Busmonitor.ViewModels
         Device.BeginInvokeOnMainThread(
           () =>
           {
-            _manager.SendNotification("Error:", "Could not import GA (" + ex.Message + ")");
+            _manager.SendNotification("Error:", "Could not import KNX Keys (" + ex.Message + ")");
           });
       }
     }
