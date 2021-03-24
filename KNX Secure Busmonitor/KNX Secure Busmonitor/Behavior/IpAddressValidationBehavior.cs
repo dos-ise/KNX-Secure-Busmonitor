@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Text;
+﻿using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.Behaviors;
 
 namespace Busmonitor.Behavior
 {
   public class IpAddressValidationBehavior : TextValidationBehavior
   {
-    protected override bool Validate(object value) => base.Validate(value) && IPAddress.TryParse(value?.ToString(), out var ip);
+		protected override ValueTask<bool> ValidateAsync(object value, CancellationToken token)
+    {
+      return new ValueTask<bool>(IPAddress.TryParse(value?.ToString() ?? string.Empty, out var ip));
+    }
   }
 }
