@@ -171,15 +171,21 @@ namespace Busmonitor.Model
       {
         return args.Value.Value[0].ToString();
       }
-      var hex = args.Value.Value.AsHexString();
+
+      var hex = ByteArrayToString(args.Value.Value);
       var provider = CultureInfo.InvariantCulture;
       if (int.TryParse(hex, NumberStyles.HexNumber, provider, out int intValue))
       {
+        if (args.Value.Value.Length == 2)
+        {
+          return (intValue / 100).ToString("n2");
+        }
+        
         return intValue.ToString();
       }
       else
       {
-        return hex;
+        return args.Value.Value.AsHexString();
       }
     }
   }

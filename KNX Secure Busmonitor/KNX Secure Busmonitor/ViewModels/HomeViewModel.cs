@@ -42,7 +42,7 @@ namespace Busmonitor.ViewModels
       Telegramms = telegrammList;
       ConnectCommand = new Command(OnConnect);
       WriteCommand = new Command(OnWrite);
-      TargetWriteAddress = "1/1/1";
+      TargetWriteAddress = "001/001/001";
       WriteValue = "true";
     }
 

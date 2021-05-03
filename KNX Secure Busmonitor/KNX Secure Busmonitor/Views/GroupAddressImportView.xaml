@@ -2,18 +2,36 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:bootstrap="clr-namespace:Busmonitor.Bootstrap;assembly=KNX Secure Busmonitor"
+             xmlns:behaviors="http://xamarin.com/schemas/2020/toolkit"
              x:Class="Busmonitor.Views.GroupAddressImportView"
              bootstrap:ViewModelLocator.AutoWireViewModel="True">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Import ETS5 GA csv Format" VerticalOptions="Center"/>
-            <Image Source="ga_export_settings.png" VerticalOptions="Center"/>
+            <Label Text="Import ETS5 GA csv Format." VerticalOptions="Center"/>
+            <Label Text="-Format CSV" VerticalOptions="Center"/>
+            <Label Text="-1/1 Name/Address" VerticalOptions="Center"/>
+            <Label Text="-Tabulator" VerticalOptions="Center"/>
             <Label Text="Import Count:" VerticalOptions="Center"/>
             <Label Text="{Binding GaCount}" VerticalOptions="Center"/>
             <Button Text="Import!"
                     Command="{Binding ImportCommand}"
                     VerticalOptions="CenterAndExpand" 
                     HorizontalOptions="CenterAndExpand" />
+            <ListView ItemsSource="{Binding ImportGroupAddress}">
+                <ListView.Behaviors>
+                    <behaviors:EventToCommandBehavior EventName="ItemSelected" Command="{Binding ItemSelectedCommand}"/>
+                </ListView.Behaviors>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout HorizontalOptions="StartAndExpand" Orientation="Horizontal">
+                                <Label Text="{Binding AddressString}" VerticalTextAlignment="Center" FontSize="Small" />
+                                <Label Text="{Binding GroupName}" VerticalTextAlignment="Center" FontSize="Small" />
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView> 
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

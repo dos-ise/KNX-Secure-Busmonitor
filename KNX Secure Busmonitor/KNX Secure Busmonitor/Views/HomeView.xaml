@@ -6,6 +6,8 @@
              xmlns:dataGrid="clr-namespace:Xamarin.Forms.DataGrid;assembly=Xamarin.Forms.DataGrid"
              xmlns:bootstrap="clr-namespace:Busmonitor.Bootstrap;assembly=KNX Secure Busmonitor"
              xmlns:behavior="clr-namespace:Busmonitor.Behavior;assembly=KNX Secure Busmonitor"
+             xmlns:maskedEdit="clr-namespace:Syncfusion.XForms.MaskedEdit;assembly=Syncfusion.SfMaskedEdit.XForms"
+             xmlns:behaviors="http://xamarin.com/schemas/2020/toolkit"
              mc:Ignorable="d"
              bootstrap:ViewModelLocator.AutoWireViewModel="True"
              x:Class="Busmonitor.Views.HomeView">
@@ -39,7 +41,7 @@
 
         <Grid  Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="2*" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
@@ -47,15 +49,15 @@
             <Label IsVisible="{Binding NoGateway}" Grid.Column="0" Grid.ColumnSpan="4" Text="No KNX Gateway selected! Please go to Gateway and select an KNX interface"/>
             <Entry Text="{Binding TargetWriteAddress}" Keyboard="Numeric" Grid.Column="0" IsVisible="{Binding IsConnected}">
                 <Entry.Behaviors>
-                    <!--<behavior:MaskedBehavior Mask="X/X/X" />-->
+                    <behaviors:MaskedBehavior Mask="XXX/XXX/XXX" />
                 </Entry.Behaviors>
             </Entry>
             <Entry Text="{Binding WriteValue}" Grid.Column="1" IsVisible="{Binding IsConnected}"/>
             <Button Text="Send" Command="{Binding WriteCommand}"  Grid.Column="2" IsVisible="{Binding IsConnected}"/>
             <Button x:Name="ConnectButton" Grid.Column="3" 
               Text="{Binding ConnectButtonText}" 
-              WidthRequest="75" 
-              HeightRequest="75"  
+              WidthRequest="60" 
+              HeightRequest="50"  
               IsVisible="{Binding GatewaySelected}"
               Command="{Binding ConnectCommand}"/>
         </Grid>

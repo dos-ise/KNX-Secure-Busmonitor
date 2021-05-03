@@ -25,7 +25,16 @@ namespace Busmonitor.ViewModels
       _manager = manager;
       _pickAsync = PickFile;
       ImportCommand = new Command(OnImport);
-      GaCount = _settings.ImportGroupAddress.Count;
+      ItemSelectedCommand = new Command(ItemSelectedExecute);
+    }
+
+    private async void ItemSelectedExecute(object obj)
+    {
+      var args = obj as SelectedItemChangedEventArgs;
+      if (args?.SelectedItem is ImportGroupAddress result)
+      {
+        await Clipboard.SetTextAsync(result.AddressString);
+      }
     }
 
     private async Task<Stream> PickFile()
@@ -39,7 +48,9 @@ namespace Busmonitor.ViewModels
       return await fileData.OpenReadAsync();
     }
 
-    public int GaCount { get; set; }
+    public int GaCount => _settings.ImportGroupAddress.Count;
+
+    public List<ImportGroupAddress> ImportGroupAddress => _settings.ImportGroupAddress;
 
     private async void OnImport()
     {
@@ -50,8 +61,8 @@ namespace Busmonitor.ViewModels
         string contents = reader.ReadToEnd();
         var gas= GetGa(contents).ToList();
         _settings.ImportGroupAddress = gas;
-        GaCount = gas.Count;
         OnPropertyChanged(nameof(GaCount));
+        OnPropertyChanged(nameof(ImportGroupAddress));
       }
       catch (Exception ex)
       {
@@ -103,5 +114,7 @@ namespace Busmonitor.ViewModels
     }
 
     public ICommand ImportCommand { get; }
+    
+    public ICommand ItemSelectedCommand { get; }
   }
 }
