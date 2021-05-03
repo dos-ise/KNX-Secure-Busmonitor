@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.3" package="com.dosSoft.knxOpenMonitor" android:installLocation="auto" android:versionCode="8">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.31" package="com.dosSoft.knxOpenMonitor" android:installLocation="auto" android:versionCode="9">
 	<uses-sdk android:minSdkVersion="22" android:targetSdkVersion="29" />
 	<application android:icon="@mipmap/icon" android:label="KNX OpenMonitor"></application>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
