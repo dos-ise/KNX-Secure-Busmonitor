@@ -1,17 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29806.167
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KNX Secure Busmonitor.Android", "KNX Secure Busmonitor\KNX Secure Busmonitor.Android\KNX Secure Busmonitor.Android.csproj", "{78B0CF58-7E7D-4618-BE48-991757E3391B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KNX Secure Busmonitor", "KNX Secure Busmonitor\KNX Secure Busmonitor\KNX Secure Busmonitor.csproj", "{53BDCD87-F576-4912-BA58-2924F6FA3346}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KNX Secure Busmonitor.UWP", "KNX Secure Busmonitor.UWP\KNX Secure Busmonitor.UWP.csproj", "{6E4FC7AB-51C7-4FA8-9DDF-7163ACA1682D}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{9F556973-169F-4A4D-8C59-B38C3A3C5FDC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KNX Secure Busmonitor Test", "KNX Secure Busmonitor Test\KNX Secure Busmonitor Test.csproj", "{52913C5C-C454-4628-A88A-A374A9A83DA1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KNX Secure Busmonitor Test", "KNX Secure Busmonitor Test\KNX Secure Busmonitor Test.csproj", "{52913C5C-C454-4628-A88A-A374A9A83DA1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KNX Secure Busmonitor.MAUI", "KNX Secure Busmonitor.MAUI\KNX Secure Busmonitor.MAUI\KNX Secure Busmonitor.MAUI.csproj", "{A72E13EF-29D9-43A5-9AA4-0DDE146B290C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,32 +79,6 @@ Global
 		{53BDCD87-F576-4912-BA58-2924F6FA3346}.Release|x64.Build.0 = Release|Any CPU
 		{53BDCD87-F576-4912-BA58-2924F6FA3346}.Release|x86.ActiveCfg = Release|Any CPU
 		{53BDCD87-F576-4912-BA58-2924F6FA3346}.Release|x86.Build.0 = Release|Any CPU
-		{6E4FC7AB-51C7-4FA8-9DDF-7163ACA1682D}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{6E4FC7AB-51C7-4FA8-9DDF-7163ACA1682D}.Debug|ARM.ActiveCfg = Debug|ARM
-		{6E4FC7AB-51C7-4FA8-9DDF-7163ACA1682D}.Debug|ARM.Build.0 = Debug|ARM
-		{6E4FC7AB-51C7-4FA8-9DDF-7163ACA1682D}.Debug|ARM.Deploy.0 = Debug|ARM
-		{6E4FC7AB-51C7-4FA8-9DDF-7163ACA1682D}.Debug|ARM64.ActiveCfg = Debug|ARM64
-		{6E4FC7AB-51C7-4FA8-9DDF-7163ACA1682D}.Debug|ARM64.Build.0 = Debug|ARM64
-		{6E4FC7AB-51C7-4FA8-9DDF-7163ACA1682D}.Debug|ARM64.Deploy.0 = Debug|ARM64
-		{6E4FC7AB-51C7-4FA8-9DDF-7163ACA1682D}.Debug|x64.ActiveCfg = Debug|x64
-		{6E4FC7AB-51C7-4FA8-9DDF-7163ACA1682D}.Debug|x64.Build.0 = Debug|x64
-		{6E4FC7AB-51C7-4FA8-9DDF-7163ACA1682D}.Debug|x64.Deploy.0 = Debug|x64
-		{6E4FC7AB-51C7-4FA8-9DDF-7163ACA1682D}.Debug|x86.ActiveCfg = Debug|x86
-		{6E4FC7AB-51C7-4FA8-9DDF-7163ACA1682D}.Debug|x86.Build.0 = Debug|x86
-		{6E4FC7AB-51C7-4FA8-9DDF-7163ACA1682D}.Debug|x86.Deploy.0 = Debug|x86
-		{6E4FC7AB-51C7-4FA8-9DDF-7163ACA1682D}.Release|Any CPU.ActiveCfg = Release|x86
-		{6E4FC7AB-51C7-4FA8-9DDF-7163ACA1682D}.Release|ARM.ActiveCfg = Release|ARM
-		{6E4FC7AB-51C7-4FA8-9DDF-7163ACA1682D}.Release|ARM.Build.0 = Release|ARM
-		{6E4FC7AB-51C7-4FA8-9DDF-7163ACA1682D}.Release|ARM.Deploy.0 = Release|ARM
-		{6E4FC7AB-51C7-4FA8-9DDF-7163ACA1682D}.Release|ARM64.ActiveCfg = Release|ARM64
-		{6E4FC7AB-51C7-4FA8-9DDF-7163ACA1682D}.Release|ARM64.Build.0 = Release|ARM64
-		{6E4FC7AB-51C7-4FA8-9DDF-7163ACA1682D}.Release|ARM64.Deploy.0 = Release|ARM64
-		{6E4FC7AB-51C7-4FA8-9DDF-7163ACA1682D}.Release|x64.ActiveCfg = Release|x64
-		{6E4FC7AB-51C7-4FA8-9DDF-7163ACA1682D}.Release|x64.Build.0 = Release|x64
-		{6E4FC7AB-51C7-4FA8-9DDF-7163ACA1682D}.Release|x64.Deploy.0 = Release|x64
-		{6E4FC7AB-51C7-4FA8-9DDF-7163ACA1682D}.Release|x86.ActiveCfg = Release|x86
-		{6E4FC7AB-51C7-4FA8-9DDF-7163ACA1682D}.Release|x86.Build.0 = Release|x86
-		{6E4FC7AB-51C7-4FA8-9DDF-7163ACA1682D}.Release|x86.Deploy.0 = Release|x86
 		{52913C5C-C454-4628-A88A-A374A9A83DA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{52913C5C-C454-4628-A88A-A374A9A83DA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52913C5C-C454-4628-A88A-A374A9A83DA1}.Debug|ARM.ActiveCfg = Debug|Any CPU
@@ -125,6 +99,26 @@ Global
 		{52913C5C-C454-4628-A88A-A374A9A83DA1}.Release|x64.Build.0 = Release|Any CPU
 		{52913C5C-C454-4628-A88A-A374A9A83DA1}.Release|x86.ActiveCfg = Release|Any CPU
 		{52913C5C-C454-4628-A88A-A374A9A83DA1}.Release|x86.Build.0 = Release|Any CPU
+		{A72E13EF-29D9-43A5-9AA4-0DDE146B290C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A72E13EF-29D9-43A5-9AA4-0DDE146B290C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A72E13EF-29D9-43A5-9AA4-0DDE146B290C}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{A72E13EF-29D9-43A5-9AA4-0DDE146B290C}.Debug|ARM.Build.0 = Debug|Any CPU
+		{A72E13EF-29D9-43A5-9AA4-0DDE146B290C}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{A72E13EF-29D9-43A5-9AA4-0DDE146B290C}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{A72E13EF-29D9-43A5-9AA4-0DDE146B290C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A72E13EF-29D9-43A5-9AA4-0DDE146B290C}.Debug|x64.Build.0 = Debug|Any CPU
+		{A72E13EF-29D9-43A5-9AA4-0DDE146B290C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A72E13EF-29D9-43A5-9AA4-0DDE146B290C}.Debug|x86.Build.0 = Debug|Any CPU
+		{A72E13EF-29D9-43A5-9AA4-0DDE146B290C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A72E13EF-29D9-43A5-9AA4-0DDE146B290C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A72E13EF-29D9-43A5-9AA4-0DDE146B290C}.Release|ARM.ActiveCfg = Release|Any CPU
+		{A72E13EF-29D9-43A5-9AA4-0DDE146B290C}.Release|ARM.Build.0 = Release|Any CPU
+		{A72E13EF-29D9-43A5-9AA4-0DDE146B290C}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{A72E13EF-29D9-43A5-9AA4-0DDE146B290C}.Release|ARM64.Build.0 = Release|Any CPU
+		{A72E13EF-29D9-43A5-9AA4-0DDE146B290C}.Release|x64.ActiveCfg = Release|Any CPU
+		{A72E13EF-29D9-43A5-9AA4-0DDE146B290C}.Release|x64.Build.0 = Release|Any CPU
+		{A72E13EF-29D9-43A5-9AA4-0DDE146B290C}.Release|x86.ActiveCfg = Release|Any CPU
+		{A72E13EF-29D9-43A5-9AA4-0DDE146B290C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
