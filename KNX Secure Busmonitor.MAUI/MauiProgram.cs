@@ -10,8 +10,7 @@ namespace KNX_Secure_Busmonitor.MAUI
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
-            builder
-                .UseMauiApp<App>();
+            builder.UseMauiApp<App>();
 
             return builder.Build();
         }
