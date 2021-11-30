@@ -53,6 +53,7 @@
 
 	<ItemGroup>
 	  <PackageReference Include="Knx.Falcon.Sdk" Version="6.0.4147" />
+	  <PackageReference Include="System.Net.NetworkInformation" Version="4.3.0" />
 	</ItemGroup>
 
 	<PropertyGroup Condition="$(TargetFramework.Contains('-windows'))">
