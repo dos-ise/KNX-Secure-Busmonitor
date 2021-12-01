@@ -11,7 +11,7 @@ namespace KNX_Secure_Busmonitor.MAUI
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            MainPage = new MainPage() { BindingContext = new MainPageViewModel() };
         }
     }
 }
