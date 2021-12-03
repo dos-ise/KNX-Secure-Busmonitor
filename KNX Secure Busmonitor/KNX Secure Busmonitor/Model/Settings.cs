@@ -3,9 +3,7 @@ using Xamarin.Forms;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
-
 using Busmonitor.Model;
-using Knx.Bus.Common;
 using Newtonsoft.Json;
 
 namespace Busmonitor

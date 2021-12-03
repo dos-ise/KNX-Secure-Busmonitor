@@ -1,32 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Security;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Busmonitor.Bootstrap;
 using Busmonitor.Extension;
 using Busmonitor.Model;
 using Busmonitor.Views;
-using Knx.Bus.Common;
-using Knx.Bus.Common.Configuration;
-using Knx.Bus.Common.GroupValues;
+using Knx.Falcon;
+using Knx.Falcon.Configuration;
 using Knx.Falcon.Sdk;
-
 using Xamarin.Forms;
 using Device = Xamarin.Forms.Device;
 
 namespace Busmonitor.ViewModels
 {
-  public class HomeViewModel : ViewModelBase
+    public class HomeViewModel : ViewModelBase
   {
     private readonly Settings _settings;
     private readonly INotificationManager _manager;
-    private Bus _bus;
+    private KnxBus _bus;
 
     private string targetWriteAddress;
     private string writeValue;
@@ -38,7 +33,7 @@ namespace Busmonitor.ViewModels
       _settings = settings;
       _manager = manager;
       _settings.PropertyChanged += SettingsOnPropertyChanged;
-      _bus = new Bus(CreateParameter());
+      _bus = new KnxBus(CreateParameter());
       Telegramms = telegrammList;
       ConnectCommand = new Command(OnConnect);
       WriteCommand = new Command(OnWrite);
@@ -63,11 +58,11 @@ namespace Busmonitor.ViewModels
 
     public Telegramm SelectedTelegramm { get; set; }
 
-    public string ConnectButtonText => _bus.IsConnected ? "Disconnect" : "Connect";
+    public string ConnectButtonText => _bus.ConnectionState == Knx.Falcon.BusConnectionState.Connected ? "Disconnect" : "Connect";
 
-    public Color ConnectButtonColor => _bus.IsConnected ? Color.GreenYellow : Color.Red;
+    public Color ConnectButtonColor => _bus.ConnectionState == Knx.Falcon.BusConnectionState.Connected ? Color.GreenYellow : Color.Red;
 
-    public bool IsConnected => _bus.IsConnected;
+    public bool IsConnected => _bus.ConnectionState == Knx.Falcon.BusConnectionState.Connected;
 
     public bool NoGateway => _settings.IP == null;
 
@@ -101,7 +96,7 @@ namespace Busmonitor.ViewModels
     {
       try
       {
-        _bus.WriteValue(new GroupAddress(TargetWriteAddress), GroupValue.Parse(WriteValue));
+        _bus.WriteGroupValue(new GroupAddress(TargetWriteAddress), GroupValue.Parse(WriteValue));
       }
       catch (Exception e)
       {
@@ -117,8 +112,8 @@ namespace Busmonitor.ViewModels
     {
       try
       {
-        ConnectorParameters connectorParameter = CreateParameter();
-        if (!_bus.IsConnected)
+        var connectorParameter = CreateParameter();
+        if (_bus.ConnectionState != BusConnectionState.Connected)
         {
           if (!_isConnecting)
           {
@@ -127,7 +122,7 @@ namespace Busmonitor.ViewModels
         }
         else
         {
-          _bus.Disconnect();
+          await _bus.DisposeAsync();
           Telegramms.Clear();
           OnPropertyChanged(nameof(ConnectButtonColor));
           OnPropertyChanged(nameof(ConnectButtonText));
@@ -142,7 +137,7 @@ namespace Busmonitor.ViewModels
 
     private void Action(ConnectorParameters connectorParameter)
     {
-      _bus = new Bus(connectorParameter);
+      _bus = new KnxBus(connectorParameter);
 
       try
       {
@@ -168,7 +163,7 @@ namespace Busmonitor.ViewModels
         _isConnecting = false;
       }
 
-      if (_bus.IsConnected)
+      if (_bus.ConnectionState == BusConnectionState.Connected)
       {
         Device.BeginInvokeOnMainThread(
           () =>
@@ -176,28 +171,30 @@ namespace Busmonitor.ViewModels
             _manager.SendNotification("Info", "Connected to " + _settings.InterfaceName + "(" + _settings.IP + ")");
           });
 
-        var senderAddress = _bus.LocalIndividualAddress;
-        _bus.GroupValueReceived += args =>
-        {
-          Device.BeginInvokeOnMainThread(() =>
-          {
-            var gaName = FindGroupName(args);
-            var t = new Telegramm(args, DateTime.Now) { GroupName = gaName };
-            Telegramms.Add(t);
-            OnPropertyChanged(nameof(Telegramms));
-            HomeView.ScrollToBottom();
-          });
-        };
-
-        while (_bus.IsConnected)
+        var senderAddress = "";
+                _bus.GroupMessageReceived += _bus_GroupMessageReceived;
+ 
+        while (_bus.ConnectionState == BusConnectionState.Connected)
         {
         }
       }
     }
 
-    private string FindGroupName(GroupValueEventArgs arg)
+        private void _bus_GroupMessageReceived(object sender, GroupEventArgs args)
+        {
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                var gaName = FindGroupName(args);
+                var t = new Telegramm(args, DateTime.Now) { GroupName = gaName };
+                Telegramms.Add(t);
+                OnPropertyChanged(nameof(Telegramms));
+                HomeView.ScrollToBottom();
+            });
+        }
+
+        private string FindGroupName(GroupEventArgs arg)
     {
-      var ga = _settings.ImportGroupAddress?.FirstOrDefault(me => me.Address == arg.Address.Address);
+      var ga = _settings.ImportGroupAddress?.FirstOrDefault(me => me.Address == arg.DestinationAddress);
       return ga == null ? string.Empty : ga.GroupName;
     }
 
@@ -207,20 +204,21 @@ namespace Busmonitor.ViewModels
       {
         try
         {
-          SecureString password = _settings.Password.ToSecureString();
-          var secure = new KnxIpSecureTunnelingConnectorParameters(_settings.IP, _settings.IpPort, false);
-          secure.IndividualAddress = _settings.IndividualAddress;
-          secure.LoadSecurityData(_settings.KnxKeys.ToStream(), password);
-          return secure;
+            //SecureString password = _settings.Password.ToSecureString();
+            //var secure = new KnxIpSecureTunnelingConnectorParameters(_settings.IP, _settings.IpPort, false);
+            //secure.IndividualAddress = _settings.IndividualAddress;
+            //secure.LoadSecurityData(_settings.KnxKeys.ToStream(), password);
+            //return secure;
+            return null;
         }
         catch (Exception e)
         {
-          return new KnxIpTunnelingConnectorParameters(_settings.IP, _settings.IpPort, false);
+          return new IpTunnelingConnectorParameters(_settings.IP, _settings.IpPort);
         }
       }
       else
       {
-        return new KnxIpTunnelingConnectorParameters(_settings.IP, _settings.IpPort, false);
+        return new IpTunnelingConnectorParameters(_settings.IP, _settings.IpPort);
       }
     }
   }

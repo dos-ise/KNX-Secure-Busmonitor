@@ -1,4 +1,5 @@
-﻿using Knx.Bus.Common;
+﻿
+using Knx.Falcon;
 
 namespace Busmonitor.Model
 {

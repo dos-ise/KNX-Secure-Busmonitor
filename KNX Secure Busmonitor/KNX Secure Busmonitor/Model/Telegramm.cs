@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
+using Knx.Falcon;
+using System.Globalization;
 
 namespace Busmonitor.Model
 {
-  using Knx.Bus.Common;
-  using System.Globalization;
-
-  public class Telegramm
+    public class Telegramm
   {
-    public GroupValueEventArgs Args { get; }
+    public GroupEventArgs Args { get; }
 
     public string GroupName { get; set; }
 
@@ -37,8 +35,8 @@ namespace Busmonitor.Model
 
       var result = CreateActionDatagramCommon("1/1/16", data, header);
       //return ByteArrayToString(result);
-      var source = ByteArrayToString(KnxHelper.GetAddress(Args.Address));
-      var target = ByteArrayToString(KnxHelper.GetAddress(Args.IndividualAddress));
+      var source = ByteArrayToString(KnxHelper.GetAddress(Args.SourceAddress));
+      var target = ByteArrayToString(KnxHelper.GetAddress(Args.DestinationAddress));
       return string.Format("290A0604928E67E5800241E2BCE0{0}{1}{2}0081", target, source, ByteArrayToString(Args.Value.Value));
     }
 
@@ -158,14 +156,14 @@ namespace Busmonitor.Model
       return data.Length + 1;
     }
 
-    public Telegramm(GroupValueEventArgs args, DateTime timeStamp)
+    public Telegramm(GroupEventArgs args, DateTime timeStamp)
     {
       Args = args;
       TimeStamp = timeStamp;
       DisplayNameValue = ConvertToDisplayName(args);
     }
 
-    private string ConvertToDisplayName(GroupValueEventArgs args)
+    private string ConvertToDisplayName(GroupEventArgs args)
     {
       if (args.Value.SizeInBit < 8)
       {
@@ -185,7 +183,7 @@ namespace Busmonitor.Model
       }
       else
       {
-        return args.Value.Value.AsHexString();
+        return args.Value.Value.ToString();
       }
     }
   }

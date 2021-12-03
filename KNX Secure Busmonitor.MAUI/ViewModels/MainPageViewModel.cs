@@ -7,6 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,6 +29,7 @@ namespace KNX_Secure_Busmonitor.MAUI
 
         public void Connect()
         {
+            Discover();
             var parameter = new IpTunnelingConnectorParameters("192.168.178.46");
             try
             {
@@ -54,6 +58,41 @@ namespace KNX_Secure_Busmonitor.MAUI
             //        var connectorParameter = IpTunnelingConnectorParameters.FromDiscovery(ip);
             //    }
             //}
+        }
+
+        private readonly IPAddress _targetAddress = IpRoutingConnectorParameters.SystemSetupMulticastAddress;
+        private byte[] _buffer;
+
+        private void Discover()
+        {
+            try
+            {
+                var a = NetworkInterface.GetAllNetworkInterfaces();
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            var networks = GetNetworks().ToList();
+            var _client = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+            _client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+            _client.ExclusiveAddressUse = false;
+            _client.MulticastLoopback = true;
+
+            //var mcOpt = new MulticastOption(_multicastEndPoint.Address, new IPEndPoint(localIpAddress.IPAddress, 0).Address);
+            //_client.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.AddMembership, mcOpt);
+
+            //EndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
+            //_client.BeginReceiveFrom(_buffer, 0, MaxReceiveSize, SocketFlags.None, ref remoteEndPoint, ReceiveCompleted, this);
+        }
+
+        private IEnumerable<(IPAddress IPAddress, NetworkInterface NetworkInterface)> GetNetworks()
+        {
+            return NetworkInterface.GetAllNetworkInterfaces()
+                .Where(_ => _.OperationalStatus == OperationalStatus.Up)
+                .SelectMany(a => a.GetIPProperties().UnicastAddresses.Select(_ => _.Address)
+                    .Where(_ => _.AddressFamily == AddressFamily.InterNetwork).Select(i => (i, a)));
         }
 
         private void OnGroupMessageReceived(object sender, GroupEventArgs e)

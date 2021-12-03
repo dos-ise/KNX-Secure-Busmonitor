@@ -9,7 +9,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Busmonitor.Bootstrap;
-using Knx.Bus.Common;
+using Knx.Falcon;
 
 namespace Busmonitor.ViewModels
 {
