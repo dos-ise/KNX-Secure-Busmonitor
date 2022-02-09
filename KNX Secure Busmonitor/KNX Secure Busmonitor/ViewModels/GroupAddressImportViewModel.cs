@@ -10,6 +10,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Busmonitor.Bootstrap;
 using Knx.Falcon;
+using Device = Xamarin.Forms.Device;
 
 namespace Busmonitor.ViewModels
 {

@@ -25,6 +25,7 @@
     <PackageReference Include="log4net" Version="2.0.14" />
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.2-mauipre.1.22054.8" />
     <PackageReference Include="System.Security.Cryptography.Xml" Version="6.0.0" />
     <PackageReference Include="System.Threading.Channels" Version="6.0.0" />
     <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.0" />
