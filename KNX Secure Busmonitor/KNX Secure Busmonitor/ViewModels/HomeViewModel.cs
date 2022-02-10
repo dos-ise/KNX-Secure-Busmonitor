@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Security;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Busmonitor.Bootstrap;
@@ -33,6 +34,7 @@ namespace Busmonitor.ViewModels
       _settings = settings;
       _manager = manager;
       _settings.PropertyChanged += SettingsOnPropertyChanged;
+      Knx.Falcon.Logging.Logger.Factory = new MyLoggerFactory();
       _bus = new KnxBus(CreateParameter());
       Telegramms = telegrammList;
       ConnectCommand = new Command(OnConnect);
@@ -213,12 +215,12 @@ namespace Busmonitor.ViewModels
         }
         catch (Exception e)
         {
-          return new IpTunnelingConnectorParameters(_settings.IP, _settings.IpPort);
+          return new IpTunnelingConnectorParameters(_settings.IP);
         }
       }
       else
       {
-        return new IpTunnelingConnectorParameters(_settings.IP, _settings.IpPort);
+        return new IpTunnelingConnectorParameters(_settings.IP);
       }
     }
   }
