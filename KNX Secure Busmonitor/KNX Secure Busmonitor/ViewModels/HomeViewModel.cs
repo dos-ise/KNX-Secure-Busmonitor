@@ -12,6 +12,7 @@ using Busmonitor.Model;
 using Busmonitor.Views;
 using Knx.Falcon;
 using Knx.Falcon.Configuration;
+using Knx.Falcon.KnxnetIp;
 using Knx.Falcon.Sdk;
 using Xamarin.Forms;
 using Device = Xamarin.Forms.Device;
@@ -119,7 +120,7 @@ namespace Busmonitor.ViewModels
         {
           if (!_isConnecting)
           {
-            await Task.Run(() => Action(connectorParameter));
+            await Action(connectorParameter);
           }
         }
         else
@@ -137,14 +138,14 @@ namespace Busmonitor.ViewModels
       }
     }
 
-    private void Action(ConnectorParameters connectorParameter)
+    private async Task Action(ConnectorParameters connectorParameter)
     {
       _bus = new KnxBus(connectorParameter);
 
       try
       {
         _isConnecting = true;
-        _bus.Connect();
+        await _bus.ConnectAsync();
 
         OnPropertyChanged(nameof(ConnectButtonColor));
         OnPropertyChanged(nameof(ConnectButtonText));
@@ -220,7 +221,7 @@ namespace Busmonitor.ViewModels
       }
       else
       {
-        return new IpTunnelingConnectorParameters(_settings.IP);
+        return new IpTunnelingConnectorParameters(_settings.IP, protocolType: IpProtocol.Udp);
       }
     }
   }
