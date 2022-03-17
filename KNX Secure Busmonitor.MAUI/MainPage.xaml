@@ -25,6 +25,8 @@
                                 <Label Text="{Binding GroupName}" LineBreakMode="TailTruncation"/>
                                 <Label Text="{Binding DisplayNameValue}" LineBreakMode="WordWrap" MaxLines="2"/>
                                 <Label Text="{Binding TimeStamp}"/>
+                                <Label Text="{Binding Args.DestinationAddress }"/>
+                                <Label Text="{Binding Args.SourceAddress }"/>
                             </StackLayout>
 
                             <!-- Separator -->
