@@ -11,7 +11,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{9F556973
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KNX Secure Busmonitor Test", "KNX Secure Busmonitor Test\KNX Secure Busmonitor Test.csproj", "{52913C5C-C454-4628-A88A-A374A9A83DA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KNX Secure Busmonitor MAUI", "KNX Secure Busmonitor MAUI\KNX Secure Busmonitor MAUI.csproj", "{DE67DB02-EBAE-4D3B-BB27-80D4B8D9CFAE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KNX Secure Busmonitor MAUI", "KNX Secure Busmonitor MAUI\KNX Secure Busmonitor MAUI.csproj", "{DE67DB02-EBAE-4D3B-BB27-80D4B8D9CFAE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KNX_Secure_Busmonitor.Tizen.TV", "KNX Secure Busmonitor\KNX Secure Busmonitor.Tizen.TV\KNX_Secure_Busmonitor.Tizen.TV.csproj", "{D177DE83-77E1-46C3-B121-2B38B61948D5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -129,6 +131,36 @@ Global
 		{DE67DB02-EBAE-4D3B-BB27-80D4B8D9CFAE}.Release|x86.ActiveCfg = Release|Any CPU
 		{DE67DB02-EBAE-4D3B-BB27-80D4B8D9CFAE}.Release|x86.Build.0 = Release|Any CPU
 		{DE67DB02-EBAE-4D3B-BB27-80D4B8D9CFAE}.Release|x86.Deploy.0 = Release|Any CPU
+		{D177DE83-77E1-46C3-B121-2B38B61948D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D177DE83-77E1-46C3-B121-2B38B61948D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D177DE83-77E1-46C3-B121-2B38B61948D5}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{D177DE83-77E1-46C3-B121-2B38B61948D5}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{D177DE83-77E1-46C3-B121-2B38B61948D5}.Debug|ARM.Build.0 = Debug|Any CPU
+		{D177DE83-77E1-46C3-B121-2B38B61948D5}.Debug|ARM.Deploy.0 = Debug|Any CPU
+		{D177DE83-77E1-46C3-B121-2B38B61948D5}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{D177DE83-77E1-46C3-B121-2B38B61948D5}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{D177DE83-77E1-46C3-B121-2B38B61948D5}.Debug|ARM64.Deploy.0 = Debug|Any CPU
+		{D177DE83-77E1-46C3-B121-2B38B61948D5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D177DE83-77E1-46C3-B121-2B38B61948D5}.Debug|x64.Build.0 = Debug|Any CPU
+		{D177DE83-77E1-46C3-B121-2B38B61948D5}.Debug|x64.Deploy.0 = Debug|Any CPU
+		{D177DE83-77E1-46C3-B121-2B38B61948D5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D177DE83-77E1-46C3-B121-2B38B61948D5}.Debug|x86.Build.0 = Debug|Any CPU
+		{D177DE83-77E1-46C3-B121-2B38B61948D5}.Debug|x86.Deploy.0 = Debug|Any CPU
+		{D177DE83-77E1-46C3-B121-2B38B61948D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D177DE83-77E1-46C3-B121-2B38B61948D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D177DE83-77E1-46C3-B121-2B38B61948D5}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{D177DE83-77E1-46C3-B121-2B38B61948D5}.Release|ARM.ActiveCfg = Release|Any CPU
+		{D177DE83-77E1-46C3-B121-2B38B61948D5}.Release|ARM.Build.0 = Release|Any CPU
+		{D177DE83-77E1-46C3-B121-2B38B61948D5}.Release|ARM.Deploy.0 = Release|Any CPU
+		{D177DE83-77E1-46C3-B121-2B38B61948D5}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{D177DE83-77E1-46C3-B121-2B38B61948D5}.Release|ARM64.Build.0 = Release|Any CPU
+		{D177DE83-77E1-46C3-B121-2B38B61948D5}.Release|ARM64.Deploy.0 = Release|Any CPU
+		{D177DE83-77E1-46C3-B121-2B38B61948D5}.Release|x64.ActiveCfg = Release|Any CPU
+		{D177DE83-77E1-46C3-B121-2B38B61948D5}.Release|x64.Build.0 = Release|Any CPU
+		{D177DE83-77E1-46C3-B121-2B38B61948D5}.Release|x64.Deploy.0 = Release|Any CPU
+		{D177DE83-77E1-46C3-B121-2B38B61948D5}.Release|x86.ActiveCfg = Release|Any CPU
+		{D177DE83-77E1-46C3-B121-2B38B61948D5}.Release|x86.Build.0 = Release|Any CPU
+		{D177DE83-77E1-46C3-B121-2B38B61948D5}.Release|x86.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
