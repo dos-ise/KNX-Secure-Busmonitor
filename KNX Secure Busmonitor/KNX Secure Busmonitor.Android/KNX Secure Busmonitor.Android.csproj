@@ -73,10 +73,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Knx.Falcon.Sdk-netstandard">
-      <Version>6.0.4348</Version>
+      <Version>6.1.5132</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2337" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.7.1" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2515" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.7.3" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Notifications\AlarmHandler.cs" />
