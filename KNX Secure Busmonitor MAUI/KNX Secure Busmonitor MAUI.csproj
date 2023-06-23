@@ -55,4 +55,22 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Update="FlyoutMenuPage.xaml.cs">
+	    <DependentUpon>FlyoutMenuPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="AppFlyout.xaml.cs">
+	    <DependentUpon>AppFlyout.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="FlyoutMenuPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="AppFlyout.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
 </Project>

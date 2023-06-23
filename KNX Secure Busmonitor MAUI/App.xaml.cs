@@ -1,4 +1,6 @@
-﻿namespace KNX_Secure_Busmonitor_MAUI
+﻿using FlyoutPageSample;
+
+namespace KNX_Secure_Busmonitor_MAUI
 {
     public partial class App : Application
     {
@@ -6,7 +8,7 @@
         {
             InitializeComponent();
 
-            MainPage = new AppShell();
+            MainPage = new AppFlyout();
         }
     }
 }
