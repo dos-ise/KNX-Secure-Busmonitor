@@ -51,6 +51,7 @@
 	<ItemGroup>
 		<PackageReference Include="akgul.Maui.DataGrid" Version="2.0.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0" />
+		<PackageReference Include="Knx.Falcon.Sdk" Version="6.0.4942" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 	</ItemGroup>
 
