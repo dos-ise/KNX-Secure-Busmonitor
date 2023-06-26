@@ -11,25 +11,21 @@ namespace KNX_Secure_Busmonitor_MAUI.ViewModel
     [INotifyPropertyChanged]
     internal partial class MainViewModel
     {
-        private readonly KnxBus _bus;
+        private KnxBus _bus;
 
         public MainViewModel()
         {
-            _bus = new KnxBus(CreateParameter());
             Telegrams = new ObservableCollection<Telegram>();
-            //Telegrams.Add(new Telegram() { Name = "Test", DestinationAddress = "1/1/1", Value = "true" });
-            //Telegrams.Add(new Telegram() { Name = "Test", DestinationAddress = "1/1/1", Value = "true" });
-            //Telegrams.Add(new Telegram() { Name = "Test", DestinationAddress = "1/1/1", Value = "true" });
-            //Telegrams.Add(new Telegram() { Name = "Test", DestinationAddress = "1/1/1", Value = "true" });
-            //Telegrams.Add(new Telegram() { Name = "Test", DestinationAddress = "1/1/1", Value = "true" });
-            //Telegrams.Add(new Telegram() { Name = "Test", DestinationAddress = "1/1/1", Value = "true" });
+
+            string ip = KnxBus.DiscoverIpDevices().ToList().FirstOrDefault()?.LocalIPAddress.MapToIPv4().ToString();
+            ip = "192.168.178.46";
+            Preferences.Default.Set(MonitorPreferences.IpAddress, ip);
         }
 
         private ConnectorParameters CreateParameter()
         {
-            ////TODO Test
-            var ip = KnxBus.DiscoverIpDevices().ToList().FirstOrDefault()?.LocalIPAddress;
-            return new IpTunnelingConnectorParameters(ip?.MapToIPv4().ToString());
+            string ip = Preferences.Default.Get(MonitorPreferences.IpAddress, string.Empty);
+            return new IpTunnelingConnectorParameters(ip);
         }
 
         [ObservableProperty]
@@ -51,6 +47,8 @@ namespace KNX_Secure_Busmonitor_MAUI.ViewModel
         [RelayCommand]
         private async void OnConnect()
         {
+            _bus = new KnxBus(CreateParameter());
+
             try
             {
                 if (_bus.ConnectionState != BusConnectionState.Connected)
@@ -68,12 +66,15 @@ namespace KNX_Secure_Busmonitor_MAUI.ViewModel
 
         private void _bus_GroupMessageReceived(object sender, GroupEventArgs e)
         {
-            Telegrams.Add(new Telegram() 
-            { 
-                Name = "TODO", 
-                DestinationAddress = e.DestinationAddress, 
-                SourceAddress = e.SourceAddress, 
-                Value = e.Value.ToString()
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                Telegrams.Add(new Telegram()
+                {
+                    Name = "TODO",
+                    DestinationAddress = e.DestinationAddress,
+                    SourceAddress = e.SourceAddress,
+                    Value = e.Value.ToString()
+                });
             });
         }
     }
