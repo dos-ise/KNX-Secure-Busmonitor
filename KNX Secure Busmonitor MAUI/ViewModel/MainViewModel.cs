@@ -16,10 +16,6 @@ namespace KNX_Secure_Busmonitor_MAUI.ViewModel
         public MainViewModel()
         {
             Telegrams = new ObservableCollection<Telegram>();
-
-            string ip = KnxBus.DiscoverIpDevices().ToList().FirstOrDefault()?.LocalIPAddress.MapToIPv4().ToString();
-            ip = "192.168.178.46";
-            Preferences.Default.Set(MonitorPreferences.IpAddress, ip);
         }
 
         private ConnectorParameters CreateParameter()
@@ -41,7 +37,6 @@ namespace KNX_Secure_Busmonitor_MAUI.ViewModel
         [RelayCommand]
         private void Refresh()
         {
-            Console.WriteLine("Hello!");
         }
 
         [RelayCommand]

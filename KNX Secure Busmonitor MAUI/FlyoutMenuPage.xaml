@@ -14,13 +14,13 @@
                                       TargetType="{x:Type knxSecureBusmonitorMaui:MainPage}" />
                 <knxSecureBusmonitorMaui:FlyoutPageItem Title="Gateway"
                                       IconSource="todo.png"
-                                      TargetType="{x:Type knxSecureBusmonitorMaui:MainPage}" />
-                <knxSecureBusmonitorMaui:FlyoutPageItem Title="Security"
+                                      TargetType="{x:Type knxSecureBusmonitorMaui:InterfacesPage}" />
+                <!--<knxSecureBusmonitorMaui:FlyoutPageItem Title="Security"
                                       IconSource="reminders.png"
                                       TargetType="{x:Type knxSecureBusmonitorMaui:MainPage}" />
                 <knxSecureBusmonitorMaui:FlyoutPageItem Title="Export"
                                       IconSource="reminders.png"
-                                      TargetType="{x:Type knxSecureBusmonitorMaui:MainPage}" />                
+                                      TargetType="{x:Type knxSecureBusmonitorMaui:MainPage}" />-->                
                 <knxSecureBusmonitorMaui:FlyoutPageItem Title="Import GA"
                                       IconSource="reminders.png"
                                       TargetType="{x:Type knxSecureBusmonitorMaui:MainPage}" />
