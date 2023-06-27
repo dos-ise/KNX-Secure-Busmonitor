@@ -62,6 +62,10 @@
 	  <Compile Update="AppFlyout.xaml.cs">
 	    <DependentUpon>AppFlyout.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="View\GroupAddressImportPage.xaml.cs">
+	    <SubType>Code</SubType>
+	    <DependentUpon>GroupAddressImportPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="View\InterfacesPage.xaml.cs">
 	    <DependentUpon>InterfacesPage.xaml</DependentUpon>
 	  </Compile>
@@ -72,6 +76,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="AppFlyout.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\GroupAddressImportPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\InterfacesPage.xaml">

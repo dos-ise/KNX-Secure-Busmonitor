@@ -4,6 +4,7 @@ using Knx.Falcon.Discovery;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Input;
 using KNX_Secure_Busmonitor_MAUI.Model;
+using System.Net;
 
 namespace KNX_Secure_Busmonitor_MAUI.ViewModel
 {
@@ -15,6 +16,7 @@ namespace KNX_Secure_Busmonitor_MAUI.ViewModel
             DiscoveredInterfaces = new ObservableCollection<IpDeviceDiscoveryResult>();
             DiscoverInterfaces();
             PropertyChanged += InterfacesViewModel_PropertyChanged;
+            IpAddress = "192.168.178.46";
         }
 
         private void InterfacesViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -34,6 +36,18 @@ namespace KNX_Secure_Busmonitor_MAUI.ViewModel
         [ObservableProperty]
         private bool isDiscovering;
 
+        [ObservableProperty]
+        private string ipAddress;
+
+        [RelayCommand]
+        private void Save()
+        {
+            if(IPAddress.TryParse(IpAddress, out var parsedAddress))
+            {
+                Preferences.Default.Set(MonitorPreferences.IpAddress, parsedAddress.MapToIPv4().ToString());
+            }
+        }
+
         [RelayCommand]
         private void DiscoverInterfaces()
         {
@@ -48,6 +62,7 @@ namespace KNX_Secure_Busmonitor_MAUI.ViewModel
                         DiscoveredInterfaces.Add(dis);
                     });
                 }
+                
                 IsDiscovering = false;
             });
         }

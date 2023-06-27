@@ -23,7 +23,7 @@
                                       TargetType="{x:Type knxSecureBusmonitorMaui:MainPage}" />-->                
                 <knxSecureBusmonitorMaui:FlyoutPageItem Title="Import GA"
                                       IconSource="reminders.png"
-                                      TargetType="{x:Type knxSecureBusmonitorMaui:MainPage}" />
+                                      TargetType="{x:Type knxSecureBusmonitorMaui:GroupAddressImportPage}" />
             </x:Array>
         </CollectionView.ItemsSource>
         <CollectionView.ItemTemplate>

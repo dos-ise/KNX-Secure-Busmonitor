@@ -14,6 +14,7 @@
                          RowHeight="70" HeaderHeight="50" 
                          BorderColor="AntiqueWhite"
                          HeaderBackground="Blue"
+                         MaximumHeightRequest="400"
                          PullToRefreshCommand="{Binding DiscoverInterfacesCommand}" IsRefreshing="{Binding IsDiscovering}"
                          ActiveRowColor="Gray">
                 <dg:DataGrid.Columns>
@@ -29,6 +30,11 @@
                 </dg:DataGrid.RowsBackgroundColorPalette>
             </dg:DataGrid>
             <Button MaximumHeightRequest="50" Text="Discover" Command="{Binding DiscoverInterfacesCommand}"/>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="IP:"/>
+                <Entry MinimumWidthRequest="300" Placeholder="Address" Text="{Binding IpAddress}"/>
+                <Button Text="Save" Command="{Binding SaveCommand}"/>
+            </StackLayout>
         </StackLayout>
     </ScrollView>
 
