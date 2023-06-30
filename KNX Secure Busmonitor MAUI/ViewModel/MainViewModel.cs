@@ -16,6 +16,8 @@ namespace KNX_Secure_Busmonitor_MAUI.ViewModel
         public MainViewModel()
         {
             Telegrams = new ObservableCollection<Telegram>();
+            WriteValue = "False";
+            TargetWriteAddress = "1/1/1";
         }
 
         private ConnectorParameters CreateParameter()
@@ -33,6 +35,11 @@ namespace KNX_Secure_Busmonitor_MAUI.ViewModel
         [ObservableProperty]
         private bool isRefreshing;
 
+        [ObservableProperty]
+        private string targetWriteAddress;
+
+        [ObservableProperty]
+        private string writeValue;
 
         [RelayCommand]
         private void Refresh()
@@ -57,6 +64,25 @@ namespace KNX_Secure_Busmonitor_MAUI.ViewModel
             {
                 Console.WriteLine(e);
             }
+        }
+
+        [RelayCommand(CanExecute = nameof(CanWrite))]
+        private void Write()
+        {
+            try
+            {
+                _bus.WriteGroupValue(new GroupAddress(TargetWriteAddress), GroupValue.Parse(WriteValue));
+            }
+            catch (Exception e)
+            {
+                //TODO
+            }
+        }
+
+        private bool CanWrite()
+        {
+            //TODO
+            return true;
         }
 
         private void _bus_GroupMessageReceived(object sender, GroupEventArgs e)
