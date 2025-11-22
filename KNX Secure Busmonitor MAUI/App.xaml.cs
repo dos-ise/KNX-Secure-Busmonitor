@@ -7,8 +7,12 @@ namespace KNX_Secure_Busmonitor_MAUI
         public App()
         {
             InitializeComponent();
+        }
 
-            MainPage = new AppFlyout();
+        // Instead of setting MainPage, override CreateWindow
+        protected override Window CreateWindow(IActivationState activationState)
+        {
+            return new Window(new AppFlyout());
         }
     }
 }

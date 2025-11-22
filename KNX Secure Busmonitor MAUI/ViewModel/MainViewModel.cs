@@ -5,6 +5,7 @@ using Knx.Falcon;
 using Knx.Falcon.Configuration;
 using Knx.Falcon.Sdk;
 using KNX_Secure_Busmonitor_MAUI.Model;
+using Knx.Falcon.Logging;
 
 namespace KNX_Secure_Busmonitor_MAUI.ViewModel
 {
@@ -15,6 +16,7 @@ namespace KNX_Secure_Busmonitor_MAUI.ViewModel
 
         public MainViewModel()
         {
+            Logger.Factory = new MauiLoggerFactory();
             Telegrams = new ObservableCollection<Telegram>();
             WriteValue = "False";
             TargetWriteAddress = "1/1/1";
@@ -47,7 +49,7 @@ namespace KNX_Secure_Busmonitor_MAUI.ViewModel
         }
 
         [RelayCommand]
-        private async void OnConnect()
+        private async Task OnConnect()
         {
             _bus = new KnxBus(CreateParameter());
 

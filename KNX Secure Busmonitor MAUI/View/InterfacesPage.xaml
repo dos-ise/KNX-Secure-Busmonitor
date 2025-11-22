@@ -9,7 +9,7 @@
     <ScrollView>
         <StackLayout Orientation="Vertical">
             <dg:DataGrid ItemsSource="{Binding DiscoveredInterfaces}" 
-                         SelectionEnabled="True" 
+                         SelectionMode="Single"
                          SelectedItem="{Binding SelectedInterface}"            
                          RowHeight="70" HeaderHeight="50" 
                          BorderColor="AntiqueWhite"
