@@ -1,0 +1,287 @@
+@page "/config"
+@using KnxMonitor.Models
+@using KnxMonitor.Services
+@using KnxMonitor.Components
+@inject ConnectionService ConnSvc
+@implements IDisposable
+
+<div class="screen">
+
+    <!-- ── Top bar ──────────────────────────────── -->
+    <div class="topbar" style="padding-bottom:12px;">
+        <div class="topbar-row1" style="margin-bottom:0;">
+            <div class="app-title">KNX <span>Config</span></div>
+            <div class="conn-badge @ConnSvc.State.ToBadgeClass()">
+                <div class="conn-dot"></div>
+                <span>@(ConnSvc.IsConnected ? (ConnSvc.ActiveInterface?.IpAddress ?? "LIVE") : ConnSvc.State.ToLabel())</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="config-scroll">
+
+        <!-- ── Active Connection ──────────────────── -->
+        <div class="cfg-section-header">Active Connection</div>
+        <div class="current-conn-card">
+            <div class="current-conn-label">KNX IP Interface</div>
+
+            @if (ConnSvc.IsConnected && ConnSvc.ActiveInterface is { } ai)
+            {
+                <div class="current-conn-ip">
+                    <span>@ai.IpAddress</span>:@ai.Port
+                </div>
+                <div class="current-conn-meta">
+                    <span>@ai.Mode</span>
+                    <span>•</span>
+                    <span>@ai.Name</span>
+                </div>
+                <div class="conn-status-row">
+                    <div class="conn-badge live" style="font-size:11px;padding:3px 10px;">
+                        <div class="conn-dot"></div>
+                        Connected · @ConnSvc.ConnectedFor.ToString(@"hh\:mm\:ss")
+                    </div>
+                    <button class="disconnect-btn" @onclick="Disconnect">Disconnect</button>
+                </div>
+            }
+            else if (ConnSvc.State == ConnectionState.Connecting)
+            {
+                <div class="current-conn-ip" style="color:var(--warn);">Connecting…</div>
+                <div class="current-conn-meta"><span>@ConnSvc.Settings.IpAddress</span></div>
+            }
+            else
+            {
+                <div class="current-conn-ip" style="color:var(--text-dim);">Not connected</div>
+                <div class="current-conn-meta"><span>—</span></div>
+            }
+        </div>
+
+        <!-- ── Discovery ──────────────────────────── -->
+        <div class="cfg-section-header">Discover KNX Interfaces</div>
+
+        <div class="scan-bar">
+            <button class="scan-btn @(ConnSvc.IsScanning ? "scanning" : "")"
+                    @onclick="StartScan"
+                    disabled="@ConnSvc.IsScanning">
+                <span class="scan-spinner">@(ConnSvc.IsScanning ? "↻" : "📡")</span>
+                <span>@ScanButtonLabel</span>
+            </button>
+        </div>
+
+        @if (ConnSvc.IsScanning && !ConnSvc.DiscoveredInterfaces.Any())
+        {
+            <div class="scan-empty">
+                <div class="scan-pulse-ring active"><div class="scan-inner-dot"></div></div>
+                <div style="font-family:var(--ui);font-size:13px;color:var(--text-dim);">
+                    Scanning 192.168.1.0/24…
+                </div>
+                <div style="font-size:11px;margin-top:4px;color:var(--text-dim);">
+                    KNXnet/IP Search Request (UDP 3671)
+                </div>
+            </div>
+        }
+
+        <div class="device-list">
+            @foreach (var iface in _discoveredSnapshot)
+            {
+                var currentIface = iface;
+                <InterfaceCard Interface="currentIface"
+                               IsSelected="@(currentIface.IpAddress == _settings.IpAddress)"
+                               OnSelect="SelectInterface" />
+            }
+        </div>
+
+        <!-- ── Manual Entry ────────────────────────── -->
+        <div class="cfg-divider">or enter manually</div>
+
+        <div class="manual-form">
+            <div class="form-row">
+                <span class="form-label">IP Addr</span>
+                <input class="form-input" type="text"
+                       placeholder="e.g. 192.168.1.100"
+                       @bind="_settings.IpAddress"
+                       @bind:event="oninput" />
+            </div>
+            <div class="form-row">
+                <span class="form-label">Port</span>
+                <input class="form-input" type="number"
+                       @bind="_settings.Port"
+                       @bind:event="oninput" />
+            </div>
+            <div class="form-row">
+                <span class="form-label">Mode</span>
+                <select class="form-select"
+                        value="@_settings.Mode"
+                        @onchange="OnModeChanged">
+                    <option value="@ConnectionMode.Tunneling">Tunneling</option>
+                    <option value="@ConnectionMode.Routing">Routing (Multicast)</option>
+                </select>
+            </div>
+            <div class="toggle-row">
+                <div>
+                    <div class="toggle-label">Auto-Reconnect</div>
+                    <div class="toggle-sub">Reconnect on connection loss</div>
+                </div>
+                <button class="toggle @(_settings.AutoReconnect ? "on" : "")"
+                        @onclick="() => _settings.AutoReconnect = !_settings.AutoReconnect">
+                </button>
+            </div>
+            <div class="toggle-row" style="border-bottom:none;">
+                <div>
+                    <div class="toggle-label">NAT Mode</div>
+                    <div class="toggle-sub">For connections through routers</div>
+                </div>
+                <button class="toggle @(_settings.NatMode ? "on" : "")"
+                        @onclick="() => _settings.NatMode = !_settings.NatMode">
+                </button>
+            </div>
+        </div>
+
+        <button class="connect-btn @(ConnSvc.IsConnecting ? "connecting-state" : "")"
+                @onclick="Connect"
+                disabled="@(ConnSvc.IsConnecting || string.IsNullOrWhiteSpace(_settings.IpAddress))">
+            @if (ConnSvc.IsConnecting)
+            {
+                <span>⏳</span><span>Connecting…</span>
+            }
+            else
+            {
+                <span>⚡</span><span>Connect</span>
+            }
+        </button>
+
+        <!-- ── Connection Log ─────────────────────── -->
+        <div class="cfg-section-header">Connection Log</div>
+        <div class="conn-log">
+            @foreach (var entry in ConnSvc.Log.Take(6))
+            {
+                <span class="log-line @entry.Level.ToCssClass()">
+                    <span class="log-time">@entry.Timestamp.ToString("HH:mm:ss")</span>
+                    <span class="log-msg">@entry.Message</span>
+                </span>
+            }
+        </div>
+
+        <div style="height:16px;"></div>
+    </div>
+
+    <!-- ── Toast ──────────────────────────────────── -->
+    @if (_toastVisible)
+    {
+        <div class="cfg-toast @(_toastType)">@_toastMessage</div>
+    }
+
+</div>
+
+@code {
+    private ConnectionSettings _settings = new();
+    private List<KnxInterface> _discoveredSnapshot = new();
+    private bool   _toastVisible;
+    private string _toastMessage = string.Empty;
+    private string _toastType    = string.Empty;
+    private CancellationTokenSource? _scanCts;
+
+    private string ScanButtonLabel =>
+        ConnSvc.IsScanning          ? "Scanning…" :
+        ConnSvc.DiscoveredInterfaces.Any() ? $"{ConnSvc.DiscoveredInterfaces.Count} Found — Search Again" :
+                                       "Search Network";
+
+    protected override void OnInitialized()
+    {
+        _settings = new ConnectionSettings
+        {
+            IpAddress     = ConnSvc.Settings.IpAddress,
+            Port          = ConnSvc.Settings.Port,
+            Mode          = ConnSvc.Settings.Mode,
+            AutoReconnect = ConnSvc.Settings.AutoReconnect,
+            NatMode       = ConnSvc.Settings.NatMode,
+        };
+        _discoveredSnapshot = ConnSvc.DiscoveredInterfaces.ToList();
+        ConnSvc.StateChanged += OnStateChanged;
+    }
+
+    // ── Scanning ──────────────────────────────────────────────────────────────
+    private void StartScan()
+    {
+        _scanCts?.Cancel();
+        _scanCts = new CancellationTokenSource();
+        _discoveredSnapshot = new List<KnxInterface>();
+
+        _ = ConnSvc.ScanNetworkAsync(
+            onFound: iface =>
+                InvokeAsync(() =>
+                {
+                    _discoveredSnapshot = ConnSvc.DiscoveredInterfaces.ToList();
+                    if (_discoveredSnapshot.Count == 1 && iface.Mode == ConnectionMode.Tunneling)
+                        SelectInterface(iface);
+                    StateHasChanged();
+                }),
+            ct: _scanCts.Token
+        );
+    }
+
+    // ── Connection ────────────────────────────────────────────────────────────
+    private async Task Connect()
+    {
+        if (string.IsNullOrWhiteSpace(_settings.IpAddress)) return;
+
+        await ConnSvc.ConnectAsync(_settings);
+
+        if (ConnSvc.IsConnected)
+            ShowToast($"✓ Connected to {_settings.IpAddress}", "success");
+        else
+            ShowToast("Connection failed — check IP / port", "error");
+    }
+
+    private void Disconnect()
+    {
+        ConnSvc.Disconnect();
+        ShowToast("Disconnected", "");
+    }
+
+    private void SelectInterface(KnxInterface iface)
+    {
+        ConnSvc.SelectInterface(iface);
+        _settings = new ConnectionSettings
+        {
+            IpAddress     = iface.IpAddress,
+            Port          = iface.Port,
+            Mode          = iface.Mode,
+            AutoReconnect = _settings.AutoReconnect,
+            NatMode       = _settings.NatMode,
+        };
+        StateHasChanged();
+    }
+
+    private void OnModeChanged(ChangeEventArgs e)
+    {
+        if (Enum.TryParse<ConnectionMode>(e.Value?.ToString(), out var mode))
+            _settings.Mode = mode;
+    }
+
+    // ── Toast ─────────────────────────────────────────────────────────────────
+    private void ShowToast(string msg, string type)
+    {
+        _toastMessage = msg;
+        _toastType    = type;
+        _toastVisible = true;
+        StateHasChanged();
+        _ = Task.Delay(2500).ContinueWith(_ => InvokeAsync(() =>
+        {
+            _toastVisible = false;
+            StateHasChanged();
+        }));
+    }
+
+    private void OnStateChanged() => InvokeAsync(() =>
+    {
+        _discoveredSnapshot = ConnSvc.DiscoveredInterfaces.ToList();
+        StateHasChanged();
+    });
+
+    public void Dispose()
+    {
+        ConnSvc.StateChanged -= OnStateChanged;
+        _scanCts?.Cancel();
+        _scanCts?.Dispose();
+    }
+}

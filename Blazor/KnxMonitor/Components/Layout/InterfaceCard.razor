@@ -1,0 +1,36 @@
+@using KnxMonitor.Models
+
+<div class="iface-card @(IsSelected ? "selected" : "")"
+     @onclick="() => OnSelect.InvokeAsync(Interface)">
+
+    <div class="iface-icon">@(Interface.Mode == ConnectionMode.Routing ? "🔀" : "🔌")</div>
+
+    <div class="iface-info">
+        <div class="iface-name">@Interface.Name</div>
+        <div class="iface-ip">@Interface.IpAddress:@Interface.Port</div>
+        <div class="iface-meta">
+            <span class="device-tag">@Interface.Mode</span>
+            <span class="device-tag">@Interface.Model</span>
+        </div>
+    </div>
+
+    <div class="iface-right">
+        <div class="signal-dots">
+            @{ var lvl = Interface.SignalLevel; }
+            <div class="signal-dot @(lvl >= 1 ? "active" : "")" style="height:7px"></div>
+            <div class="signal-dot @(lvl >= 2 ? "active" : "")" style="height:10px"></div>
+            <div class="signal-dot @(lvl >= 3 ? "active" : "")" style="height:13px"></div>
+            <div class="signal-dot @(lvl >= 4 ? "active" : "")" style="height:16px"></div>
+        </div>
+        @if (IsSelected)
+        {
+            <span class="iface-check">✓</span>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired] public KnxInterface                Interface  { get; set; } = default!;
+    [Parameter]                 public bool                        IsSelected { get; set; }
+    [Parameter]                 public EventCallback<KnxInterface> OnSelect   { get; set; }
+}

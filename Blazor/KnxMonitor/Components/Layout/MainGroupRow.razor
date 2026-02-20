@@ -1,0 +1,59 @@
+@using KnxMonitor.Models
+
+<div class="main-group @(Group.IsOpen ? "open" : "")">
+
+  <!-- Main group header -->
+  <div class="main-group-header" @onclick="ToggleMain">
+    <span class="mg-chevron">▶</span>
+    <div class="mg-color" style="background:@Color"></div>
+    <span class="mg-name">@Group.Address · @Group.Name</span>
+    <span class="mg-count">@Group.TotalGaCount</span>
+  </div>
+
+  <!-- Middle groups -->
+  @foreach (var mid in Group.MiddleGroups)
+  {
+    <div class="mid-group @(mid.IsOpen ? "open" : "")">
+      <div class="mid-group-header" @onclick="() => ToggleMid(mid)">
+        <span class="mg-chevron">▶</span>
+        <span class="mid-name">@mid.Address · @mid.Name</span>
+        <span class="mg-count" style="font-size:9px;">@mid.GroupAddresses.Count</span>
+      </div>
+
+      <div class="ga-rows">
+        @foreach (var ga in mid.GroupAddresses)
+        {
+          <div class="ga-row" @onclick="() => OnGaSelected.InvokeAsync(ga)">
+            <span class="ga-row-addr">@ga.Address</span>
+            <div class="ga-row-info">
+              <div class="ga-row-name">@ga.Name</div>
+              <div class="ga-row-meta">
+                <span class="ga-dpt">@ga.DptType</span>
+                @foreach (var f in ga.Flags.ToCharArray())
+                {
+                  <span class="ga-flag @f.ToString().ToLower()">@f</span>
+                }
+              </div>
+            </div>
+            <div class="ga-row-right">
+              <span class="ga-last-val">@ga.LastValue</span>
+              @if (ga.LastSeen.HasValue)
+              {
+                <div class="ga-live-dot"></div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>
+
+@code {
+    [Parameter, EditorRequired] public MainGroup    Group        { get; set; } = default!;
+    [Parameter, EditorRequired] public string       Color        { get; set; } = "#00d4ff";
+    [Parameter]                 public EventCallback<GroupAddress> OnGaSelected { get; set; }
+
+    private void ToggleMain()        => Group.IsOpen = !Group.IsOpen;
+    private void ToggleMid(MiddleGroup m) => m.IsOpen = !m.IsOpen;
+}

@@ -1,0 +1,309 @@
+@page "/groups"
+@using KnxMonitor.Models
+@using KnxMonitor.Services
+@using KnxMonitor.Components
+@using Microsoft.AspNetCore.Components.Forms
+@inject GroupAddressService GaService
+@inject KnxService Knx
+@implements IDisposable
+
+<div class="screen">
+
+  <!-- ── Top bar ──────────────────────────────────────────── -->
+  <div class="groups-topbar">
+    <div class="groups-title-row">
+      <div class="app-title">KNX <span>Groups</span></div>
+      <div class="groups-stats">
+        <div class="grp-stat"><span>@GaService.TotalGaCount</span> GAs</div>
+        <div class="grp-stat"><span>@GaService.MainGroupCount</span> Main</div>
+      </div>
+    </div>
+
+    <!-- Import drop zone -->
+    <div class="import-zone @(_hasFile ? "has-file" : "")"
+         @ondragover:preventDefault="true"
+         @ondrop="HandleDrop"
+         @ondragover="() => _dragging = true"
+         @ondragleave="() => _dragging = false">
+
+      <InputFile id="ga-file-input" OnChange="HandleFileSelected"
+                 accept=".csv,.esf,.xml,.knxproj"
+                 style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;" />
+
+      <span class="import-icon">@_importIcon</span>
+      <div class="import-title">@_importTitle</div>
+      <div class="import-sub">@_importSub</div>
+      <div class="import-formats">
+        <span class="fmt-badge ets">ETS .esf</span>
+        <span class="fmt-badge ets">.knxproj</span>
+        <span class="fmt-badge">CSV</span>
+        <span class="fmt-badge">XML</span>
+      </div>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="import-actions">
+      <button class="imp-btn" @onclick="LoadDemo">⚡ Demo Data</button>
+      <button class="imp-btn" disabled="@(!GaService.HasData)" @onclick="ToggleExpandAll">
+        @(_allExpanded ? "⊟ Collapse" : "⊞ Expand All")
+      </button>
+      <button class="imp-btn" disabled="@(!GaService.HasData)" @onclick="Clear">🗑 Clear</button>
+    </div>
+  </div>
+
+  @if (GaService.HasData)
+  {
+    <!-- ── Search bar ──────────────────────────────────────── -->
+    <div class="groups-search">
+      <div class="grp-search-wrap">
+        <i class="grp-search-icon">⌕</i>
+        <input class="grp-search-input"
+               type="text"
+               placeholder="Search name, address, DPT…"
+               @bind="_searchQuery"
+               @bind:event="oninput" />
+      </div>
+      <button class="view-toggle-btn" @onclick="ToggleView" title="Toggle view">
+        @(_flatView ? "⋮⋮" : "☰")
+      </button>
+    </div>
+
+    <!-- ── Group tree or flat list ────────────────────────── -->
+    <div class="groups-scroll">
+      @if (_flatView)
+      {
+        @foreach (var ga in FilteredFlat)
+        {
+          <div class="ga-row" @onclick="() => OpenDetail(ga)">
+            <span class="ga-row-addr">@ga.Address</span>
+            <div class="ga-row-info">
+              <div class="ga-row-name">@ga.Name</div>
+              <div class="ga-row-meta">
+                <span class="ga-dpt">@ga.DptType</span>
+                @foreach (var f in ga.Flags.ToCharArray())
+                { <span class="ga-flag @f.ToString().ToLower()">@f</span> }
+              </div>
+            </div>
+            <div class="ga-row-right">
+              <span class="ga-last-val">@ga.LastValue</span>
+              @if (ga.LastSeen.HasValue) { <div class="ga-live-dot"></div> }
+            </div>
+          </div>
+        }
+      }
+      else
+      {
+        @foreach (var (mg, idx) in FilteredTree.Select((g, i) => (g, i)))
+        {
+          <MainGroupRow Group="mg"
+                        Color="@GroupColors.ForIndex(idx)"
+                        OnGaSelected="OpenDetail" />
+        }
+
+        @if (!FilteredTree.Any())
+        {
+          <div class="groups-empty">
+            <div class="groups-empty-icon">🔍</div>
+            <div class="groups-empty-title">No Results</div>
+          </div>
+        }
+      }
+    </div>
+  }
+  else
+  {
+    <!-- ── Empty state ─────────────────────────────────────── -->
+    <div class="groups-empty">
+      <div class="groups-empty-icon">🗂️</div>
+      <div class="groups-empty-title">No Group Addresses</div>
+      <div class="groups-empty-sub">
+        Import an ETS export (.esf, .knxproj) or CSV, or tap ⚡ Demo Data to get started.
+      </div>
+    </div>
+  }
+
+  <!-- ── GA Detail slide-in panel ──────────────────────────── -->
+  <GaDetailPanel Ga="_selectedGa"
+                 IsOpen="_detailOpen"
+                 OnClose="CloseDetail"
+                 RecentTelegrams="_recentForGa" />
+
+</div>
+
+@code {
+    // ── State ─────────────────────────────────────────────────
+    private string _searchQuery  = string.Empty;
+    private bool   _flatView     = false;
+    private bool   _allExpanded  = false;
+    private bool   _detailOpen   = false;
+    private bool   _hasFile      = false;
+    private bool   _dragging     = false;
+
+    private GroupAddress?                _selectedGa   = null;
+    private List<KnxTelegram>            _recentForGa  = new();
+
+    // Import zone display
+    private string _importIcon  = "📂";
+    private string _importTitle = "Import Group Addresses";
+    private string _importSub   = "Tap to select file or drag & drop";
+
+    // ── Filtered Views ────────────────────────────────────────
+    private List<MainGroup> FilteredTree =>
+        string.IsNullOrWhiteSpace(_searchQuery)
+            ? GaService.MainGroups
+            : GaService.Filter(_searchQuery);
+
+    private IEnumerable<GroupAddress> FilteredFlat =>
+        string.IsNullOrWhiteSpace(_searchQuery)
+            ? GaService.AllGroupAddresses
+            : GaService.Filter(_searchQuery)
+                       .SelectMany(mg => mg.MiddleGroups.SelectMany(m => m.GroupAddresses));
+
+    // ── Lifecycle ─────────────────────────────────────────────
+    protected override void OnInitialized()
+    {
+        GaService.DataChanged += OnDataChanged;
+        Knx.TelegramReceived  += OnTelegramReceived;
+    }
+
+    // ── File Import ───────────────────────────────────────────
+    private async Task HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        if (file is null) return;
+        await ImportFile(file.Name, file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024));
+    }
+
+    private async Task HandleDrop(DragEventArgs e)
+    {
+        _dragging = false;
+        // Drag-drop files require JS interop in MAUI Blazor — wired up via InputFile above.
+        // This handler is a placeholder; real drop handling works through the InputFile overlay.
+        await Task.CompletedTask;
+    }
+
+    private async Task ImportFile(string fileName, Stream stream)
+    {
+        _importIcon  = "⏳";
+        _importTitle = $"Parsing {fileName}…";
+        _importSub   = "";
+        StateHasChanged();
+
+        try
+        {
+            using var reader  = new StreamReader(stream);
+            var content = await reader.ReadToEndAsync();
+
+            var ext = Path.GetExtension(fileName).ToLowerInvariant();
+
+            if (ext is ".csv")
+                GaService.ImportCsv(content);
+            else if (ext is ".xml" or ".esf")
+                GaService.ImportXml(content);
+            else
+            {
+                // .knxproj is a ZIP — needs System.IO.Compression + XML parsing
+                // For now fall back to demo
+                GaService.LoadDemoData();
+                _importIcon  = "⚠️";
+                _importTitle = $"{fileName} (demo fallback)";
+                _importSub   = ".knxproj parsing coming soon";
+                _hasFile     = true;
+                StateHasChanged();
+                return;
+            }
+
+            var count = GaService.TotalGaCount;
+            _importIcon  = "✅";
+            _importTitle = fileName;
+            _importSub   = $"{count} group addresses imported";
+            _hasFile     = true;
+        }
+        catch (Exception ex)
+        {
+            _importIcon  = "❌";
+            _importTitle = "Import failed";
+            _importSub   = ex.Message;
+        }
+
+        StateHasChanged();
+    }
+
+    // ── Actions ───────────────────────────────────────────────
+    private void LoadDemo()
+    {
+        GaService.LoadDemoData();
+        _importIcon  = "⚡";
+        _importTitle = "Demo Project — Residential Building";
+        _importSub   = $"{GaService.TotalGaCount} group addresses";
+        _hasFile     = true;
+        StateHasChanged();
+    }
+
+    private void ToggleExpandAll()
+    {
+        _allExpanded = !_allExpanded;
+        foreach (var mg in GaService.MainGroups)
+        {
+            mg.IsOpen = _allExpanded;
+            foreach (var mid in mg.MiddleGroups)
+                mid.IsOpen = _allExpanded;
+        }
+        StateHasChanged();
+    }
+
+    private void ToggleView()
+    {
+        _flatView = !_flatView;
+        StateHasChanged();
+    }
+
+    private void Clear()
+    {
+        GaService.Clear();
+        _hasFile     = false;
+        _allExpanded = false;
+        _searchQuery = string.Empty;
+        _importIcon  = "📂";
+        _importTitle = "Import Group Addresses";
+        _importSub   = "Tap to select file or drag & drop";
+        StateHasChanged();
+    }
+
+    // ── Detail Panel ──────────────────────────────────────────
+    private void OpenDetail(GroupAddress ga)
+    {
+        _selectedGa = ga;
+
+        // Collect recent telegrams from the live monitor for this GA
+        _recentForGa = Knx.RecentTelegrams
+            .Where(t => t.GroupAddress == ga.Address)
+            .Take(10)
+            .ToList();
+
+        _detailOpen = true;
+        StateHasChanged();
+    }
+
+    private void CloseDetail()
+    {
+        _detailOpen = false;
+        StateHasChanged();
+    }
+
+    // ── Event Handlers ────────────────────────────────────────
+    private void OnDataChanged() =>
+        InvokeAsync(StateHasChanged);
+
+    private void OnTelegramReceived(KnxTelegram t)
+    {
+        // Update last value in GA database
+        GaService.UpdateLastValue(t.GroupAddress, t.DecodedValue, t.RawBytes);
+    }
+
+    public void Dispose()
+    {
+        GaService.DataChanged -= OnDataChanged;
+        Knx.TelegramReceived  -= OnTelegramReceived;
+    }
+}

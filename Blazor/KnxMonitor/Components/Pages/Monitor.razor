@@ -1,0 +1,111 @@
+@page "/"
+@using KnxMonitor.Components
+@using KnxMonitor.Models
+@using KnxMonitor.Services
+@inject KnxService Knx
+@implements IAsyncDisposable
+
+<div class="screen">
+
+    <StatsBar Stats="_stats" />
+    <ActivityStrip History="_stats.ActivityHistory" />
+
+    <div class="filter-bar">
+        @foreach (var f in _filters)
+        {
+            <button class="filter-btn @(f == _activeFilter ? "active" : "")"
+                    @onclick="() => SetFilter(f)">@f</button>
+        }
+    </div>
+
+    <div class="search-row">
+        <div class="search-wrap">
+            <span class="search-icon">⌕</span>
+            <input class="search-input" type="text" placeholder="Filter by GA, source, value…"
+                   @bind="_searchText" @bind:event="oninput" />
+        </div>
+    </div>
+
+    <div class="telegram-list">
+        @foreach (var entry in FilteredTelegrams)
+        {
+            <TelegramRow Telegram="entry.Item1" IsNew="entry.Item2" />
+        }
+    </div>
+
+    <button class="fab @(Knx.IsPaused ? "paused" : "")" @onclick="Knx.TogglePause">
+        @(Knx.IsPaused ? "▶" : "⏸")
+    </button>
+
+</div>
+
+@code {
+    private BusStats _stats = new BusStats { DeviceCount = 192 };
+    private readonly LinkedList<KnxTelegram> _telegrams = new();
+    private readonly HashSet<Guid> _newIds = new();
+    private const int MaxItems = 100;
+
+    private string _searchText  = string.Empty;
+    private string _activeFilter = "All";
+    private readonly string[] _filters = { "All", "Write", "Read", "Response", "Errors" };
+
+    protected override async Task OnInitializedAsync()
+    {
+        Knx.TelegramReceived += OnTelegramReceived;
+        Knx.StatsUpdated     += OnStatsUpdated;
+        await Knx.ConnectAsync();
+    }
+
+    private IEnumerable<(KnxTelegram, bool)> FilteredTelegrams =>
+        _telegrams
+            .Where(MatchesFilter)
+            .Where(MatchesSearch)
+            .Take(50)
+            .Select(t => (t, _newIds.Contains(t.Id)));
+
+    private bool MatchesFilter(KnxTelegram t) => _activeFilter switch
+    {
+        "Write"    => t.Type == MessageType.Write,
+        "Read"     => t.Type == MessageType.Read,
+        "Response" => t.Type == MessageType.Response,
+        "Errors"   => t.IsError,
+        _          => true
+    };
+
+    private bool MatchesSearch(KnxTelegram t)
+    {
+        if (string.IsNullOrWhiteSpace(_searchText)) return true;
+        var s = _searchText.ToLowerInvariant();
+        return t.GroupAddress.Contains(s, StringComparison.OrdinalIgnoreCase)
+            || t.GroupName.Contains(s, StringComparison.OrdinalIgnoreCase)
+            || t.SourceAddress.Contains(s, StringComparison.OrdinalIgnoreCase)
+            || t.DecodedValue.Contains(s, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private void SetFilter(string f) { _activeFilter = f; StateHasChanged(); }
+
+    private void OnTelegramReceived(KnxTelegram t)
+    {
+        _ = InvokeAsync(() =>
+        {
+            _telegrams.AddFirst(t);
+            _newIds.Add(t.Id);
+            while (_telegrams.Count > MaxItems) _telegrams.RemoveLast();
+            _ = Task.Delay(800).ContinueWith(_ =>
+                InvokeAsync(() => { _newIds.Remove(t.Id); StateHasChanged(); }));
+            StateHasChanged();
+        });
+    }
+
+    private void OnStatsUpdated(BusStats s)
+    {
+        _ = InvokeAsync(() => { _stats = s; StateHasChanged(); });
+    }
+
+    public ValueTask DisposeAsync()
+    {
+        Knx.TelegramReceived -= OnTelegramReceived;
+        Knx.StatsUpdated     -= OnStatsUpdated;
+        return ValueTask.CompletedTask;
+    }
+}

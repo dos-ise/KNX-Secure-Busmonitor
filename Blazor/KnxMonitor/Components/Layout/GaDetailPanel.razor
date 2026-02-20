@@ -1,0 +1,111 @@
+@using KnxMonitor.Models
+@using KnxMonitor.Services
+
+<div class="ga-detail-panel @(IsOpen ? "open" : "")">
+
+  <div class="detail-header">
+    <button class="detail-back" @onclick="OnClose">←</button>
+    <div>
+      <div class="detail-addr">@Ga?.Address</div>
+      <div class="detail-name">@Ga?.Name</div>
+    </div>
+  </div>
+
+  @if (Ga is not null)
+  {
+    <div class="detail-scroll">
+
+      <!-- Live value card -->
+      <div class="detail-value-card">
+        <div class="detail-val-label">Last Value</div>
+        <div class="detail-val-big">@Ga.LastValue</div>
+        <div class="detail-val-raw">Raw: @Ga.LastRaw</div>
+        <div class="detail-val-time">
+          @if (Ga.LastSeen.HasValue)
+          { <span>Last: @Ga.LastSeen.Value.ToString("HH:mm:ss")</span> }
+          else
+          { <span>Never received</span> }
+        </div>
+      </div>
+
+      <!-- Properties -->
+      <div class="detail-props">
+        <div class="detail-prop-row">
+          <span class="detail-prop-key">Address</span>
+          <span class="detail-prop-val">@Ga.Address</span>
+        </div>
+        <div class="detail-prop-row">
+          <span class="detail-prop-key">DPT</span>
+          <span class="detail-prop-val">
+            @Ga.DptType
+            @if (!string.IsNullOrEmpty(GroupAddressService.DptDescription(Ga.DptType)))
+            {
+              <span style="color:var(--text-dim);font-family:var(--ui);"> – @GroupAddressService.DptDescription(Ga.DptType)</span>
+            }
+          </span>
+        </div>
+        <div class="detail-prop-row">
+          <span class="detail-prop-key">Description</span>
+          <span class="detail-prop-val" style="font-family:var(--ui);color:var(--text-dim);">
+            @(string.IsNullOrEmpty(Ga.Description) ? "—" : Ga.Description)
+          </span>
+        </div>
+        <div class="detail-prop-row">
+          <span class="detail-prop-key">Main Group</span>
+          <span class="detail-prop-val" style="font-family:var(--ui);">@Ga.MainGroupName</span>
+        </div>
+        <div class="detail-prop-row">
+          <span class="detail-prop-key">Middle Group</span>
+          <span class="detail-prop-val" style="font-family:var(--ui);">@Ga.MiddleGroupName</span>
+        </div>
+        <div class="detail-flags-row">
+          <span class="detail-flag-key">Flags</span>
+          @foreach (var f in new[] { "C","R","W","T","U" })
+          {
+            <span class="ga-flag @f.ToLower()" style="opacity:@(Ga.Flags.Contains(f, StringComparison.OrdinalIgnoreCase) ? "1" : "0.2")">@f</span>
+          }
+        </div>
+      </div>
+
+      <!-- Recent telegrams from monitor -->
+      <div class="detail-history-label">Recent Telegrams</div>
+      <div class="detail-history">
+        @if (!RecentTelegrams.Any())
+        {
+          <div style="padding:14px;font-family:var(--ui);font-size:12px;color:var(--text-dim);text-align:center;">
+            No telegrams captured yet
+          </div>
+        }
+        else
+        {
+          @foreach (var t in RecentTelegrams)
+          {
+            <div class="detail-hist-row">
+              <span class="hist-time">@t.Timestamp.ToString("HH:mm:ss")</span>
+              <span class="hist-type @TypeCss(t.Type)">@t.Type.ToString().ToUpper()</span>
+              <span class="hist-val">@t.DecodedValue</span>
+              <span class="hist-src">@t.SourceAddress</span>
+            </div>
+          }
+        }
+      </div>
+
+    </div>
+  }
+</div>
+
+@code {
+    [Parameter] public GroupAddress? Ga            { get; set; }
+    [Parameter] public bool          IsOpen        { get; set; }
+    [Parameter] public EventCallback OnClose       { get; set; }
+    [Parameter] public IEnumerable<KnxMonitor.Models.KnxTelegram> RecentTelegrams { get; set; } = Enumerable.Empty<KnxMonitor.Models.KnxTelegram>();
+
+    private static string TypeCss(MessageType t) => t switch
+    {
+        MessageType.Write    => "type-write",
+        MessageType.Read     => "type-read",
+        MessageType.Response => "type-response",
+        MessageType.Ack      => "type-ack",
+        _                    => ""
+    };
+}

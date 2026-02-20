@@ -1,0 +1,33 @@
+@using KnxMonitor.Models
+
+<div class="topbar">
+    <div class="topbar-row1">
+        <div class="app-title">KNX <span>Monitor</span></div>
+        <div class="conn-badge @(Stats.IsConnected ? "live" : "offline")">
+            <div class="conn-dot"></div>
+            @(Stats.IsConnected ? "LIVE" : "OFFLINE")
+        </div>
+    </div>
+    <div class="stats-row">
+        <div class="stat-chip accent">
+            <span class="stat-val">@Stats.TotalCount.ToString("N0")</span>
+            <span class="stat-label">Total</span>
+        </div>
+        <div class="stat-chip green">
+            <span class="stat-val">@Stats.TelegramsPerSecond</span>
+            <span class="stat-label">Tgm/s</span>
+        </div>
+        <div class="stat-chip warn">
+            <span class="stat-val">@Stats.ErrorCount</span>
+            <span class="stat-label">Errors</span>
+        </div>
+        <div class="stat-chip orange">
+            <span class="stat-val">@Stats.DeviceCount</span>
+            <span class="stat-label">Devices</span>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired] public BusStats Stats { get; set; } = default!;
+}

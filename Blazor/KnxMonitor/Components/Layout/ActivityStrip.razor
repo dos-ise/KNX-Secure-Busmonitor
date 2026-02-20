@@ -1,0 +1,19 @@
+@using KnxMonitor.Models
+
+<div class="activity-strip">
+    @{
+        var max = History.Any() ? History.Max() : 1;
+        if (max == 0) max = 1;
+    }
+    @foreach (var h in History)
+    {
+        var pct = (double)h / max;
+        var height = Math.Max(2, (int)(pct * 24));
+        var cls = pct > 0.8 ? "peak" : pct > 0.5 ? "high" : "";
+        <div class="activity-bar @cls" style="height:@(height)px"></div>
+    }
+</div>
+
+@code {
+    [Parameter] public List<int> History { get; set; } = new();
+}

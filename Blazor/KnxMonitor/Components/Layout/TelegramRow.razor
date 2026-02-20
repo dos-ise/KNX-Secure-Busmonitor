@@ -1,0 +1,42 @@
+@using KnxMonitor.Models
+
+<div class="telegram-item @(IsNew ? "new" : "")">
+    <div class="time-col">
+        <span class="time-main">@Telegram.Timestamp.ToString("HH:mm:ss")</span>
+        <span class="time-ms">.@Telegram.Timestamp.Millisecond.ToString("D3")</span>
+    </div>
+
+    <div class="main-col">
+        <div class="telegram-header">
+            <span class="msg-type @TypeCssClass">@Telegram.Type.ToString().ToUpper()</span>
+            <span class="ga-addr">@Telegram.GroupAddress</span>
+        </div>
+        <div class="ga-name">@Telegram.GroupName</div>
+        <div class="telegram-data">
+            <span class="dpt-badge">@Telegram.DptType</span>
+            <span class="value-display">@Telegram.DecodedValue</span>
+            <span class="raw-bytes">[@Telegram.RawBytes]</span>
+        </div>
+    </div>
+
+    <div class="right-col">
+        <span class="src-addr">@Telegram.SourceAddress</span>
+        <div class="rssi-bar">
+            <div class="rssi-fill" style="width:@(Telegram.RssiPercent)%"></div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired] public KnxTelegram Telegram { get; set; } = default!;
+    [Parameter] public bool IsNew { get; set; }
+
+    private string TypeCssClass => Telegram.Type switch
+    {
+        MessageType.Write    => "type-write",
+        MessageType.Read     => "type-read",
+        MessageType.Response => "type-response",
+        MessageType.Ack      => "type-ack",
+        _                    => ""
+    };
+}
