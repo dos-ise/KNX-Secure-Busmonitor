@@ -22,7 +22,7 @@ namespace KnxMonitor
             builder.Services.AddSingleton<KnxService>();
             builder.Services.AddSingleton<GroupAddressService>();
             builder.Services.AddSingleton<ConnectionService>();
-            builder.Services.AddSingleton<IKnxBusDriver, SimulatedBusDriver>();
+            builder.Services.AddSingleton<IKnxBusDriver, FalconBusDriver>();
 
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();
