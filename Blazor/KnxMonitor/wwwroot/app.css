@@ -1978,3 +1978,296 @@ html, body {
 .conn-badge.connecting .conn-dot {
     animation: pulse 0.6s infinite;
 }
+
+/* ══════════════════════════════════════════════════════════════
+   WRITE-TO-BUS PANEL  (GA Detail Panel extension)
+   ══════════════════════════════════════════════════════════════ */
+
+.write-panel-label {
+    padding: 14px 16px 8px;
+    font-family: var(--ui);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: opacity 0.2s;
+}
+
+    .write-panel-label::before {
+        content: '';
+        width: 3px;
+        height: 14px;
+        background: var(--accent2);
+        border-radius: 2px;
+    }
+
+/* Card wrapper */
+.write-card {
+    margin: 0 16px 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    transition: opacity 0.2s;
+}
+
+    .write-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--accent2), transparent);
+    }
+
+/* ── Binary toggle ─────────────────────────────────────────── */
+.write-toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px;
+    border-bottom: 1px solid var(--border);
+}
+
+.write-toggle-label {
+    font-family: var(--ui);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-dim);
+    width: 50px;
+    flex-shrink: 0;
+}
+
+.write-toggle-btns {
+    display: flex;
+    gap: 6px;
+    flex: 1;
+    flex-wrap: wrap;
+}
+
+.write-toggle-btn {
+    flex: 1;
+    min-width: 50px;
+    padding: 9px 6px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: var(--ui);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+}
+
+    .write-toggle-btn:hover {
+        border-color: var(--accent2);
+        color: var(--accent2);
+    }
+
+    .write-toggle-btn.selected {
+        border-color: var(--accent2);
+        background: rgba(255,107,53,0.12);
+        color: var(--accent2);
+    }
+
+/* ── Percent slider ────────────────────────────────────────── */
+.write-slider-row {
+    padding: 14px;
+    border-bottom: 1px solid var(--border);
+}
+
+.write-slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.write-slider-title {
+    font-family: var(--ui);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-dim);
+}
+
+.write-slider-val {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-bright);
+}
+
+.write-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+}
+
+    .write-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: var(--accent2);
+        box-shadow: 0 0 10px rgba(255,107,53,0.5);
+        cursor: pointer;
+    }
+
+    .write-slider::-moz-range-thumb {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        border: none;
+        background: var(--accent2);
+        cursor: pointer;
+    }
+
+/* ── Number / text input ───────────────────────────────────── */
+.write-input-row {
+    display: flex;
+    align-items: center;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    gap: 10px;
+}
+
+.write-input-label {
+    font-family: var(--ui);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-dim);
+    flex-shrink: 0;
+    width: 56px;
+}
+
+.write-input {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text-bright);
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+    .write-input:focus {
+        border-color: var(--accent2);
+    }
+
+.write-input-unit {
+    font-family: var(--ui);
+    font-size: 11px;
+    color: var(--text-dim);
+    flex-shrink: 0;
+}
+
+/* ── Raw hex preview row ───────────────────────────────────── */
+.write-raw-row {
+    display: flex;
+    align-items: center;
+    padding: 8px 14px;
+    gap: 10px;
+    border-bottom: 1px solid var(--border);
+}
+
+.write-raw-label {
+    font-family: var(--ui);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    flex-shrink: 0;
+    width: 36px;
+}
+
+.write-raw-preview {
+    font-size: 11px;
+    color: var(--text-dim);
+    font-family: var(--mono);
+    letter-spacing: 0.5px;
+}
+
+/* ── Action buttons ────────────────────────────────────────── */
+.write-actions {
+    display: flex;
+    gap: 8px;
+    padding: 12px 14px;
+}
+
+.write-read-btn {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 11px 0;
+    flex: 1;
+    font-family: var(--ui);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+    .write-read-btn:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+    }
+
+.write-send-btn {
+    background: var(--accent2);
+    border: none;
+    border-radius: 10px;
+    padding: 11px 0;
+    flex: 2;
+    font-family: var(--ui);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    box-shadow: 0 4px 16px rgba(255,107,53,0.3);
+}
+
+    .write-send-btn:hover:not(:disabled) {
+        box-shadow: 0 4px 24px rgba(255,107,53,0.5);
+        transform: translateY(-1px);
+    }
+
+    .write-send-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .write-send-btn.sent {
+        background: var(--accent3);
+        color: var(--bg);
+        box-shadow: 0 4px 16px rgba(57,255,20,0.35);
+    }

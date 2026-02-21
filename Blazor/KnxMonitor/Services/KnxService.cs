@@ -184,4 +184,14 @@ public class KnxService : IAsyncDisposable
 
         StatsUpdated?.Invoke(Stats);
     }
+
+    public async Task Write(string gaAddress, string gaName, string gaDptType, DptWriteValue staged)
+    {
+        await _driver.WriteAsync(gaAddress, staged.RawBytes);
+    }
+
+    public async Task Read(string gaAddress, string gaName, string gaDptType, string gaLastValue, string gaLastRaw)
+    {
+        //await _driver.ReadAsync();
+    }
 }

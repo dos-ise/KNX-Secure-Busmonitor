@@ -1,111 +1,375 @@
 @using KnxMonitor.Models
 @using KnxMonitor.Services
+@inject KnxService Knx
 
 <div class="ga-detail-panel @(IsOpen ? "open" : "")">
 
-  <div class="detail-header">
-    <button class="detail-back" @onclick="OnClose">←</button>
-    <div>
-      <div class="detail-addr">@Ga?.Address</div>
-      <div class="detail-name">@Ga?.Name</div>
+    <div class="detail-header">
+        <button class="detail-back" @onclick="OnClose">←</button>
+        <div>
+            <div class="detail-addr">@Ga?.Address</div>
+            <div class="detail-name">@Ga?.Name</div>
+        </div>
     </div>
-  </div>
 
-  @if (Ga is not null)
-  {
-    <div class="detail-scroll">
+    @if (Ga is not null)
+    {
+        <div class="detail-scroll">
 
-      <!-- Live value card -->
-      <div class="detail-value-card">
-        <div class="detail-val-label">Last Value</div>
-        <div class="detail-val-big">@Ga.LastValue</div>
-        <div class="detail-val-raw">Raw: @Ga.LastRaw</div>
-        <div class="detail-val-time">
-          @if (Ga.LastSeen.HasValue)
-          { <span>Last: @Ga.LastSeen.Value.ToString("HH:mm:ss")</span> }
-          else
-          { <span>Never received</span> }
-        </div>
-      </div>
-
-      <!-- Properties -->
-      <div class="detail-props">
-        <div class="detail-prop-row">
-          <span class="detail-prop-key">Address</span>
-          <span class="detail-prop-val">@Ga.Address</span>
-        </div>
-        <div class="detail-prop-row">
-          <span class="detail-prop-key">DPT</span>
-          <span class="detail-prop-val">
-            @Ga.DptType
-            @if (!string.IsNullOrEmpty(GroupAddressService.DptDescription(Ga.DptType)))
-            {
-              <span style="color:var(--text-dim);font-family:var(--ui);"> – @GroupAddressService.DptDescription(Ga.DptType)</span>
-            }
-          </span>
-        </div>
-        <div class="detail-prop-row">
-          <span class="detail-prop-key">Description</span>
-          <span class="detail-prop-val" style="font-family:var(--ui);color:var(--text-dim);">
-            @(string.IsNullOrEmpty(Ga.Description) ? "—" : Ga.Description)
-          </span>
-        </div>
-        <div class="detail-prop-row">
-          <span class="detail-prop-key">Main Group</span>
-          <span class="detail-prop-val" style="font-family:var(--ui);">@Ga.MainGroupName</span>
-        </div>
-        <div class="detail-prop-row">
-          <span class="detail-prop-key">Middle Group</span>
-          <span class="detail-prop-val" style="font-family:var(--ui);">@Ga.MiddleGroupName</span>
-        </div>
-        <div class="detail-flags-row">
-          <span class="detail-flag-key">Flags</span>
-          @foreach (var f in new[] { "C","R","W","T","U" })
-          {
-            <span class="ga-flag @f.ToLower()" style="opacity:@(Ga.Flags.Contains(f, StringComparison.OrdinalIgnoreCase) ? "1" : "0.2")">@f</span>
-          }
-        </div>
-      </div>
-
-      <!-- Recent telegrams from monitor -->
-      <div class="detail-history-label">Recent Telegrams</div>
-      <div class="detail-history">
-        @if (!RecentTelegrams.Any())
-        {
-          <div style="padding:14px;font-family:var(--ui);font-size:12px;color:var(--text-dim);text-align:center;">
-            No telegrams captured yet
-          </div>
-        }
-        else
-        {
-          @foreach (var t in RecentTelegrams)
-          {
-            <div class="detail-hist-row">
-              <span class="hist-time">@t.Timestamp.ToString("HH:mm:ss")</span>
-              <span class="hist-type @TypeCss(t.Type)">@t.Type.ToString().ToUpper()</span>
-              <span class="hist-val">@t.DecodedValue</span>
-              <span class="hist-src">@t.SourceAddress</span>
+            <!-- ── Live value ─────────────────────────── -->
+            <div class="detail-value-card">
+                <div class="detail-val-label">Last Value</div>
+                <div class="detail-val-big">@Ga.LastValue</div>
+                <div class="detail-val-raw">Raw: @Ga.LastRaw</div>
+                <div class="detail-val-time">
+                    @if (Ga.LastSeen.HasValue)
+                    {
+                        <span>Last: @Ga.LastSeen.Value.ToString("HH:mm:ss")</span>
+                    }
+                    else
+                    {
+                        <span>Never received</span>
+                    }
+                </div>
             </div>
-          }
-        }
-      </div>
 
-    </div>
-  }
+            <!-- ── Properties ────────────────────────── -->
+            <div class="detail-props">
+                <div class="detail-prop-row">
+                    <span class="detail-prop-key">Address</span>
+                    <span class="detail-prop-val">@Ga.Address</span>
+                </div>
+                <div class="detail-prop-row">
+                    <span class="detail-prop-key">DPT</span>
+                    <span class="detail-prop-val">
+                        @Ga.DptType
+                        @if (!string.IsNullOrEmpty(GroupAddressService.DptDescription(Ga.DptType)))
+                        {
+                            <span style="color:var(--text-dim);font-family:var(--ui);"> – @GroupAddressService.DptDescription(Ga.DptType)</span>
+                        }
+                    </span>
+                </div>
+                <div class="detail-prop-row">
+                    <span class="detail-prop-key">Description</span>
+                    <span class="detail-prop-val" style="font-family:var(--ui);color:var(--text-dim);">
+                        @(string.IsNullOrEmpty(Ga.Description) ? "—" : Ga.Description)
+                    </span>
+                </div>
+                <div class="detail-prop-row">
+                    <span class="detail-prop-key">Main Group</span>
+                    <span class="detail-prop-val" style="font-family:var(--ui);">@Ga.MainGroupName</span>
+                </div>
+                <div class="detail-prop-row">
+                    <span class="detail-prop-key">Middle Group</span>
+                    <span class="detail-prop-val" style="font-family:var(--ui);">@Ga.MiddleGroupName</span>
+                </div>
+                <div class="detail-flags-row">
+                    <span class="detail-flag-key">Flags</span>
+                    @foreach (var f in new[] { "C", "R", "W", "T", "U" })
+                    {
+                        <span class="ga-flag @f.ToLower()"
+                              style="opacity:@(Ga.Flags.Contains(f, StringComparison.OrdinalIgnoreCase) ? "1" : "0.2")">@f</span>
+                    }
+                </div>
+            </div>
+
+            <!-- ── Recent Telegrams ───────────────────── -->
+            <div class="detail-history-label">Recent Telegrams</div>
+            <div class="detail-history">
+                @if (!RecentTelegrams.Any())
+                {
+                    <div style="padding:14px;font-family:var(--ui);font-size:12px;color:var(--text-dim);text-align:center;">
+                        No telegrams captured yet
+                    </div>
+                }
+                else
+                {
+                    @foreach (var t in RecentTelegrams)
+                    {
+                        <div class="detail-hist-row">
+                            <span class="hist-time">@t.Timestamp.ToString("HH:mm:ss")</span>
+                            <span class="hist-type @TypeCss(t.Type)">@t.Type.ToString().ToUpper()</span>
+                            <span class="hist-val">@t.DecodedValue</span>
+                            <span class="hist-src">@t.SourceAddress</span>
+                        </div>
+                    }
+                }
+            </div>
+
+            <!-- ── Write to Bus ───────────────────────── -->
+            <div class="write-panel-label" style="opacity:@(_hasWriteFlag ? "1" : "0.45")">
+                Write to Bus
+            </div>
+            <div class="write-card"
+                 style="opacity:@(_hasWriteFlag ? "1" : "0.4");pointer-events:@(_hasWriteFlag ? "auto" : "none")">
+
+                @{
+                    // Evaluate locals once so they're available in every branch
+                    var (lblOff, lblOn) = DptClassifier.BinaryLabels(Ga.Name);
+                    var floatUnit = DptClassifier.FloatUnit(Ga.DptType);
+                }
+
+                @if (_widgetType == DptWidgetType.Binary)
+                {
+                    <!-- DPT-1 Binary toggle -->
+                    <div class="write-toggle-row">
+                        <span class="write-toggle-label">Value</span>
+                        <div class="write-toggle-btns">
+                            <button class="write-toggle-btn @(_binaryVal == false ? "selected" : "")"
+                                    @onclick="() => StageBinary(false, lblOff)">
+                                @lblOff
+                            </button>
+                            <button class="write-toggle-btn @(_binaryVal == true ? "selected" : "")"
+                                    @onclick="() => StageBinary(true, lblOn)">
+                                @lblOn
+                            </button>
+                        </div>
+                    </div>
+                }
+                else if (_widgetType == DptWidgetType.Percent)
+                {
+                    <!-- DPT-5 Percent slider -->
+                    <div class="write-slider-row">
+                        <div class="write-slider-header">
+                            <span class="write-slider-title">Value</span>
+                            <span class="write-slider-val">@_percentVal%</span>
+                        </div>
+                        <input class="write-slider" type="range" min="0" max="100"
+                               value="@_percentVal"
+                               @oninput="OnPercentSlider" />
+                    </div>
+                }
+                else if (_widgetType == DptWidgetType.Float)
+                {
+                    <!-- DPT-9 Float -->
+                    <div class="write-input-row">
+                        <span class="write-input-label">Value</span>
+                        <input class="write-input" type="number" step="0.1"
+                               value="@_floatVal"
+                               @oninput="OnFloatInput"
+                               style="max-width:130px;" />
+                        <span class="write-input-unit">@floatUnit</span>
+                    </div>
+                }
+                else if (_widgetType == DptWidgetType.Integer)
+                {
+                    <!-- DPT-13 Integer -->
+                    <div class="write-input-row">
+                        <span class="write-input-label">Value</span>
+                        <input class="write-input" type="number" step="1"
+                               value="@_intVal"
+                               @oninput="OnIntegerInput"
+                               style="max-width:150px;" />
+                    </div>
+                }
+                else if (_widgetType == DptWidgetType.Scene)
+                {
+                    <!-- DPT-17 Scene -->
+                    <div class="write-toggle-row">
+                        <span class="write-toggle-label">Scene</span>
+                        <div class="write-toggle-btns" style="flex-wrap:wrap;gap:4px;">
+                            @for (int s = 1; s <= 8; s++)
+                            {
+                                var sceneNum = s;
+                                <button class="write-toggle-btn @(_sceneVal == sceneNum ? "selected" : "")"
+                                        @onclick="() => SelectScene(sceneNum)">
+                                    S@(sceneNum)
+                                </button>
+                            }
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <!-- Raw hex fallback -->
+                    <div class="write-input-row">
+                        <span class="write-input-label">Hex</span>
+                        <input class="write-input" type="text" placeholder="e.g. 0x01"
+                               @bind="_rawHex" @bind:event="oninput" />
+                    </div>
+                }
+
+                <!-- Raw byte preview -->
+                <div class="write-raw-row">
+                    <span class="write-raw-label">Raw</span>
+                    <span class="write-raw-preview">@(_staged?.RawHex ?? "—")</span>
+                </div>
+
+                <!-- Action buttons -->
+                <div class="write-actions">
+                    <button class="write-read-btn" @onclick="SendRead">
+                        <span>↩</span><span>Read</span>
+                    </button>
+                    <button class="write-send-btn @(_sentFlash ? "sent" : "")"
+                            @onclick="SendWrite"
+                            disabled="@(_staged is null || _staged.RawBytes.Length == 0)">
+                        @if (_sentFlash)
+                        {
+                            <span>✓</span>
+                    
+                            <span>Sent!</span>
+                        }
+                        else
+                        {
+                            <span>⚡</span>
+                    
+                            <span>Write</span>
+                        }
+                    </button>
+                </div>
+            </div>
+
+            <div style="height:16px;"></div>
+        </div>
+    }
 </div>
 
 @code {
-    [Parameter] public GroupAddress? Ga            { get; set; }
-    [Parameter] public bool          IsOpen        { get; set; }
-    [Parameter] public EventCallback OnClose       { get; set; }
-    [Parameter] public IEnumerable<KnxMonitor.Models.KnxTelegram> RecentTelegrams { get; set; } = Enumerable.Empty<KnxMonitor.Models.KnxTelegram>();
+    // ── Parameters ────────────────────────────────────────────────────────────
+    [Parameter] public GroupAddress? Ga { get; set; }
+    [Parameter] public bool IsOpen { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter]
+    public IEnumerable<KnxTelegram> RecentTelegrams { get; set; }
+        = Enumerable.Empty<KnxTelegram>();
 
+    // ── Write widget state ────────────────────────────────────────────────────
+    private DptWidgetType _widgetType = DptWidgetType.Raw;
+    private bool _hasWriteFlag;
+    private DptWriteValue? _staged;
+    private bool _sentFlash;
+
+    // Per-widget backing fields
+    private bool _binaryVal = false;
+    private int _percentVal = 0;
+    private double _floatVal = 0;
+    private int _intVal = 0;
+    private int _sceneVal = 1;
+    private string _rawHex = string.Empty;
+
+    // ── Lifecycle ─────────────────────────────────────────────────────────────
+    protected override void OnParametersSet()
+    {
+        if (Ga is null) return;
+
+        _hasWriteFlag = Ga.Flags.Contains('W', StringComparison.OrdinalIgnoreCase);
+        _widgetType = DptClassifier.Classify(Ga.DptType);
+
+        switch (_widgetType)
+        {
+            case DptWidgetType.Binary:
+                var lastLow = Ga.LastValue.ToLowerInvariant();
+                _binaryVal = lastLow is "on" or "up" or "active" or "1" or "true";
+                var (lblOff, lblOn) = DptClassifier.BinaryLabels(Ga.Name);
+                _staged = DptWriteValue.FromBool(_binaryVal);
+                _staged.DisplayValue = _binaryVal ? lblOn : lblOff;
+                break;
+
+            case DptWidgetType.Percent:
+                _percentVal = int.TryParse(Ga.LastValue.TrimEnd('%'), out var p) ? p : 0;
+                _staged = DptWriteValue.FromPercent(_percentVal);
+                break;
+
+            case DptWidgetType.Float:
+                _floatVal = double.TryParse(
+                    Ga.LastValue.Replace("°C", "").Replace("lx", "").Replace("m/s", "").Trim(),
+                    System.Globalization.NumberStyles.Any,
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    out var f) ? f : 0;
+                _staged = DptWriteValue.FromFloat(_floatVal, DptClassifier.FloatUnit(Ga.DptType));
+                break;
+
+            case DptWidgetType.Integer:
+                _intVal = int.TryParse(
+                    System.Text.RegularExpressions.Regex.Match(Ga.LastValue, @"-?\d+").Value,
+                    out var i) ? i : 0;
+                _staged = DptWriteValue.FromInt32(_intVal);
+                break;
+
+            case DptWidgetType.Scene:
+                _sceneVal = int.TryParse(
+                    System.Text.RegularExpressions.Regex.Match(Ga.LastValue, @"\d+").Value,
+                    out var sc) ? sc : 1;
+                _staged = DptWriteValue.FromScene(_sceneVal);
+                break;
+
+            default:
+                _rawHex = string.Empty;
+                _staged = null;
+                break;
+        }
+    }
+
+    // ── Widget event handlers ─────────────────────────────────────────────────
+    private void StageBinary(bool on, string label)
+    {
+        _binaryVal = on;
+        _staged = DptWriteValue.FromBool(on);
+        _staged.DisplayValue = label;
+    }
+
+    private void OnPercentSlider(ChangeEventArgs e)
+    {
+        _percentVal = int.TryParse(e.Value?.ToString(), out var v) ? v : _percentVal;
+        _staged = DptWriteValue.FromPercent(_percentVal);
+    }
+
+    private void OnFloatInput(ChangeEventArgs e)
+    {
+        _floatVal = double.TryParse(
+            e.Value?.ToString(),
+            System.Globalization.NumberStyles.Any,
+            System.Globalization.CultureInfo.InvariantCulture,
+            out var v) ? v : _floatVal;
+        _staged = DptWriteValue.FromFloat(_floatVal, DptClassifier.FloatUnit(Ga!.DptType));
+    }
+
+    private void OnIntegerInput(ChangeEventArgs e)
+    {
+        _intVal = int.TryParse(e.Value?.ToString(), out var v) ? v : _intVal;
+        _staged = DptWriteValue.FromInt32(_intVal);
+    }
+
+    private void SelectScene(int n)
+    {
+        _sceneVal = n;
+        _staged = DptWriteValue.FromScene(n);
+    }
+
+    // ── Send actions ──────────────────────────────────────────────────────────
+    private async Task SendWrite()
+    {
+        if (Ga is null || _staged is null) return;
+
+        if (_widgetType == DptWidgetType.Raw)
+            _staged = DptWriteValue.FromHex(_rawHex);
+
+        Ga.LastValue = _staged.DisplayValue;
+        Ga.LastRaw = _staged.RawHex;
+        Ga.LastSeen = DateTime.Now;
+
+        await Knx.Write(Ga.Address, Ga.Name, Ga.DptType, _staged);
+
+        _sentFlash = true;
+        StateHasChanged();
+        await Task.Delay(1400);
+        _sentFlash = false;
+        StateHasChanged();
+    }
+
+    private async Task SendRead()
+    {
+        if (Ga is null) return;
+        await Knx.Read(Ga.Address, Ga.Name, Ga.DptType, Ga.LastValue, Ga.LastRaw);
+    }
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
     private static string TypeCss(MessageType t) => t switch
     {
-        MessageType.Write    => "type-write",
-        MessageType.Read     => "type-read",
+        MessageType.Write => "type-write",
+        MessageType.Read => "type-read",
         MessageType.Response => "type-response",
-        MessageType.Ack      => "type-ack",
-        _                    => ""
+        MessageType.Ack => "type-ack",
+        _ => ""
     };
 }
